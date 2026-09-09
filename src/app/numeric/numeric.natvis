@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="roxyg::numeric::_vec_storage&lt;*,2,*&gt;">
+    <DisplayString>{{{val._Elems[0]}, {val._Elems[1]}}}</DisplayString>
+    <Expand>
+      <Item Name="[SIMD ready]">false</Item>
+      <ArrayItems>
+        <Size>2</Size>
+        <ValuePointer>val._Elems</ValuePointer>
+      </ArrayItems>
+      <Item Name="[element_length]">element_length</Item>
+      <Item Name="[storage_length]">storage_length</Item>
+      <Item Name="[padding_length]">padding_length</Item>
+    </Expand>
+  </Type>
+  <Type Name="roxyg::numeric::_vec_storage&lt;*,3,*&gt;">
+    <DisplayString>{{{val._Elems[0]}, {val._Elems[1]}, {val._Elems[2]}}}</DisplayString>
+    <Expand>
+      <Item Name="[SIMD ready]">false</Item>
+      <ArrayItems>
+        <Size>3</Size>
+        <ValuePointer>val._Elems</ValuePointer>
+      </ArrayItems>
+      <Item Name="[element_length]">element_length</Item>
+      <Item Name="[storage_length]">storage_length</Item>
+      <Item Name="[padding_length]">padding_length</Item>
+    </Expand>
+  </Type>
+  <Type Name="roxyg::numeric::_vec_storage&lt;*,4,*&gt;">
+    <DisplayString>{{{val._Elems[0]}, {val._Elems[1]}, {val._Elems[2]}, {val._Elems[3]}}}</DisplayString>
+    <Expand>
+      <Item Name="[SIMD ready]">false</Item>
+      <ArrayItems>
+        <Size>4</Size>
+        <ValuePointer>val._Elems</ValuePointer>
+      </ArrayItems>
+      <Item Name="[element_length]">element_length</Item>
+      <Item Name="[storage_length]">storage_length</Item>
+      <Item Name="[padding_length]">padding_length</Item>
+    </Expand>
+  </Type>
+  <Type Name="roxyg::numeric::_vec_storage&lt;int,2,16&gt;">
+    <DisplayString>{{{val.m128i_i32[0]}, {val.m128i_i32[1]}}}</DisplayString>
+    <Expand>
+      <Item Name="[SIMD ready]">true</Item>
+      <ArrayItems>
+        <Size>2</Size>
+        <ValuePointer>val.m128i_i32</ValuePointer>
+      </ArrayItems>
+      <Item Name="[element_length]">element_length</Item>
+      <Item Name="[storage_length]">storage_length</Item>
+      <Item Name="[padding_length]">padding_length</Item>
+    </Expand>
+  </Type>
+  <Type Name="roxyg::numeric::_vec_storage&lt;int,3,16&gt;">
+    <DisplayString>{{{val.m128i_i32[0]}, {val.m128i_i32[1]}, {val.m128i_i32[2]}}}</DisplayString>
+    <Expand>
+      <Item Name="[SIMD ready]">true</Item>
+      <ArrayItems>
+        <Size>3</Size>
+        <ValuePointer>val.m128i_i32</ValuePointer>
+      </ArrayItems>
+      <Item Name="[element_length]">element_length</Item>
+      <Item Name="[storage_length]">storage_length</Item>
+      <Item Name="[padding_length]">padding_length</Item>
+    </Expand>
+  </Type>
+  <Type Name="roxyg::numeric::_vec_storage&lt;int,4,16&gt;">
+    <DisplayString>{{{val.m128i_i32[0]}, {val.m128i_i32[1]}, {val.m128i_i32[2]}, {val.m128i_i32[3]}}}</DisplayString>
+    <Expand>
+      <Item Name="[SIMD ready]">true</Item>
+      <ArrayItems>
+        <Size>4</Size>
+        <ValuePointer>val.m128i_i32</ValuePointer>
+      </ArrayItems>
+      <Item Name="[element_length]">element_length</Item>
+      <Item Name="[storage_length]">storage_length</Item>
+      <Item Name="[padding_length]">padding_length</Item>
+    </Expand>
+  </Type>
+  <Type Name="roxyg::numeric::_vec_storage&lt;long,2,16&gt;">
+    <DisplayString>{{{val.m128i_i32[0]}, {val.m128i_i32[1]}}}</DisplayString>
+    <Expand>
+      <Item Name="[SIMD ready]">true</Item>
+      <ArrayItems>
+        <Size>2</Size>
+        <ValuePointer>val.m128i_i32</ValuePointer>
+      </ArrayItems>
+      <Item Name="[element_length]">element_length</Item>
+      <Item Name="[storage_length]">storage_length</Item>
+      <Item Name="[padding_length]">padding_length</Item>
+    </Expand>
+  </Type>
+  <Type Name="roxyg::numeric::_vec_storage&lt;long,3,16&gt;">
+    <DisplayString>{{{val.m128i_i32[0]}, {val.m128i_i32[1]}, {val.m128i_i32[2]}}}</DisplayString>
+    <Expand>
+      <Item Name="[SIMD ready]">true</Item>
+      <ArrayItems>
+        <Size>3</Size>
+        <ValuePointer>val.m128i_i32</ValuePointer>
+      </ArrayItems>
+      <Item Name="[element_length]">element_length</Item>
+      <Item Name="[storage_length]">storage_length</Item>
+      <Item Name="[padding_length]">padding_length</Item>
+    </Expand>
+  </Type>
+  <Type Name="roxyg::numeric::_vec_storage&lt;long,4,16&gt;">
+    <DisplayString>{{{val.m128i_i32[0]}, {val.m128i_i32[1]}, {val.m128i_i32[2]}, {val.m128i_i32[3]}}}</DisplayString>
+    <Expand>
+      <Item Name="[SIMD ready]">true</Item>
+      <ArrayItems>
+        <Size>4</Size>
+        <ValuePointer>val.m128i_i32</ValuePointer>
+      </ArrayItems>
+      <Item Name="[element_length]">element_length</Item>
+      <Item Name="[storage_length]">storage_length</Item>
+      <Item Name="[padding_length]">padding_length</Item>
+    </Expand>
+  </Type>
+  <Type Name="roxyg::numeric::_vec_storage&lt;float,2,16&gt;">
+    <DisplayString>{{{val.m128_f32[0]}, {val.m128_f32[1]}}}</DisplayString>
+    <Expand>
+      <Item Name="[SIMD ready]">true</Item>
+      <ArrayItems>
+        <Size>2</Size>
+        <ValuePointer>val.m128_f32</ValuePointer>
+      </ArrayItems>
+      <Item Name="[element_length]">element_length</Item>
+      <Item Name="[storage_length]">storage_length</Item>
+      <Item Name="[padding_length]">padding_length</Item>
+    </Expand>
+  </Type>
+  <Type Name="roxyg::numeric::_vec_storage&lt;float,3,16&gt;">
+    <DisplayString>{{{val.m128_f32[0]}, {val.m128_f32[1]}, {val.m128_f32[2]}}}</DisplayString>
+    <Expand>
+      <Item Name="[SIMD ready]">true</Item>
+      <ArrayItems>
+        <Size>3</Size>
+        <ValuePointer>val.m128_f32</ValuePointer>
+      </ArrayItems>
+      <Item Name="[element_length]">element_length</Item>
+      <Item Name="[storage_length]">storage_length</Item>
+      <Item Name="[padding_length]">padding_length</Item>
+    </Expand>
+  </Type>
+  <Type Name="roxyg::numeric::_vec_storage&lt;float,4,16&gt;">
+    <DisplayString>{{{val.m128_f32[0]}, {val.m128_f32[1]}, {val.m128_f32[2]}, {val.m128_f32[3]}}}</DisplayString>
+    <Expand>
+      <Item Name="[SIMD ready]">true</Item>
+      <ArrayItems>
+        <Size>4</Size>
+        <ValuePointer>val.m128_f32</ValuePointer>
+      </ArrayItems>
+      <Item Name="[element_length]">element_length</Item>
+      <Item Name="[storage_length]">storage_length</Item>
+      <Item Name="[padding_length]">padding_length</Item>
+    </Expand>
+  </Type>
+</AutoVisualizer>

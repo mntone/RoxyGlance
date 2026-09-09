@@ -1,0 +1,17 @@
+﻿<Solution>
+  <Configurations>
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="vcpkg-configuration.json" />
+    <File Path="vcpkg.json" />
+  </Folder>
+  <Project Path="src\app\RoxyGlance.App.vcxproj" Id="1fad0bbe-4564-4ee7-9e38-51a60ed24eee" />
+  <Project DefaultStartup="true" Path="src\winui3\RoxyGlance.WinUI3.vcxproj" Id="0a1c29b2-b1f8-4998-873f-803664116d26">
+    <Deploy />
+  </Project>
+  <Project Path="tests\RoxyGlance.Tests.vcxproj" Id="3e8070f1-3d01-4475-ad9a-ec18579dffcf" />
+</Solution>

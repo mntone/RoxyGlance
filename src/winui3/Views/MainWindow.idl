@@ -1,0 +1,10 @@
+import "ViewModels/LogViewModels.idl";
+
+namespace Mntone.RoxyGlance.Views
+{
+  [default_interface]
+  runtimeclass MainWindow : Microsoft.UI.Xaml.Window
+  {
+    [noexcept] Mntone.RoxyGlance.ViewModels.LogsViewModel Logs { get; };
+  }
+}

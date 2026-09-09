@@ -1,0 +1,283 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="compiler">
+      <UniqueIdentifier>{9e71b093-986f-4a81-9906-13ed5c5a9643}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="compiler\filter">
+      <UniqueIdentifier>{fa0f6e5e-23ae-4820-8d17-2569cbc3c9d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="context">
+      <UniqueIdentifier>{2bcf2ebf-19a3-4893-9606-a27212aca0d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="debug">
+      <UniqueIdentifier>{4a4fba5b-81a9-4e29-9b17-4a6a3f5e6153}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine">
+      <UniqueIdentifier>{cbd55e6c-0b36-41ac-a86e-0e277617ca67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="logging">
+      <UniqueIdentifier>{e5db5388-40c4-42ee-947a-0adcd4421004}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="monitor">
+      <UniqueIdentifier>{04e7fc81-168e-40cc-8e53-66ec387d6ec2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="numeric">
+      <UniqueIdentifier>{5a9def36-6906-4946-9d0f-af729e476e0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="numeric\neon">
+      <UniqueIdentifier>{f09ae942-e3cb-427d-8635-6fc3cbbe4174}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="numeric\x86">
+      <UniqueIdentifier>{ab51b057-c8a5-439d-943c-2ba21139aa0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="settings">
+      <UniqueIdentifier>{48094318-8fb3-4fb0-9f4b-912c311feff4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="settings\action">
+      <UniqueIdentifier>{3e217ae3-4d5c-41fe-8980-b275f1ec77ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility">
+      <UniqueIdentifier>{0a898882-105a-4499-9bb0-cee74d401613}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="win32">
+      <UniqueIdentifier>{90f5552a-d3ea-440b-b9c8-b2249a5fecf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="window">
+      <UniqueIdentifier>{5ca526c3-9edf-4367-a29c-09d15f3909e5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AppDelegate.h" />
+    <ClInclude Include="compiler\CompileAction.h">
+      <Filter>compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="compiler\CompileRule.h">
+      <Filter>compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="compiler\filter\CompileFilter.h">
+      <Filter>compiler\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="compiler\filter\CompileFilterPrivate.h">
+      <Filter>compiler\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="context\AppContext.h">
+      <Filter>context</Filter>
+    </ClInclude>
+    <ClInclude Include="context\OperationContext.h">
+      <Filter>context</Filter>
+    </ClInclude>
+    <ClInclude Include="debug\WindowEventLogAdapter.h">
+      <Filter>debug</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\MoveAndResizeOperation.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Operation.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Predicate.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Rule.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\RuleEngine.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="logging\ILogger.h">
+      <Filter>logging</Filter>
+    </ClInclude>
+    <ClInclude Include="logging\ILogSource.h">
+      <Filter>logging</Filter>
+    </ClInclude>
+    <ClInclude Include="logging\Log.h">
+      <Filter>logging</Filter>
+    </ClInclude>
+    <ClInclude Include="logging\Logger.h">
+      <Filter>logging</Filter>
+    </ClInclude>
+    <ClInclude Include="monitor\MonitorState.h">
+      <Filter>monitor</Filter>
+    </ClInclude>
+    <ClInclude Include="monitor\MonitorStateCache.h">
+      <Filter>monitor</Filter>
+    </ClInclude>
+    <ClInclude Include="numeric\common.h">
+      <Filter>numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="numeric\numeric.h">
+      <Filter>numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="numeric\neon\base_neon.h">
+      <Filter>numeric\neon</Filter>
+    </ClInclude>
+    <ClInclude Include="numeric\x86\base_x86.h">
+      <Filter>numeric\x86</Filter>
+    </ClInclude>
+    <ClInclude Include="numeric\x86\float32x4_x86.h">
+      <Filter>numeric\x86</Filter>
+    </ClInclude>
+    <ClInclude Include="numeric\x86\int32x4_x86.h">
+      <Filter>numeric\x86</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="settings\Action.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\action\MoveAndResizeAction.h">
+      <Filter>settings\action</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\constants.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\Filter.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\ISettingsListener.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\NodeHelper.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\Rule.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\SettingsStore.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\String.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\UserSettings.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\CallbackBase.hpp">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\ListenerHost.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\file.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\monitor.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\string.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\window.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="window\IWindowStateListener.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="window\WindowState.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="window\WindowStateCache.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="window\WindowStateWatcher.h">
+      <Filter>window</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AppDelegate.cc" />
+    <ClCompile Include="compiler\CompileAction.cc">
+      <Filter>compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="compiler\CompileRule.cc">
+      <Filter>compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="compiler\filter\CompileFilter.cc">
+      <Filter>compiler\filter</Filter>
+    </ClCompile>
+    <ClCompile Include="compiler\filter\WindowClassMatcher.cc">
+      <Filter>compiler\filter</Filter>
+    </ClCompile>
+    <ClCompile Include="compiler\filter\WindowTitleMatcher.cc">
+      <Filter>compiler\filter</Filter>
+    </ClCompile>
+    <ClCompile Include="context\AppContext.cc">
+      <Filter>context</Filter>
+    </ClCompile>
+    <ClCompile Include="context\OperationContext.cc">
+      <Filter>context</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\WindowEventLogAdapter.cc">
+      <Filter>debug</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\MoveAndResizeOperation.cc">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\Operation.cc">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\RuleEngine.cc">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="logging\Logger.cc">
+      <Filter>logging</Filter>
+    </ClCompile>
+    <ClCompile Include="monitor\MonitorState.cc">
+      <Filter>monitor</Filter>
+    </ClCompile>
+    <ClCompile Include="monitor\MonitorStateCache.cc">
+      <Filter>monitor</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cc" />
+    <ClCompile Include="settings\action\MoveAndResizeAction.cc">
+      <Filter>settings\action</Filter>
+    </ClCompile>
+    <ClCompile Include="settings\Action.cc">
+      <Filter>settings</Filter>
+    </ClCompile>
+    <ClCompile Include="settings\Filter.cc">
+      <Filter>settings</Filter>
+    </ClCompile>
+    <ClCompile Include="settings\NodeHelper.cc">
+      <Filter>settings</Filter>
+    </ClCompile>
+    <ClCompile Include="settings\Rule.cc">
+      <Filter>settings</Filter>
+    </ClCompile>
+    <ClCompile Include="settings\SettingsStore.cc">
+      <Filter>settings</Filter>
+    </ClCompile>
+    <ClCompile Include="settings\UserSettings.cc">
+      <Filter>settings</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\CallbackBase.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\ListenerHost.cc">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\file.cc">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\string.cc">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\window.cc">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="window\WindowState.cc">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="window\WindowStateCache.cc">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="window\WindowStateWatcher.cc">
+      <Filter>window</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="numeric\numeric.natvis" />
+  </ItemGroup>
+</Project>

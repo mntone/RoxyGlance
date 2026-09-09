@@ -1,0 +1,17 @@
+# User-specific files
+*.user
+
+# Build directories
+build/
+
+# Visual Studio cache/options directory
+.vs/
+
+# Visual Studio auto generated files
+Generated\ Files/
+
+# NuGet Packages
+**/packages/*
+
+# vcpkg
+vcpkg_installed/

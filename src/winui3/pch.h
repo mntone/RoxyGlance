@@ -5,8 +5,11 @@
 #include <mutex>
 #include <regex>
 
+#include <boost/circular_buffer.hpp>          // use in Logger
+#include <boost/container/static_vector.hpp>  // use in ListenerHost<I>
 #include <c4/yml/yml.hpp>
 #include <magic_enum/magic_enum.hpp>
+#include <magic_enum/magic_enum_flags.hpp>
 
 #define WINAPI_PARTITION_DESKTOP 1 // for RO_INIT_SINGLETHREADED
 #include <windows.h>

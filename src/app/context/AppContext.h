@@ -5,8 +5,7 @@
 #include "../debug/WindowEventLogAdapter.h"
 #endif
 #include "../engine/RuleEngine.h"
-#include "../logging/ILogger.h"
-#include "../logging/ILogSource.h"
+#include "../logging/Logger.h"
 #include "../settings/SettingsStore.h"
 
 namespace roxyg {
@@ -18,13 +17,13 @@ class AppContext final {
 public:
   AppContext() noexcept;
 
-  winrt::hresult initialize(
-    std::shared_ptr<logging::ILogger> logger,
-    std::shared_ptr<logging::ILogSource> logSource
-  ) noexcept;
+  winrt::hresult initialize();
 
-  [[nodiscard]] inline std::shared_ptr<logging::ILogSource> logSource() const noexcept {
-    return log_source_;
+  [[nodiscard]] constexpr logging::Logger& logger() noexcept {
+    return logger_;
+  }
+  [[nodiscard]] constexpr logging::Logger const& logger() const noexcept {
+    return logger_;
   }
 
   [[nodiscard]] constexpr settings::SettingsStore const& settingsStore() const noexcept {
@@ -35,7 +34,7 @@ private:
   OperationContext operation_context_;
   engine::RuleEngine engine_;
   settings::SettingsStore settings_store_;  // <-- require this after engine!
-  std::shared_ptr<logging::ILogSource> log_source_;
+  logging::Logger logger_;
 
 #if _DEBUG
   debug::WindowEventLogAdapter log_adapter_;

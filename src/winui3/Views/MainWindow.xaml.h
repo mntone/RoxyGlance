@@ -8,14 +8,15 @@ namespace winrt::Mntone::RoxyGlance::Views::implementation {
 struct MainWindow: MainWindowT<MainWindow> {
   MainWindow() noexcept;
 
-  constexpr Mntone::RoxyGlance::ViewModels::LogsViewModel Logs() noexcept {
+  inline Mntone::RoxyGlance::ViewModels::LogsViewModel Logs() const noexcept {
     return Logs_;
   }
-
-  void Window_Activated(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::WindowActivatedEventArgs const& args);
+  inline void setLogs(Mntone::RoxyGlance::ViewModels::LogsViewModel value) noexcept {
+    Logs_ = value;
+  }
 
 private:
-  Mntone::RoxyGlance::ViewModels::LogsViewModel Logs_{nullptr};
+  Mntone::RoxyGlance::ViewModels::LogsViewModel Logs_;
 };
 
 }

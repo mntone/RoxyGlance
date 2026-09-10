@@ -4,35 +4,63 @@
 #include "ViewModels.LogViewModels.g.cpp"
 #endif
 
-#include <boost/circular_buffer.hpp>
-#include <boost/container/small_vector.hpp>
-#include <boost/container/static_vector.hpp>
-#include <boost/static_string.hpp>
-#include <boost/unordered/unordered_flat_map.hpp>
-#include "../app/engine/Rule.h"
-#include "../app/context/AppContext.h"  // require some boost headers
-#include "../App.xaml.h"
-
 namespace winrt {
 using namespace ::winrt::Windows::Foundation::Collections;
 using namespace ::winrt::Microsoft::UI::Dispatching;
 using namespace ::winrt::Microsoft::UI::Xaml;
 
 namespace impl {
-using namespace ::winrt::Mntone::RoxyGlance::implementation;
 using namespace ::winrt::Mntone::RoxyGlance::ViewModels::implementation;
 }
 }
 
-winrt::impl::LogsViewModel::LogsViewModel() noexcept
-  : Logs_(winrt::single_threaded_observable_vector<ViewModels::LogViewModel>()) {
-  auto app = Application::Current().as<impl::App>();
+using namespace magic_enum;
+using namespace roxyg;
 
-  std::shared_ptr<roxyg::logging::ILogSource> source{ app->AppDelegate().context().logSource()};
-  source->addCallback([](void* context, roxyg::logging::Log const& log) {
-    DispatcherQueue::GetForCurrentThread().TryEnqueue([context, log] {
-      LogsViewModel* viewModel = reinterpret_cast<LogsViewModel*>(context);
-      viewModel->Logs_.InsertAt(0, make<impl::LogViewModel>(log));
-    });
-  }, this);
+winrt::impl::LogsViewModel::LogsViewModel() noexcept
+  : logger_(nullptr)
+  , dispatcher_(DispatcherQueue::GetForCurrentThread())
+  , Logs_(winrt::single_threaded_observable_vector<ViewModels::LogViewModel>()) {
+}
+
+winrt::impl::LogsViewModel::~LogsViewModel() {
+  unsetLogger();
+}
+
+void winrt::impl::LogsViewModel::onCollectionChanged(utility::CollectionChange<logging::Log> const& change) {
+  if (enum_flags_test(change.type, utility::CollectionChangeType::kAdded)) {
+    Logs_.InsertAt(change.index, make<impl::LogViewModel>(*change.item));
+  }
+  if (enum_flags_test(change.type, utility::CollectionChangeType::kRemoved)) {
+    Logs_.RemoveAtEnd();
+  }
+}
+
+void winrt::impl::LogsViewModel::unsetLogger() {
+  logging::Logger* logger = logger_;
+  if (!logger) {
+    return;
+  }
+
+  logger_ = nullptr;
+  logger->removeListener(this);
+}
+
+void winrt::impl::LogsViewModel::setLogger(logging::Logger& logger) {
+#if _DEBUG
+  assert(dispatcher_.HasThreadAccess());
+#endif
+
+  unsetLogger();
+  auto const& logs{logger.Logs()};
+
+  std::vector<ViewModels::LogViewModel> winrt_logs;
+  winrt_logs.reserve(logs.size());
+  for (logging::Log const& log : logs) {
+    winrt_logs.emplace_back(make<impl::LogViewModel>(log));
+  }
+  Logs_.ReplaceAll(std::move(winrt_logs));
+
+  logger_ = &logger;
+  logger.addListener(this);
 }

@@ -85,12 +85,6 @@
     <ClInclude Include="engine\RuleEngine.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="logging\ILogger.h">
-      <Filter>logging</Filter>
-    </ClInclude>
-    <ClInclude Include="logging\ILogSource.h">
-      <Filter>logging</Filter>
-    </ClInclude>
     <ClInclude Include="logging\Log.h">
       <Filter>logging</Filter>
     </ClInclude>
@@ -152,7 +146,7 @@
     <ClInclude Include="settings\UserSettings.h">
       <Filter>settings</Filter>
     </ClInclude>
-    <ClInclude Include="utility\CallbackBase.hpp">
+    <ClInclude Include="utility\ICollectionChangeListener.h">
       <Filter>utility</Filter>
     </ClInclude>
     <ClInclude Include="utility\ListenerHost.h">
@@ -248,9 +242,6 @@
     </ClCompile>
     <ClCompile Include="settings\UserSettings.cc">
       <Filter>settings</Filter>
-    </ClCompile>
-    <ClCompile Include="utility\CallbackBase.cpp">
-      <Filter>utility</Filter>
     </ClCompile>
     <ClCompile Include="utility\ListenerHost.cc">
       <Filter>utility</Filter>

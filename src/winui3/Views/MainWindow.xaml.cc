@@ -16,5 +16,5 @@ using namespace ::winrt::Mntone::RoxyGlance::Views::implementation;
 }
 
 winrt::impl::MainWindow::MainWindow() noexcept
-  : Logs_(make<impl::LogsViewModel>()) {
+  : Logs_(nullptr) {
 }

@@ -10,3 +10,15 @@ AppDelegate::AppDelegate() noexcept
 }
 
 AppDelegate::~AppDelegate() noexcept = default;
+
+winrt::hresult AppDelegate::initialize() {
+  return context_->initialize();
+}
+
+logging::Logger& AppDelegate::logger() noexcept {
+  return context_->logger();
+}
+
+logging::Logger const& AppDelegate::logger() const noexcept {
+  return context_->logger();
+}

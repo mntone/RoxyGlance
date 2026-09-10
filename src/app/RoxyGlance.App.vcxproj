@@ -93,8 +93,6 @@
     <ClInclude Include="engine\Predicate.h" />
     <ClInclude Include="engine\Rule.h" />
     <ClInclude Include="engine\RuleEngine.h" />
-    <ClInclude Include="logging\ILogger.h" />
-    <ClInclude Include="logging\ILogSource.h" />
     <ClInclude Include="logging\Log.h" />
     <ClInclude Include="logging\Logger.h" />
     <ClInclude Include="monitor\MonitorState.h" />
@@ -116,7 +114,7 @@
     <ClInclude Include="settings\SettingsStore.h" />
     <ClInclude Include="settings\String.h" />
     <ClInclude Include="settings\UserSettings.h" />
-    <ClInclude Include="utility\CallbackBase.hpp" />
+    <ClInclude Include="utility\ICollectionChangeListener.h" />
     <ClInclude Include="utility\ListenerHost.h" />
     <ClInclude Include="win32\file.h" />
     <ClInclude Include="win32\monitor.h" />
@@ -153,7 +151,6 @@
     <ClCompile Include="pch.cc">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="utility\CallbackBase.cpp" />
     <ClCompile Include="utility\ListenerHost.cc" />
     <ClCompile Include="win32\file.cc" />
     <ClCompile Include="win32\string.cc" />

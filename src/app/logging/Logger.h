@@ -1,44 +1,27 @@
 #pragma once
-#include "ILogger.h"
-#include "ILogSource.h"
+#include "Log.h"
 
-#include "../utility/CallbackBase.hpp"
+#include "../utility/ICollectionChangeListener.h"
+#include "../utility/ListenerHost.h"
 
 namespace roxyg::logging {
 
 class Logger final
-  : public utility::CallbackBase<LogCallback>
-  , public ILogger
-  , public ILogSource
-  , public std::enable_shared_from_this<Logger> {
-  static constexpr size_t LogSize = 256;
+  : public utility::ListenerHost<utility::ICollectionChangeListener<Log>> {
+  using ContainerType = boost::circular_buffer<Log>;
 
   Logger(Logger const&) = delete;
   Logger& operator=(Logger const&) = delete;
 
 public:
-  Logger() noexcept = default;
-  virtual ~Logger() noexcept = default;
+  Logger() noexcept;
 
-  inline boost::circular_buffer<Log> const Logs() const noexcept {
-    return Logs_;
-  }
+  void addLog(Log log);
 
-  void addCallback(LogCallback callback, void* context) override {
-    utility::CallbackBase<LogCallback>::addCallback(callback, context);
-  }
-  void addLog(Log log) override;
-
-  std::shared_ptr<ILogger> __getAsLogger() {
-    return shared_from_this();
-  }
-
-  std::shared_ptr<ILogSource> __getAsLogSource() {
-    return shared_from_this();
-  }
+  constexpr ContainerType const& Logs() const noexcept { return logs_; }
 
 private:
-  boost::circular_buffer<Log> Logs_{ LogSize };
+  ContainerType logs_;
 };
 
 }

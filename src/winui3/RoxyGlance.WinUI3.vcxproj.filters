@@ -29,8 +29,9 @@
     </Midl>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cc" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="main.cc" />
+    <ClCompile Include="pch.cc" />
     <ClCompile Include="ViewModels\LogViewModel.cc">
       <Filter>ViewModels</Filter>
     </ClCompile>

@@ -9,7 +9,7 @@ class ThreadController {
 protected:
   struct ThreadState final {
     HANDLE hthread;
-    unsigned int thread_id;
+    DWORD thread_id;
   };
 
   ThreadController() noexcept;
@@ -27,7 +27,7 @@ protected:
   [[nodiscard]] inline HANDLE hThread() const noexcept {
     return state_.load(std::memory_order_acquire).hthread;
   }
-  [[nodiscard]] inline unsigned int threadId() const noexcept {
+  [[nodiscard]] inline DWORD threadId() const noexcept {
     return state_.load(std::memory_order_acquire).thread_id;
   }
 

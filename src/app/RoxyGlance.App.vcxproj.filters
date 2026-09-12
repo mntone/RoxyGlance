@@ -155,16 +155,19 @@
     <ClInclude Include="win32\file.h">
       <Filter>win32</Filter>
     </ClInclude>
-    <ClInclude Include="win32\MessageThreadController.h">
-      <Filter>win32</Filter>
-    </ClInclude>
     <ClInclude Include="win32\monitor.h">
       <Filter>win32</Filter>
     </ClInclude>
     <ClInclude Include="win32\string.h">
       <Filter>win32</Filter>
     </ClInclude>
+    <ClInclude Include="win32\ThreadController.h">
+      <Filter>win32</Filter>
+    </ClInclude>
     <ClInclude Include="win32\window.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\WinEventHookController.h">
       <Filter>win32</Filter>
     </ClInclude>
     <ClInclude Include="window\IWindowStateListener.h">
@@ -252,13 +255,16 @@
     <ClCompile Include="win32\file.cc">
       <Filter>win32</Filter>
     </ClCompile>
-    <ClCompile Include="win32\MessageThreadController.cc">
-      <Filter>win32</Filter>
-    </ClCompile>
     <ClCompile Include="win32\string.cc">
       <Filter>win32</Filter>
     </ClCompile>
+    <ClCompile Include="win32\ThreadController.cc">
+      <Filter>win32</Filter>
+    </ClCompile>
     <ClCompile Include="win32\window.cc">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\WinEventHookController.cc">
       <Filter>win32</Filter>
     </ClCompile>
     <ClCompile Include="window\WindowState.cc">

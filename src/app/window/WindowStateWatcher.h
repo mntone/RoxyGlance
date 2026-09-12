@@ -3,7 +3,7 @@
 #include "WindowStateCache.h"
 
 #include "../utility/ListenerHost.h"
-#include "../win32/MessageThreadController.h"
+#include "../win32/WinEventHookController.h"
 
 namespace roxyg::window {
 
@@ -23,7 +23,6 @@ public:
   }
 
 private:
-  static unsigned int __stdcall winEventThreadWorker(void *params) noexcept;
   static void CALLBACK winEventProcStatic(
     HWINEVENTHOOK hWinEventHook,
     DWORD event,
@@ -35,7 +34,7 @@ private:
   ) noexcept;
 
 private:
-  win32::MessageThreadController worker_;
+  win32::WinEventHookController worker_;
   StateCache cache_;
 };
 

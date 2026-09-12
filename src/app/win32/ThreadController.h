@@ -2,23 +2,24 @@
 
 namespace roxyg::win32 {
 
-class MessageThreadController final {
-  MessageThreadController(MessageThreadController const&) = delete;
-  MessageThreadController& operator=(MessageThreadController const&) = delete;
+class ThreadController {
+  ThreadController(ThreadController const&) = delete;
+  ThreadController& operator=(ThreadController const&) = delete;
 
-public:
+protected:
   struct ThreadState final {
     HANDLE hthread;
     unsigned int thread_id;
   };
 
-  MessageThreadController() noexcept;
+  ThreadController() noexcept;
 #if _DEBUG
-  ~MessageThreadController() noexcept;
+  ~ThreadController() noexcept;
 #endif
 
   [[nodiscard]] winrt::hresult start(_beginthreadex_proc_type proc, void* params) noexcept;
-  DWORD stop(DWORD timeout = INFINITE) noexcept;
+  [[nodiscard]] DWORD validateThreadAccess(ThreadState const& state) noexcept;
+  [[nodiscard]] DWORD reapThread(HANDLE hthread) noexcept;
 
   [[nodiscard]] inline ThreadState const threadState() const noexcept {
     return state_.load(std::memory_order_acquire);
@@ -30,7 +31,7 @@ public:
     return state_.load(std::memory_order_acquire).thread_id;
   }
 
-private:
+protected:
   std::mutex mutex_;
   std::atomic<ThreadState> state_;
 };

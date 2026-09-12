@@ -3,12 +3,13 @@
 #include "WindowStateCache.h"
 
 #include "../utility/ListenerHost.h"
+#include "../win32/MessageThreadController.h"
 
 namespace roxyg::window {
 
 class StateWatcher final
   : public utility::ListenerHost<IWindowStateListener> {
-  StateWatcher() noexcept = default;
+  StateWatcher() noexcept;
   StateWatcher(StateWatcher const&) = delete;
   StateWatcher& operator=(StateWatcher const&) = delete;
 
@@ -22,6 +23,7 @@ public:
   }
 
 private:
+  static unsigned int __stdcall winEventThreadWorker(void *params) noexcept;
   static void CALLBACK winEventProcStatic(
     HWINEVENTHOOK hWinEventHook,
     DWORD event,
@@ -33,7 +35,7 @@ private:
   ) noexcept;
 
 private:
-  HWINEVENTHOOK hWinEventHook_{nullptr};
+  win32::MessageThreadController worker_;
   StateCache cache_;
 };
 

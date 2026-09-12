@@ -117,6 +117,7 @@
     <ClInclude Include="utility\ICollectionChangeListener.h" />
     <ClInclude Include="utility\ListenerHost.h" />
     <ClInclude Include="win32\file.h" />
+    <ClInclude Include="win32\MessageThreadController.h" />
     <ClInclude Include="win32\monitor.h" />
     <ClInclude Include="win32\string.h" />
     <ClInclude Include="win32\window.h" />
@@ -153,6 +154,7 @@
     </ClCompile>
     <ClCompile Include="utility\ListenerHost.cc" />
     <ClCompile Include="win32\file.cc" />
+    <ClCompile Include="win32\MessageThreadController.cc" />
     <ClCompile Include="win32\string.cc" />
     <ClCompile Include="win32\window.cc" />
     <ClCompile Include="window\WindowState.cc" />

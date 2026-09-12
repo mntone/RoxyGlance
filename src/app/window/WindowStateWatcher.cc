@@ -3,35 +3,81 @@
 
 #include "../win32/window.h"
 
+struct ThreadState final {
+  std::atomic<bool> ready;
+  std::atomic<DWORD> status;
+};
+
+static __forceinline void notifyBeginThread(ThreadState& state) noexcept {
+  state.ready.store(true, std::memory_order_release);
+  state.ready.notify_one();
+}
+
 using namespace roxyg::window;
 
-winrt::hresult StateWatcher::start() noexcept {
-  assert(hWinEventHook_ == nullptr);
-
+unsigned int __stdcall StateWatcher::winEventThreadWorker(void* params) noexcept {
+  ThreadState& state = *static_cast<ThreadState*>(params);
   HWINEVENTHOOK hWinEventHook = SetWinEventHook(
-      EVENT_SYSTEM_FOREGROUND, EVENT_OBJECT_NAMECHANGE,
-      nullptr,
-      &StateWatcher::winEventProcStatic,
-      0,
-      0,
-      WINEVENT_OUTOFCONTEXT | WINEVENT_SKIPOWNPROCESS);
-  if (hWinEventHook == nullptr) {
-    return winrt::impl::hresult_from_win32(WINRT_IMPL_GetLastError());
+    EVENT_SYSTEM_FOREGROUND, EVENT_OBJECT_NAMECHANGE,
+    nullptr,
+    &StateWatcher::winEventProcStatic,
+    0,
+    0,
+    WINEVENT_OUTOFCONTEXT | WINEVENT_SKIPOWNPROCESS);
+  if (!hWinEventHook) {
+    state.status.store(WINRT_IMPL_GetLastError(), std::memory_order_relaxed);
+    notifyBeginThread(state);
+    _endthreadex(EXIT_FAILURE);
+    return 0;
   }
 
-  hWinEventHook_ = hWinEventHook;
+  MSG msg;
+  BOOL rc = PeekMessageW(&msg, nullptr, 0, 0, PM_NOREMOVE);
+  notifyBeginThread(state);
+
+  DWORD ret = EXIT_SUCCESS;
+  while ((rc = GetMessageW(&msg, nullptr, 0, 0)) != 0) {
+    if (rc == -1) {
+      ret = EXIT_FAILURE;  // invalid message pointer
+      break;
+    }
+    TranslateMessage(&msg);
+    DispatchMessageW(&msg);
+  }
+
+  rc = UnhookWinEvent(hWinEventHook);
+  if (rc == FALSE) {
+    ret = EXIT_FAILURE;
+  }
+
+  _endthreadex(ret);
+  return 0;
+}
+
+StateWatcher::StateWatcher() noexcept
+  : worker_() {
+}
+
+winrt::hresult StateWatcher::start() noexcept {
+  ThreadState state{false, ERROR_SUCCESS};
+  winrt::hresult hr = worker_.start(StateWatcher::winEventThreadWorker, &state);
+  if (FAILED(hr)) {
+    return hr;
+  }
+
+  state.ready.wait(false, std::memory_order_acquire);
+
+  DWORD const status = state.status.load(std::memory_order_acquire);
+  if (status != ERROR_SUCCESS) {
+    [[maybe_unused]] DWORD const stop_status = worker_.stop();
+    return winrt::impl::hresult_from_win32(status);
+  }
+
   return S_OK;
 }
 
 winrt::hresult StateWatcher::stop() noexcept {
-  HWINEVENTHOOK hWinEventHook = hWinEventHook_;
-  if (hWinEventHook == nullptr) {
-    return S_OK;
-  }
-  hWinEventHook_ = nullptr;
-
-  BOOL rc = UnhookWinEvent(hWinEventHook);
-  return rc ? S_OK : E_FAIL;
+  return winrt::impl::hresult_from_win32(worker_.stop());
 }
 
 void CALLBACK StateWatcher::winEventProcStatic(

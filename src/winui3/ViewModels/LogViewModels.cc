@@ -28,12 +28,19 @@ winrt::impl::LogsViewModel::~LogsViewModel() {
 }
 
 void winrt::impl::LogsViewModel::onCollectionChanged(utility::CollectionChange<logging::Log> const& change) {
-  if (enum_flags_test(change.type, utility::CollectionChangeType::kAdded)) {
-    Logs_.InsertAt(change.index, make<impl::LogViewModel>(*change.item));
-  }
-  if (enum_flags_test(change.type, utility::CollectionChangeType::kRemoved)) {
-    Logs_.RemoveAtEnd();
-  }
+#if _DEBUG
+  assert(!dispatcher_.HasThreadAccess());
+#endif
+
+  dispatcher_.TryEnqueue([that = get_weak(), change] {
+    winrt::impl::com_ref<winrt::impl::LogsViewModel> viewModel{that.get()};
+    if (enum_flags_test(change.type, utility::CollectionChangeType::kAdded)) {
+      viewModel->Logs_.InsertAt(change.index, make<impl::LogViewModel>(*change.item));
+    }
+    if (enum_flags_test(change.type, utility::CollectionChangeType::kRemoved)) {
+      viewModel->Logs_.RemoveAtEnd();
+    }
+  });
 }
 
 void winrt::impl::LogsViewModel::unsetLogger() {

@@ -32,10 +32,11 @@ public:
   using V = vec<T, N, A>;
 
 protected:
-  static constexpr std::array<short, 13> kTestData = {
+  static constexpr std::array<short, 17> kTestData = {
     2,  3, 4,  5,
     4, -5, 3, -6,
     1,  3, 2,  5,
+    6,  3, 4,  5,
     3,
   };
 
@@ -70,6 +71,16 @@ protected:
   ) {
     accessor_operation(actual);
     EXPECT_EQ(actual.at(index), expected);
+  }
+
+  void expectCompareOperation(
+    std::string_view operation,
+    V const& lhs,
+    V const& rhs,
+    bool(* const vector_operation)(V const&, V const&),
+    bool expected
+  ) {
+    EXPECT_EQ(vector_operation(lhs, rhs), expected);
   }
 
   void expectUnaryOperation(
@@ -159,6 +170,33 @@ TYPED_TEST(TypedVectorTest, SetAccessors) {
   }
 }
 
+TYPED_TEST(TypedVectorTest, CompareOperators) {
+  using V = typename TestFixture::V;
+
+  auto const lhs = this->makeVector(0);
+  auto const rhs = this->makeVector(12);
+  this->expectCompareOperation(
+    "vector == vector (true)", lhs, lhs,
+    [](V const& a, V const& b) { return a == b; },
+    true
+  );
+  this->expectCompareOperation(
+    "vector == vector (false)", lhs, rhs,
+    [](V const& a, V const& b) { return a == b; },
+    false
+  );
+  this->expectCompareOperation(
+    "vector != vector (true)", lhs, rhs,
+    [](V const& a, V const& b) { return a != b; },
+    true
+  );
+  this->expectCompareOperation(
+    "vector != vector (false)", lhs, lhs,
+    [](V const& a, V const& b) { return a != b; },
+    false
+  );
+}
+
 TYPED_TEST(TypedVectorTest, UnaryOperators) {
   using T = typename TestFixture::T;
   using V = typename TestFixture::V;
@@ -187,7 +225,7 @@ TYPED_TEST(TypedVectorTest, VectorScalarOperators) {
   using V = typename TestFixture::V;
 
   auto const input = this->makeVector(0);
-  auto const scalar = this->makeScalar(12);
+  auto const scalar = this->makeScalar(16);
 
   this->expectVectorScalarOperation(
     "vector + scalar", input, scalar,

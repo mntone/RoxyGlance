@@ -107,6 +107,23 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     return ret;
   }
 
+  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE bool operator==(_vec_storage lhs, _vec_storage rhs) noexcept {
+    if constexpr (__simd_feature_tags::has_sse4_1) {
+      i32x4 const diff = _mm_xor_si128(lhs.val, rhs.val);
+      return _mm_testz_si128(diff, diff) != 0;
+    } else {
+      return _mm_movemask_epi8(_mm_cmpeq_epi32(lhs.val, rhs.val)) == 0xFFFF;
+    }
+  }
+  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE bool operator!=(_vec_storage lhs, _vec_storage rhs) noexcept {
+    if constexpr (__simd_feature_tags::has_sse4_1) {
+      i32x4 const diff = _mm_xor_si128(lhs.val, rhs.val);
+      return _mm_testz_si128(diff, diff) == 0;
+    } else {
+      return _mm_movemask_epi8(_mm_cmpeq_epi32(lhs.val, rhs.val)) != 0xFFFF;
+    }
+  }
+
   [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall operator-() const noexcept {
     _vec_storage ret;
     if constexpr (__simd_feature_tags::has_ssse3) {

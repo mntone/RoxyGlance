@@ -106,6 +106,13 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     return ret;
   }
 
+  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE bool operator==(_vec_storage lhs, _vec_storage rhs) noexcept {
+    return _mm_movemask_ps(_mm_cmpeq_ps(lhs.val, rhs.val)) == 0xF;
+  }
+  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE bool operator!=(_vec_storage lhs, _vec_storage rhs) noexcept {
+    return _mm_movemask_ps(_mm_cmpeq_ps(lhs.val, rhs.val)) != 0xF;
+  }
+
   [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall operator-() const noexcept {
     _vec_storage ret;
     ret.val = _mm_xor_ps(val, _mm_set_ps1(-0.f));

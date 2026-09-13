@@ -74,21 +74,11 @@ struct alignas(__alignup(sizeof(T), Align)) vec {
     return ret;
   }
 
-  [[nodiscard]] constexpr bool operator==(vec rhs) const noexcept {
-    for (std::size_t i = 0; i < N; ++i) {
-      if (storage[i] != rhs.storage[i]) {
-        return false;
-      }
-    }
-    return true;
+  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE bool operator==(vec lhs, vec rhs) noexcept {
+    return lhs.storage == rhs.storage;
   }
-  [[nodiscard]] constexpr bool operator!=(vec rhs) const noexcept {
-    for (std::size_t i = 0; i < N; ++i) {
-      if (storage[i] == rhs.storage[i]) {
-        return true;
-      }
-    }
-    return false;
+  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE bool operator!=(vec lhs, vec rhs) noexcept {
+    return lhs.storage != rhs.storage;
   }
 
   [[nodiscard]] constexpr vec operator+() const noexcept {

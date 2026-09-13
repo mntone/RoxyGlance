@@ -130,6 +130,23 @@ struct _vec_storage {
     return ret;
   }
 
+  [[nodiscard]] friend constexpr bool operator==(_vec_storage lhs, _vec_storage rhs) noexcept {
+    for (std::size_t i = 0; i < N; ++i) {
+      if (lhs.at(i) != rhs.at(i)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  [[nodiscard]] friend constexpr bool operator!=(_vec_storage lhs, _vec_storage rhs) noexcept {
+    for (std::size_t i = 0; i < N; ++i) {
+      if (lhs.at(i) != rhs.at(i)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   constexpr _vec_storage operator-() const noexcept requires (std::signed_integral<T> || std::floating_point<T>) {
     _vec_storage ret;
     for (std::size_t i = 0; i < N; ++i) {

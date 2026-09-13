@@ -28,10 +28,16 @@ winrt::hresult AbsoluteMoveAndResizeOperation::execute([[maybe_unused]] Operatio
 
 winrt::hresult RelativeMoveAndResizeOperation::execute(OperationContext& ctx, window::State& windowState) noexcept {
   if (dirty_) [[unlikely]] {
-    HMONITOR hMonitor = win32::GetPrimaryHMonitor();
+    HMONITOR hmonitor = win32::GetPrimaryHMonitor();
+
+    monitor::State* state;
+    ctx.monitor().getOrCreate(hmonitor, state);
+    if (!state) {
+      return E_OUTOFMEMORY;
+    }
 
     // Calc the new window bounds from relative bounds.
-    float4 const workArea{ctx.monitor().getOrCreate(hMonitor)->workArea()};
+    float4 const workArea{state->workArea()};
     float2_fast const workSize = workArea.zw();
     float2_fast const expectedSize = (relative_bounds_.zw() * workSize).ceil();
     float2_fast const expectedPos = workArea.xy() + (relative_bounds_.xy() * (workSize - expectedSize)).floor();

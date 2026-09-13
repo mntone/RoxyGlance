@@ -3,8 +3,16 @@
 
 using namespace roxyg::monitor;
 
+State::State(HMONITOR hmonitor) noexcept
+  : display_area_(numeric::float4::make(0.f, 0.f, 0.f, 0.f))
+  , work_area_(numeric::float4::make(0.f, 0.f, 0.f, 0.f))
+  , hmonitor_(hmonitor)
+  , device_name_()
+  , area_dirty_(true) {
+}
+
 void State::updateArea() {
-  MONITORINFOEXW info{ sizeof(MONITORINFOEXW) };
+  MONITORINFOEXW info{sizeof(MONITORINFOEXW)};
   BOOL rc = GetMonitorInfoW(hmonitor_, &info);
   if (!rc) {
     winrt::throw_hresult(E_FAIL);

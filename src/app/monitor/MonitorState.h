@@ -7,6 +7,8 @@ namespace roxyg::monitor {
 struct State final {
   friend class StateCache;
 
+  explicit State(HMONITOR hmonitor) noexcept;
+
   [[nodiscard]] constexpr HMONITOR hMonitor() const noexcept {
     return hmonitor_;
   }
@@ -26,17 +28,12 @@ struct State final {
   }
 
 private:
-  constexpr void initialize(HMONITOR hMonitor) noexcept {
-    hmonitor_ = hMonitor;
-    area_dirty_ = true;
-  }
-
   void updateArea();
 
 private:
   numeric::float4 display_area_, work_area_;
-  boost::static_wstring<CCHDEVICENAME> device_name_;
   HMONITOR hmonitor_;
+  boost::static_wstring<CCHDEVICENAME> device_name_;
 
   bool area_dirty_ : 1;
 };

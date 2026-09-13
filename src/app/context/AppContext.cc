@@ -23,5 +23,10 @@ AppContext::AppContext() noexcept {
 }
 
 winrt::hresult AppContext::initialize() {
+  winrt::hresult hr = operation_context_.initialize();
+  if (FAILED(hr)) {
+    return hr;
+  }
+
   return window::StateWatcher::instance().start();
 }

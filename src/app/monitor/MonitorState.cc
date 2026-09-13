@@ -3,12 +3,22 @@
 
 using namespace roxyg::monitor;
 
+State::State(HMONITOR hmonitor, numeric::float4 display_area) noexcept
+  : display_area_(display_area)
+  , work_area_(numeric::float4::make(0.f, 0.f, 0.f, 0.f))
+  , hmonitor_(hmonitor)
+  , device_name_()
+  , display_area_dirty_(false)
+  , work_area_dirty_(true) {
+}
+
 State::State(HMONITOR hmonitor) noexcept
   : display_area_(numeric::float4::make(0.f, 0.f, 0.f, 0.f))
   , work_area_(numeric::float4::make(0.f, 0.f, 0.f, 0.f))
   , hmonitor_(hmonitor)
   , device_name_()
-  , area_dirty_(true) {
+  , display_area_dirty_(true)
+  , work_area_dirty_(true) {
 }
 
 void State::updateArea() {
@@ -31,5 +41,6 @@ void State::updateArea() {
     info.rcWork.bottom - info.rcWork.top
   ));
   device_name_ = info.szDevice;
-  area_dirty_ = false;
+  display_area_dirty_ = false;
+  work_area_dirty_ = false;
 }

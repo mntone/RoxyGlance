@@ -11,6 +11,8 @@ class OperationContext final {
 public:
   constexpr OperationContext() noexcept = default;
 
+  [[nodiscard]] winrt::hresult initialize() noexcept;
+
   constexpr monitor::StateCache& monitor() noexcept {
     return monitor_state_cache_;
   }

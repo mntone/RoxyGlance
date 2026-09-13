@@ -19,18 +19,20 @@ inline constexpr std::size_t kMonitorStateCacheDefaultSize = 4;
 /// completed.
 /// </remarks>
 class StateCache final {
-  using StatesType = boost::unordered_flat_map<HMONITOR, State>;
-
   StateCache(StateCache const&) = delete;
   StateCache& operator=(StateCache const&) = delete;
 
 public:
+  using StatesType = boost::unordered_flat_map<HMONITOR, State>;
+
   /// <summary>
   /// Initializes an empty monitor state cache.
   /// </summary>
   constexpr StateCache() noexcept {
     states_.reserve(kMonitorStateCacheDefaultSize);
   }
+
+  [[nodiscard]] winrt::hresult initialize() noexcept;
 
   /// <summary>
   /// Gets the cached state for the specified monitor.
@@ -88,6 +90,9 @@ public:
   inline void remove(HMONITOR hmonitor) noexcept {
     states_.erase(hmonitor);
   }
+
+private:
+  static BOOL CALLBACK EnumDisplayMonitorsCallback(HMONITOR hmonitor, HDC, LPRECT lprcMonitor, LPARAM data) noexcept;
 
 private:
   StatesType states_;

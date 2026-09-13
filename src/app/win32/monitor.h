@@ -10,4 +10,9 @@ __forceinline HMONITOR GetPrimaryHMonitor() noexcept {
   return hMonitor;
 }
 
+__forceinline int GetMonitorCount() noexcept {
+  int const monitorCount = GetSystemMetrics(SM_CMONITORS);
+  return monitorCount;
+}
+
 }

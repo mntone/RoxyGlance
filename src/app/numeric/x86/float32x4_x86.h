@@ -85,27 +85,49 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
 
   static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall splat(T x) noexcept {
     _vec_storage ret;
-    ret.val = _mm_set_ps1(x);
+    if constexpr (N == 1) {
+      ret.val = _mm_set_ss(x);
+    } else if constexpr (N == 2) {
+      if constexpr (__simd_feature_tags::has_sse4_1) {
+        ret.val = _mm_blend_ps(_mm_setzero_ps(), _mm_set_ps1(x), 0b0011);
+      } else {
+        __m128 single = _mm_set_ps1(x);
+        ret.val = _mm_shuffle_ps(single, single, _MM_SHUFFLE(1, 1, 0, 0));
+      }
+    } else if constexpr (N == 3) {
+      if constexpr (__simd_feature_tags::has_sse4_1) {
+        ret.val = _mm_blend_ps(_mm_setzero_ps(), _mm_set_ps1(x), 0b0111);
+      } else {
+        __m128 single = _mm_set_ps1(x);
+        ret.val = _mm_shuffle_ps(single, single, _MM_SHUFFLE(1, 0, 0, 0));
+      }
+    } else {
+      ret.val = _mm_set_ps1(x);
+    }
     return ret;
   }
-  static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall make(T x) noexcept {
+  static NUMERIC_INLINE_CONSTEXPR _vec_storage __vectorcall make(T x, T y, T z, T w) noexcept {
     _vec_storage ret;
-    ret.val = _mm_set_ps(0.f, 0.f, 0.f, x);
+    NUMERIC_IF_CONSTEVAL_{
+      ret.val = {x, y, z, w};
+    } else {
+      ret.val = _mm_set_ps(w, z, y, x);
+    }
     return ret;
   }
-  static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall make(T x, T y) noexcept {
-    _vec_storage ret;
-    ret.val = _mm_set_ps(0.f, 0.f, y, x);
-    return ret;
+  static NUMERIC_INLINE_CONSTEXPR _vec_storage __vectorcall make(T x, T y, T z) noexcept {
+    return make(x, y, z, 0.f);
   }
-  static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall make(T x, T y, T z) noexcept {
-    _vec_storage ret;
-    ret.val = _mm_set_ps(0.f, z, y, x);
-    return ret;
+  static NUMERIC_INLINE_CONSTEXPR _vec_storage __vectorcall make(T x, T y) noexcept {
+    return make(x, y, 0.f, 0.f);
   }
-  static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall make(T x, T y, T z, T w) noexcept {
+  static NUMERIC_INLINE_CONSTEXPR _vec_storage __vectorcall make(T x) noexcept {
     _vec_storage ret;
-    ret.val = _mm_set_ps(w, z, y, x);
+    NUMERIC_IF_CONSTEVAL_{
+      ret.val = {x, 0.f, 0.f, 0.f};
+    } else {
+      ret.val = _mm_set_ss(x);
+    }
     return ret;
   }
   static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall concat(_vec_storage<T, 2, 16> xy, _vec_storage<T, 2, 16> zw) noexcept {

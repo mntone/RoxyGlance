@@ -53,35 +53,35 @@ struct alignas(__alignup(sizeof(T), Align)) vec {
     }
   }
 
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE static vec splat(T s) noexcept {
-    vec ret;
-    ret.storage = storage_type::splat(s);
-    return ret;
+  [[nodiscard]] static NUMERIC_INLINE_CONSTEXPR vec splat(T s) noexcept {
+    NUMERIC_IF_CONSTEVAL_{
+      vec ret;
+      for (std::size_t i = 0; i < storage_type::storage_count; ++i) {
+        ret.storage.setAt(i, i < N ? s : 0);
+      }
+      return ret;
+    } else {
+      return vec{storage_type::splat(s)};
+    }
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE static vec make(T x) noexcept requires (N == 1) {
-    vec ret;
-    ret.storage = storage_type::make(x);
-    return ret;
+  [[nodiscard]] static NUMERIC_INLINE_CONSTEXPR vec make(T x, T y, T z, T w) noexcept requires (N == 4) {
+    return vec{storage_type::make(x, y, z, w)};
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE static vec make(T x, T y) noexcept requires (N == 2) {
-    vec ret;
-    ret.storage = storage_type::make(x, y);
-    return ret;
+  [[nodiscard]] static NUMERIC_INLINE_CONSTEXPR vec make(T x, T y, T z) noexcept requires (N == 3) {
+    return vec{storage_type::make(x, y, z)};
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE static vec make(T x, T y, T z) noexcept requires (N == 3) {
-    vec ret;
-    ret.storage = storage_type::make(x, y, z);
-    return ret;
+  [[nodiscard]] static NUMERIC_INLINE_CONSTEXPR vec make(T x, T y) noexcept requires (N == 2) {
+    return vec{storage_type::make(x, y)};
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE static vec make(T x, T y, T z, T w) noexcept requires (N == 4) {
-    vec ret;
-    ret.storage = storage_type::make(x, y, z, w);
-    return ret;
+  [[nodiscard]] static NUMERIC_INLINE_CONSTEXPR vec make(T x) noexcept requires (N == 1) {
+    return vec{storage_type::make(x)};
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE static vec<T, 4> concat(vec<T, 2, 16> xy, vec<T, 2, 16> zw) noexcept requires (N == 4) {
-    vec ret;
-    ret.storage = storage_type::concat(xy.storage, zw.storage);
-    return ret;
+  [[nodiscard]] static NUMERIC_INLINE_CONSTEXPR vec<T, 4> concat(vec<T, 2, 16> xy, vec<T, 2, 16> zw) noexcept requires (N == 4) {
+    NUMERIC_IF_CONSTEVAL_{
+      return vec{storage_type::make(xy.x(), xy.y(), zw.x(), zw.y())};
+    } else {
+      return vec{storage_type::concat(xy.storage, zw.storage)};
+    }
   }
 
   [[nodiscard]] friend NUMERIC_ALWAYS_INLINE bool operator==(vec lhs, vec rhs) noexcept {

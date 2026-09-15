@@ -86,27 +86,48 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
 
   static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall splat(T x) noexcept {
     _vec_storage ret;
-    ret.val = _mm_set1_epi32(x);
+    if constexpr (N == 1) {
+      ret.val = _mm_cvtsi32_si128(x);
+    } else if constexpr (N == 2) {
+      if constexpr (__simd_feature_tags::has_sse4_1) {
+        ret.val = _mm_blend_epi16(_mm_setzero_si128(), _mm_set1_epi32(x), 0x0F);
+      } else {
+        ret.val = _mm_shuffle_epi32(_mm_cvtsi32_si128(x), _MM_SHUFFLE(1, 1, 0, 0));
+      }
+    } else if constexpr (N == 3) {
+      if constexpr (__simd_feature_tags::has_sse4_1) {
+        ret.val = _mm_blend_epi16(_mm_setzero_si128(), _mm_set1_epi32(x), 0x3F);
+      } else {
+        __m128i single = _mm_cvtsi32_si128(x);
+        ret.val = _mm_unpacklo_epi32(_mm_shuffle_epi32(single, _MM_SHUFFLE(1, 1, 0, 0)), single);
+      }
+    } else {
+      ret.val = _mm_set1_epi32(x);
+    }
     return ret;
   }
-  static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall make(T x) noexcept {
+  static NUMERIC_INLINE_CONSTEXPR _vec_storage __vectorcall make(T x, T y, T z, T w) noexcept {
     _vec_storage ret;
-    ret.val = _mm_set_epi32(0, 0, 0, x);
+    NUMERIC_IF_CONSTEVAL_{
+      ret.val = {.m128i_i32 = {x, y, z, w}};
+    } else {
+      ret.val = _mm_set_epi32(w, z, y, x);
+    }
     return ret;
   }
-  static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall make(T x, T y) noexcept {
-    _vec_storage ret;
-    ret.val = _mm_set_epi32(0, 0, y, x);
-    return ret;
+  static NUMERIC_INLINE_CONSTEXPR _vec_storage __vectorcall make(T x, T y, T z) noexcept {
+    return make(x, y, z, 0);
   }
-  static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall make(T x, T y, T z) noexcept {
-    _vec_storage ret;
-    ret.val = _mm_set_epi32(0, z, y, x);
-    return ret;
+  static NUMERIC_INLINE_CONSTEXPR _vec_storage __vectorcall make(T x, T y) noexcept {
+    return make(x, y, 0, 0);
   }
-  static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall make(T x, T y, T z, T w) noexcept {
+  static NUMERIC_INLINE_CONSTEXPR _vec_storage __vectorcall make(T x) noexcept {
     _vec_storage ret;
-    ret.val = _mm_set_epi32(w, z, y, x);
+    NUMERIC_IF_CONSTEVAL_{
+      ret.val = {.m128i_i32 = {x, 0, 0, 0}};
+    } else {
+      ret.val = _mm_cvtsi32_si128(x);
+    }
     return ret;
   }
   static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall concat(_vec_storage<T, 2, 16> xy, _vec_storage<T, 2, 16> zw) noexcept {

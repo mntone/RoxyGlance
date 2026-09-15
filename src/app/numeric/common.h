@@ -61,6 +61,7 @@ struct __simd_vec_tags {
   static constexpr std::size_t element_count = N;
   static constexpr std::size_t element_length = sizeof(T);
   static constexpr std::size_t storage_length = Align;
+  static constexpr std::size_t storage_count = storage_length / element_length;
   static constexpr std::size_t padding_length = storage_length - element_length * element_count;
   static constexpr std::size_t simd_bits = storage_length * 8;
 };
@@ -74,6 +75,7 @@ struct _vec_storage {
   static constexpr std::size_t element_count = N;
   static constexpr std::size_t element_length = sizeof(T);
   static constexpr std::size_t storage_length = Align;
+  static constexpr std::size_t storage_count = storage_length / element_length;
   static constexpr std::size_t padding_length = storage_length - element_length * N;
   static constexpr std::size_t simd_bits = 0;
 
@@ -118,27 +120,27 @@ struct _vec_storage {
     val[3] = rhs.val[1];
   }
 
-  static constexpr _vec_storage splat(T s) noexcept {
+  static NUMERIC_ALWAYS_INLINE constexpr _vec_storage splat(T s) noexcept {
     _vec_storage ret;
     for (std::size_t i = 0; i < N; ++i) {
-      ret.setAt(i, s);
+      ret.val[i] = s;
     }
     return ret;
   }
-  static constexpr _vec_storage make(std::initializer_list<T> v) noexcept {
-    _vec_storage ret;
-    for (std::size_t i = 0; i < N; ++i) {
-      ret.setAt(i, v[i]);
-    }
-    return ret;
+  static NUMERIC_ALWAYS_INLINE constexpr _vec_storage make(T x, T y, T z, T w) noexcept {
+    return {x, y, z, w};
   }
-  static constexpr _vec_storage concat(std::initializer_list<_vec_storage<T, 2, 16>> v) noexcept {
-    _vec_storage ret;
-    for (std::size_t i = 0; i < (N >> 1); ++i) {
-      ret.setAt(2 * i, v[i].x());
-      ret.setAt(2 * i + 1, v[i].y());
-    }
-    return ret;
+  static NUMERIC_ALWAYS_INLINE constexpr _vec_storage make(T x, T y, T z) noexcept {
+    return {x, y, z};
+  }
+  static NUMERIC_ALWAYS_INLINE constexpr _vec_storage make(T x, T y) noexcept {
+    return {x, y};
+  }
+  static NUMERIC_ALWAYS_INLINE constexpr _vec_storage make(T x) noexcept {
+    return {x};
+  }
+  static NUMERIC_ALWAYS_INLINE constexpr _vec_storage concat(_vec_storage<T, 2, Align> xy, _vec_storage<T, 2, Align> zw) noexcept {
+    return {xy.val[0], xy.val[1], zw.val[0], zw.val[1]};
   }
 
   friend constexpr bool operator==(_vec_storage lhs, _vec_storage rhs) noexcept {

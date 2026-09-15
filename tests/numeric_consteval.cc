@@ -139,4 +139,82 @@ TYPED_TEST(ConstevalTypedVectorTest, GetAccessors) {
   }
 }
 
+TYPED_TEST(ConstevalTypedVectorTest, BuildFunctions) {
+  using T = typename TestFixture::T;
+  using V = typename TestFixture::V;
+  constexpr std::size_t N = TestFixture::N;
+  constexpr std::size_t A = TestFixture::A;
+
+  // vec::splat
+  constexpr V b = V::splat(9);
+  if constexpr (N >= 1) {
+    static_assert(b.x() == 9, "splat failed at x");
+    if constexpr (N >= 2) {
+      static_assert(b.y() == 9, "splat failed at y");
+      if constexpr (N >= 3) {
+        static_assert(b.z() == 9, "splat failed at z");
+        if constexpr (N >= 4) {
+          static_assert(b.w() == 9, "splat failed at w");
+        }
+      } else if constexpr (V::storage_type::simd_bits != 0) {
+        static_assert(b.storage.w() == 0, "splat failed at w");
+      }
+    } else if constexpr (V::storage_type::simd_bits != 0) {
+      static_assert(b.storage.z() == 0, "splat failed at z");
+      static_assert(b.storage.w() == 0, "splat failed at w");
+    }
+  } else if constexpr (V::storage_type::simd_bits != 0) {
+    static_assert(b.storage.y() == 0, "splat failed at y");
+    static_assert(b.storage.z() == 0, "splat failed at z");
+    static_assert(b.storage.w() == 0, "splat failed at w");
+  }
+
+  // vec::make
+  if constexpr (N == 1) {
+    constexpr V c = V::make(1);
+    static_assert(c.x() == 1, "make failed at x");
+    if constexpr (V::storage_type::simd_bits != 0) {
+      static_assert(c.storage.y() == 0, "make failed at y");
+      static_assert(c.storage.z() == 0, "make failed at z");
+      static_assert(c.storage.w() == 0, "make failed at w");
+    }
+  } else if constexpr (N == 2) {
+    constexpr V c = V::make(1, 2);
+    static_assert(c.x() == 1, "make failed at x");
+    static_assert(c.y() == 2, "make failed at y");
+    if constexpr (V::storage_type::simd_bits != 0) {
+      static_assert(c.storage.z() == 0, "make failed at z");
+      static_assert(c.storage.w() == 0, "make failed at w");
+    }
+  } else if constexpr (N == 3) {
+    constexpr V c = V::make(1, 2, 3);
+    static_assert(c.x() == 1, "make failed at x");
+    static_assert(c.y() == 2, "make failed at y");
+    static_assert(c.z() == 3, "make failed at z");
+    if constexpr (V::storage_type::simd_bits != 0) {
+      static_assert(c.storage.w() == 0, "make failed at w");
+    }
+  } else if constexpr (N == 4) {
+    constexpr V c = V::make(1, 2, 3, 4);
+    static_assert(c.x() == 1, "make failed at x");
+    static_assert(c.y() == 2, "make failed at y");
+    static_assert(c.z() == 3, "make failed at z");
+    static_assert(c.w() == 4, "make failed at w");
+  } else {
+    static_assert(false, "Compile-time is not supported");
+  }
+
+  // vec::concat
+  if constexpr (V::storage_type::simd_bits != 0 && N == 4) {
+    using V2 = vec<T, 2, A>;
+    constexpr V2 xy = V2::make(2, 4);
+    constexpr V2 zw = V2::make(6, 3);
+    constexpr V m = V::concat(xy, zw);
+    static_assert(m.x() == 2, "concat failed at x");
+    static_assert(m.y() == 4, "concat failed at y");
+    static_assert(m.z() == 6, "concat failed at z");
+    static_assert(m.w() == 3, "concat failed at w");
+  }
+}
+
 }  // namespace test::roxyg::numeric

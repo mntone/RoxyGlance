@@ -170,6 +170,52 @@ TYPED_TEST(TypedVectorTest, SetAccessors) {
   }
 }
 
+TYPED_TEST(TypedVectorTest, BuildFunctions) {
+  using T = typename TestFixture::T;
+  using V = typename TestFixture::V;
+  constexpr std::size_t N = TestFixture::N;
+  constexpr std::size_t A = TestFixture::A;
+  using V4 = ::roxyg::numeric::vec<T, 4>;
+
+  if constexpr (V::storage_type::simd_bits != 0 && A == V4::storage_type::storage_length) {
+    // vec::splat
+    V4 const actual = V4{.storage = {.val = V::splat(2).storage.val}};
+    V4 expected;
+    if constexpr (N == 1) {
+      expected = V4::make(2, 0, 0, 0);
+    } else if constexpr (N == 2) {
+      expected = V4::make(2, 2, 0, 0);
+    } else if constexpr (N == 3) {
+      expected = V4::make(2, 2, 2, 0);
+    } else if constexpr (N == 4) {
+      expected = V4::make(2, 2, 2, 2);
+    }
+    EXPECT_EQ(actual, expected);
+
+    // vec::make
+    if constexpr (N == 1) {
+      V4 const actual = V4{.storage = {.val = V::make(6).storage.val}};
+      EXPECT_EQ(actual, V4::make(6, 0, 0, 0));
+    } else if constexpr (N == 2) {
+      V4 const actual = V4{.storage = {.val = V::make(6, 7).storage.val}};
+      EXPECT_EQ(actual, V4::make(6, 7, 0, 0));
+    } else if constexpr (N == 3) {
+      V4 const actual = V4{.storage = {.val = V::make(6, 7, 8).storage.val}};
+      EXPECT_EQ(actual, V4::make(6, 7, 8, 0));
+    } else if constexpr (N == 4) {
+      V4 const actual = V4{.storage = {.val = V::make(6, 7, 8, 9).storage.val}};
+      EXPECT_EQ(actual, V4::make(6, 7, 8, 9));
+    }
+
+    // vec::concat
+    if constexpr (N == 4) {
+      using V2 = ::roxyg::numeric::vec<T, 2, A>;
+      V const actual = V::concat(V2::make(11, 12), V2::make(13, 14));
+      EXPECT_EQ(actual, V4::make(11, 12, 13, 14));
+    }
+  }
+}
+
 TYPED_TEST(TypedVectorTest, CompareOperators) {
   using V = typename TestFixture::V;
 

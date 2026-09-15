@@ -56,6 +56,23 @@ using _bitop_t
   std::conditional_t<sizeof(T) == 4, uint32_t,
   std::conditional_t<sizeof(T) == 8, uint64_t, void>>>>>;
 
+template<typename T>
+NUMERIC_ALWAYS_INLINE constexpr T __logical_bit_not(T a) noexcept {
+  return std::bit_cast<T>(~std::bit_cast<_bitop_t<T>>(a));
+}
+template<typename T>
+NUMERIC_ALWAYS_INLINE constexpr T __logical_bit_and(T a, T b) noexcept {
+  return std::bit_cast<T>(std::bit_cast<_bitop_t<T>>(a) & std::bit_cast<_bitop_t<T>>(b));
+}
+template<typename T>
+NUMERIC_ALWAYS_INLINE constexpr T __logical_bit_or(T a, T b) noexcept {
+  return std::bit_cast<T>(std::bit_cast<_bitop_t<T>>(a) | std::bit_cast<_bitop_t<T>>(b));
+}
+template<typename T>
+NUMERIC_ALWAYS_INLINE constexpr T __logical_bit_xor(T a, T b) noexcept {
+  return std::bit_cast<T>(std::bit_cast<_bitop_t<T>>(a) ^ std::bit_cast<_bitop_t<T>>(b));
+}
+
 template<arithmetic T, std::size_t N, std::size_t Align>
 struct __simd_vec_tags {
   static constexpr std::size_t element_count = N;
@@ -143,91 +160,91 @@ struct _vec_storage {
     return {xy.val[0], xy.val[1], zw.val[0], zw.val[1]};
   }
 
-  friend constexpr bool operator==(_vec_storage lhs, _vec_storage rhs) noexcept {
+  friend NUMERIC_ALWAYS_INLINE constexpr bool operator==(_vec_storage lhs, _vec_storage rhs) noexcept {
     for (std::size_t i = 0; i < N; ++i) {
-      if (lhs.at(i) != rhs.at(i)) {
+      if (lhs.val[i] != rhs.val[i]) {
         return false;
       }
     }
     return true;
   }
-  friend constexpr bool operator!=(_vec_storage lhs, _vec_storage rhs) noexcept {
+  friend NUMERIC_ALWAYS_INLINE constexpr bool operator!=(_vec_storage lhs, _vec_storage rhs) noexcept {
     for (std::size_t i = 0; i < N; ++i) {
-      if (lhs.at(i) != rhs.at(i)) {
+      if (lhs.val[i] != rhs.val[i]) {
         return true;
       }
     }
     return false;
   }
 
-  constexpr _vec_storage operator-() const noexcept requires (std::signed_integral<T> || std::floating_point<T>) {
+  NUMERIC_ALWAYS_INLINE constexpr _vec_storage operator-() const noexcept requires (std::signed_integral<T> || std::floating_point<T>) {
     _vec_storage ret;
     for (std::size_t i = 0; i < N; ++i) {
-      ret.setAt(i, -at(i));
+      ret.val[i] = -val[i];
     }
     return ret;
   }
-  constexpr _vec_storage operator~() const noexcept {
+  NUMERIC_ALWAYS_INLINE constexpr _vec_storage operator~() const noexcept {
     _vec_storage ret;
     for (std::size_t i = 0; i < N; ++i) {
-      ret.setAt(i, std::bit_cast<T>(~std::bit_cast<_bitop_t<T>>(at(i))));
+      ret.val[i] = __logical_bit_not(val[i]);
     }
     return ret;
   }
 
-  constexpr _vec_storage& operator+=(_vec_storage rhs) noexcept {
+  NUMERIC_ALWAYS_INLINE constexpr _vec_storage& operator+=(_vec_storage rhs) noexcept {
     for (std::size_t i = 0; i < N; ++i) {
-      setAt(i, at(i) + rhs.at(i));
+      val[i] += rhs.val[i];
     }
     return *this;
   }
-  constexpr _vec_storage& operator-=(_vec_storage rhs) noexcept {
+  NUMERIC_ALWAYS_INLINE constexpr _vec_storage& operator-=(_vec_storage rhs) noexcept {
     for (std::size_t i = 0; i < N; ++i) {
-      setAt(i, at(i) - rhs.at(i));
+      val[i] -= rhs.val[i];
     }
     return *this;
   }
-  constexpr _vec_storage& operator*=(_vec_storage rhs) noexcept {
+  NUMERIC_ALWAYS_INLINE constexpr _vec_storage& operator*=(_vec_storage rhs) noexcept {
     for (std::size_t i = 0; i < N; ++i) {
-      setAt(i, at(i) * rhs.at(i));
+      val[i] *= rhs.val[i];
     }
     return *this;
   }
-  constexpr _vec_storage& operator/=(_vec_storage rhs) noexcept {
+  NUMERIC_ALWAYS_INLINE constexpr _vec_storage& operator/=(_vec_storage rhs) noexcept {
     for (std::size_t i = 0; i < N; ++i) {
-      setAt(i, at(i) / rhs.at(i));
-    }
-    return *this;
-  }
-
-  constexpr _vec_storage& operator&=(_vec_storage rhs) noexcept {
-    for (std::size_t i = 0; i < N; ++i) {
-      setAt(i, std::bit_cast<T>(std::bit_cast<_bitop_t<T>>(at(i)) & std::bit_cast<_bitop_t<T>>(rhs.at(i))));
-    }
-    return *this;
-  }
-  constexpr _vec_storage& operator|=(_vec_storage rhs) noexcept {
-    for (std::size_t i = 0; i < N; ++i) {
-      setAt(i, std::bit_cast<T>(std::bit_cast<_bitop_t<T>>(at(i)) | std::bit_cast<_bitop_t<T>>(rhs.at(i))));
-    }
-    return *this;
-  }
-  constexpr _vec_storage& operator^=(_vec_storage rhs) noexcept {
-    for (std::size_t i = 0; i < N; ++i) {
-      setAt(i, std::bit_cast<T>(std::bit_cast<_bitop_t<T>>(at(i)) ^ std::bit_cast<_bitop_t<T>>(rhs.at(i))));
+      val[i] /= rhs.val[i];
     }
     return *this;
   }
 
-  constexpr _vec_storage& operator>>=(_vec_storage rhs) noexcept requires std::integral<T> {
+  NUMERIC_ALWAYS_INLINE constexpr _vec_storage& operator&=(_vec_storage rhs) noexcept {
     for (std::size_t i = 0; i < N; ++i) {
-      setAt(i, at(i) >> rhs.at(i));
+      val[i] = __logical_bit_and(val[i], rhs.val[i]);
     }
     return *this;
   }
-  constexpr _vec_storage& operator<<=(_vec_storage rhs) noexcept requires std::integral<T> {
+  NUMERIC_ALWAYS_INLINE constexpr _vec_storage& operator|=(_vec_storage rhs) noexcept {
     for (std::size_t i = 0; i < N; ++i) {
-      setAt(i, at(i) << rhs.at(i));
+      val[i] = __logical_bit_or(val[i], rhs.val[i]);
+    }
+    return *this;
+  }
+  NUMERIC_ALWAYS_INLINE constexpr _vec_storage& operator^=(_vec_storage rhs) noexcept {
+    for (std::size_t i = 0; i < N; ++i) {
+      val[i] = __logical_bit_xor(val[i], rhs.val[i]);
+    }
+    return *this;
+  }
+
+  NUMERIC_ALWAYS_INLINE constexpr _vec_storage& operator>>=(_vec_storage rhs) noexcept requires std::integral<T> {
+    for (std::size_t i = 0; i < N; ++i) {
+      val[i] >>= rhs.val[i];
+    }
+    return *this;
+  }
+  NUMERIC_ALWAYS_INLINE constexpr _vec_storage& operator<<=(_vec_storage rhs) noexcept requires std::integral<T> {
+    for (std::size_t i = 0; i < N; ++i) {
+      val[i] <<= rhs.val[i];
     }
     return *this;
   }
@@ -235,28 +252,28 @@ struct _vec_storage {
   NUMERIC_ALWAYS_INLINE _vec_storage ceil() const noexcept requires std::floating_point<T> {
     _vec_storage ret;
     for (std::size_t i = 0; i < N; ++i) {
-      ret.setAt(i, std::ceil(at(i)));
+      ret.val[i] = std::ceil(val[i]);
     }
     return ret;
   }
   NUMERIC_ALWAYS_INLINE _vec_storage floor() const noexcept requires std::floating_point<T> {
     _vec_storage ret;
     for (std::size_t i = 0; i < N; ++i) {
-      ret.setAt(i, std::floor(at(i)));
+      ret.val[i] = std::floor(val[i]);
     }
     return ret;
   }
   NUMERIC_ALWAYS_INLINE _vec_storage rint() const noexcept requires std::floating_point<T> {
     _vec_storage ret;
     for (std::size_t i = 0; i < N; ++i) {
-      ret.setAt(i, std::rint(at(i)));
+      ret.val[i] = std::rint(val[i]);
     }
     return ret;
   }
   NUMERIC_ALWAYS_INLINE _vec_storage trunc() const noexcept requires std::floating_point<T> {
     _vec_storage ret;
     for (std::size_t i = 0; i < N; ++i) {
-      ret.setAt(i, std::trunc(at(i)));
+      ret.val[i] = std::trunc(val[i]);
     }
     return ret;
   }
@@ -265,35 +282,35 @@ struct _vec_storage {
   NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> _lceil() const noexcept requires std::floating_point<T> {
     _vec_storage<long, N, long_storage_length> ret;
     for (std::size_t i = 0; i < N; ++i) {
-      ret.setAt(i, static_cast<long>(std::ceil(at(i))));
+      ret.val[i] = static_cast<long>(std::ceil(val[i]));
     }
     return ret;
   }
   NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> _lfloor() const noexcept requires std::floating_point<T> {
     _vec_storage<long, N, long_storage_length> ret;
     for (std::size_t i = 0; i < N; ++i) {
-      ret.setAt(i, static_cast<long>(std::floor(at(i))));
+      ret.val[i] = static_cast<long>(std::floor(val[i]));
     }
     return ret;
   }
   NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> _lrint() const noexcept requires std::floating_point<T> {
     _vec_storage<long, N, long_storage_length> ret;
     for (std::size_t i = 0; i < N; ++i) {
-      ret.setAt(i, std::lrint(at(i)));
+      ret.val[i] = std::lrint(val[i]);
     }
     return ret;
   }
   NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> _lround() const noexcept requires std::floating_point<T> {
     _vec_storage<long, N, long_storage_length> ret;
     for (std::size_t i = 0; i < N; ++i) {
-      ret.setAt(i, std::lround(at(i)));
+      ret.val[i] = std::lround(val[i]);
     }
     return ret;
   }
   NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> _ltrunc() const noexcept requires std::floating_point<T> {
     _vec_storage<long, N, long_storage_length> ret;
     for (std::size_t i = 0; i < N; ++i) {
-      ret.setAt(i, static_cast<long>(at(i)));
+      ret.val[i] = static_cast<long>(val[i]);
     }
     return ret;
   }

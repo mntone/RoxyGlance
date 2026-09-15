@@ -107,6 +107,7 @@
     <ClInclude Include="settings_shared.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="numeric_consteval.cc" />
     <ClCompile Include="numeric_float.cc" />
     <ClCompile Include="numeric.cc" />
     <ClCompile Include="pch.cc">

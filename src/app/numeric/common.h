@@ -7,6 +7,7 @@
 #include <concepts>
 #include <cmath>
 #include <cstdint>
+#include <type_traits>
 #endif
 
 #if defined(_MSC_VER)
@@ -16,6 +17,22 @@
 #else
 #  define NUMERIC_ALWAYS_INLINE inline
 #endif
+
+#if defined(__cpp_if_consteval) && __cpp_if_consteval >= 202106L
+#  define NUMERIC_CONSTEXPR_IF_SUPPORTED constexpr
+#  define NUMERIC_IF_CONSTEVAL_          if consteval
+#elif defined(__cpp_lib_is_constant_evaluated) && __cpp_lib_is_constant_evaluated >= 201811L
+#  define NUMERIC_CONSTEXPR_IF_SUPPORTED constexpr
+#  define NUMERIC_IF_CONSTEVAL_          if (std::is_constant_evaluated())
+#elif defined(__GNUC__)
+#  define NUMERIC_CONSTEXPR_IF_SUPPORTED constexpr
+#  define NUMERIC_IF_CONSTEVAL_          if (__builtin_is_constant_evaluated())
+#else
+#  define NUMERIC_CONSTEXPR_IF_SUPPORTED
+#  define NUMERIC_IF_CONSTEVAL_          if (0)
+#endif
+
+#define NUMERIC_INLINE_CONSTEXPR NUMERIC_ALWAYS_INLINE NUMERIC_CONSTEXPR_IF_SUPPORTED
 
 namespace roxyg::numeric {
 
@@ -63,48 +80,42 @@ struct _vec_storage {
   using value_type = _basic_vec_storage<T, N>;
   alignas(Align) value_type val;
 
-  constexpr T x() const noexcept { return val[0]; }
-  constexpr T y() const noexcept { return val[1]; }
-  constexpr T z() const noexcept { return val[2]; }
-  constexpr T w() const noexcept { return val[3]; }
-  constexpr T at(std::size_t i) const noexcept {
+  NUMERIC_ALWAYS_INLINE constexpr T x() const noexcept { return val[0]; }
+  NUMERIC_ALWAYS_INLINE constexpr T y() const noexcept { return val[1]; }
+  NUMERIC_ALWAYS_INLINE constexpr T z() const noexcept { return val[2]; }
+  NUMERIC_ALWAYS_INLINE constexpr T w() const noexcept { return val[3]; }
+  NUMERIC_ALWAYS_INLINE constexpr T at(std::size_t i) const noexcept {
 #if _DEBUG
     assert(i >= 0 && i < N && "index out of range");
 #endif
     return val.at(i);
   }
 
-  constexpr _vec_storage<T, 2, Align> xy() const noexcept {
-    _vec_storage<T, 2, Align> ret;
-    ret.setX(x());
-    ret.setY(y());
-    return ret;
+  NUMERIC_ALWAYS_INLINE constexpr _vec_storage<T, 2, Align> xy() const noexcept {
+    return {val[0], val[1]};
   }
-  constexpr _vec_storage<T, 2, Align> zw() const noexcept {
-    _vec_storage<T, 2, Align> ret;
-    ret.setX(z());
-    ret.setY(w());
-    return ret;
+  NUMERIC_ALWAYS_INLINE constexpr _vec_storage<T, 2, Align> zw() const noexcept {
+    return {val[2], val[3]};
   }
 
-  constexpr void setX(T rhs) noexcept { val[0] = rhs; }
-  constexpr void setY(T rhs) noexcept { val[1] = rhs; }
-  constexpr void setZ(T rhs) noexcept { val[2] = rhs; }
-  constexpr void setW(T rhs) noexcept { val[3] = rhs; }
-  constexpr void setAt(std::size_t i, T rhs) noexcept {
+  NUMERIC_ALWAYS_INLINE constexpr void setX(T rhs) noexcept { val[0] = rhs; }
+  NUMERIC_ALWAYS_INLINE constexpr void setY(T rhs) noexcept { val[1] = rhs; }
+  NUMERIC_ALWAYS_INLINE constexpr void setZ(T rhs) noexcept { val[2] = rhs; }
+  NUMERIC_ALWAYS_INLINE constexpr void setW(T rhs) noexcept { val[3] = rhs; }
+  NUMERIC_ALWAYS_INLINE constexpr void setAt(std::size_t i, T rhs) noexcept {
 #if _DEBUG
     assert(i >= 0 && i < N && "index out of range");
 #endif
-    val.at(i) = rhs;
+    val[i] = rhs;
   }
 
-  constexpr void setXY(_vec_storage<T, 2, Align> rhs) noexcept {
-    setAt(0, rhs.at(0));
-    setAt(1, rhs.at(1));
+  NUMERIC_ALWAYS_INLINE constexpr void setXY(_vec_storage<T, 2, Align> rhs) noexcept {
+    val[0] = rhs.val[0];
+    val[1] = rhs.val[1];
   }
-  constexpr void setZW(_vec_storage<T, 2, Align> rhs) noexcept {
-    setAt(2, rhs.at(0));
-    setAt(3, rhs.at(1));
+  NUMERIC_ALWAYS_INLINE constexpr void setZW(_vec_storage<T, 2, Align> rhs) noexcept {
+    val[2] = rhs.val[0];
+    val[3] = rhs.val[1];
   }
 
   static constexpr _vec_storage splat(T s) noexcept {

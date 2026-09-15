@@ -20,27 +20,37 @@ struct alignas(__alignup(sizeof(T), Align)) vec {
 
   storage_type storage;
 
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T x() const noexcept requires (N >= 1) { return storage.x(); }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T y() const noexcept requires (N >= 2) { return storage.y(); }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T z() const noexcept requires (N >= 3) { return storage.z(); }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T w() const noexcept requires (N >= 4) { return storage.w(); }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T at(std::size_t i) const noexcept { return storage.at(i); }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T operator[](std::size_t i) const { return storage.at(i); }
+  [[nodiscard]] NUMERIC_INLINE_CONSTEXPR T x() const noexcept requires (N >= 1) { return storage.x(); }
+  [[nodiscard]] NUMERIC_INLINE_CONSTEXPR T y() const noexcept requires (N >= 2) { return storage.y(); }
+  [[nodiscard]] NUMERIC_INLINE_CONSTEXPR T z() const noexcept requires (N >= 3) { return storage.z(); }
+  [[nodiscard]] NUMERIC_INLINE_CONSTEXPR T w() const noexcept requires (N >= 4) { return storage.w(); }
+  [[nodiscard]] NUMERIC_INLINE_CONSTEXPR T at(std::size_t i) const noexcept { return storage.at(i); }
+  [[nodiscard]] NUMERIC_INLINE_CONSTEXPR T operator[](std::size_t i) const { return storage.at(i); }
 
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE vec<T, 2, Align> xy() const noexcept requires (N >= 2) { return {storage.xy()}; }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE vec<T, 2, Align> zw() const noexcept requires (N >= 4) { return {storage.zw()}; }
+  [[nodiscard]] NUMERIC_INLINE_CONSTEXPR vec<T, 2, Align> xy() const noexcept requires (N >= 2) { return {storage.xy()}; }
+  [[nodiscard]] NUMERIC_INLINE_CONSTEXPR vec<T, 2, Align> zw() const noexcept requires (N >= 4) { return {storage.zw()}; }
 
-  NUMERIC_ALWAYS_INLINE void setX(T rhs) noexcept requires (N >= 1) { storage.setX(rhs); }
-  NUMERIC_ALWAYS_INLINE void setY(T rhs) noexcept requires (N >= 2) { storage.setY(rhs); }
-  NUMERIC_ALWAYS_INLINE void setZ(T rhs) noexcept requires (N >= 3) { storage.setZ(rhs); }
-  NUMERIC_ALWAYS_INLINE void setW(T rhs) noexcept requires (N >= 4) { storage.setW(rhs); }
-  NUMERIC_ALWAYS_INLINE void setAt(std::size_t i, T rhs) noexcept { storage.setAt(i, rhs); }
+  NUMERIC_INLINE_CONSTEXPR void setX(T rhs) noexcept requires (N >= 1) { storage.setX(rhs); }
+  NUMERIC_INLINE_CONSTEXPR void setY(T rhs) noexcept requires (N >= 2) { storage.setY(rhs); }
+  NUMERIC_INLINE_CONSTEXPR void setZ(T rhs) noexcept requires (N >= 3) { storage.setZ(rhs); }
+  NUMERIC_INLINE_CONSTEXPR void setW(T rhs) noexcept requires (N >= 4) { storage.setW(rhs); }
+  NUMERIC_INLINE_CONSTEXPR void setAt(std::size_t i, T rhs) noexcept { storage.setAt(i, rhs); }
 
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE void setXY(vec<T, 2, Align> rhs) noexcept requires (N >= 2) {
-    storage.setXY(rhs.storage);
+  NUMERIC_INLINE_CONSTEXPR void setXY(vec<T, 2, Align> rhs) noexcept requires (N >= 2) {
+    NUMERIC_IF_CONSTEVAL_{
+      storage.setX(rhs.x());
+      storage.setY(rhs.y());
+    } else {
+      storage.setXY(rhs.storage);
+    }
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE void setZW(vec<T, 2, Align> rhs) noexcept requires (N >= 4) {
-    storage.setZW(rhs.storage);
+  NUMERIC_INLINE_CONSTEXPR void setZW(vec<T, 2, Align> rhs) noexcept requires (N >= 4) {
+    NUMERIC_IF_CONSTEVAL_{
+      storage.setZ(rhs.x());
+      storage.setW(rhs.y());
+    } else {
+      storage.setZW(rhs.storage);
+    }
   }
 
   [[nodiscard]] NUMERIC_ALWAYS_INLINE static vec splat(T s) noexcept {

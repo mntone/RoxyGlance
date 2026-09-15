@@ -7,14 +7,14 @@ namespace roxyg::numeric {
 
 template<std::signed_integral T, int Index>
   requires (sizeof(T) == 4)
-NUMERIC_ALWAYS_INLINE T _numeric128_i32_get(__m128i val) {
+NUMERIC_INLINE_CONSTEXPR T _numeric128_i32_get(__m128i val) noexcept {
   static_assert(Index >= 0 && Index <= 3, "index out of range [0-3]");
   return static_cast<T>(val.m128i_i32[Index]);
 }
 
 template<std::signed_integral T, int Index>
   requires (sizeof(T) == 4)
-NUMERIC_ALWAYS_INLINE void _numeric128_i32_set(__m128i& val, T scalar) {
+NUMERIC_INLINE_CONSTEXPR void _numeric128_i32_set(__m128i& val, T scalar) noexcept {
   static_assert(Index >= 0 && Index <= 3, "index out of range [0-3]");
   val.m128i_i32[Index] = static_cast<int>(scalar);
 }
@@ -28,47 +28,55 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
   using value_type = i32x4;
   value_type val;
 
-  NUMERIC_ALWAYS_INLINE T x() const noexcept { return _numeric128_i32_get<T, 0>(val); }
-  NUMERIC_ALWAYS_INLINE T y() const noexcept { return _numeric128_i32_get<T, 1>(val); }
-  NUMERIC_ALWAYS_INLINE T z() const noexcept { return _numeric128_i32_get<T, 2>(val); }
-  NUMERIC_ALWAYS_INLINE T w() const noexcept { return _numeric128_i32_get<T, 3>(val); }
-  NUMERIC_ALWAYS_INLINE T at(std::size_t i) const noexcept {
+  NUMERIC_INLINE_CONSTEXPR T __vectorcall x() const noexcept { return _numeric128_i32_get<T, 0>(val); }
+  NUMERIC_INLINE_CONSTEXPR T __vectorcall y() const noexcept { return _numeric128_i32_get<T, 1>(val); }
+  NUMERIC_INLINE_CONSTEXPR T __vectorcall z() const noexcept { return _numeric128_i32_get<T, 2>(val); }
+  NUMERIC_INLINE_CONSTEXPR T __vectorcall w() const noexcept { return _numeric128_i32_get<T, 3>(val); }
+  NUMERIC_INLINE_CONSTEXPR T __vectorcall at(std::size_t i) const noexcept {
 #if _DEBUG
     assert(i >= 0 && i <= 3 && "index out of range [0-3]");
 #endif
     return static_cast<T>(val.m128i_i32[i]);
   }
 
-  NUMERIC_ALWAYS_INLINE _vec_storage<T, 2, 16> xy() const noexcept {
+  NUMERIC_INLINE_CONSTEXPR _vec_storage<T, 2, 16> __vectorcall xy() const noexcept {
     _vec_storage<T, 2, 16> ret;
-    ret.val = _mm_unpacklo_epi64(val, val);
+    NUMERIC_IF_CONSTEVAL_{
+      ret.val = {.m128i_i32 = {val.m128i_i32[0], val.m128i_i32[1], 0, 0}};
+    } else {
+      ret.val = _mm_unpacklo_epi64(val, val);
+    }
     return ret;
   }
-  NUMERIC_ALWAYS_INLINE _vec_storage<T, 2, 16> zw() const noexcept {
+  NUMERIC_INLINE_CONSTEXPR _vec_storage<T, 2, 16> __vectorcall zw() const noexcept {
     _vec_storage<T, 2, 16> ret;
-    ret.val = _mm_unpackhi_epi64(val, val);
+    NUMERIC_IF_CONSTEVAL_{
+      ret.val = {.m128i_i32 = {val.m128i_i32[2], val.m128i_i32[3], 0, 0}};
+    } else {
+      ret.val = _mm_unpackhi_epi64(val, val);
+    }
     return ret;
   }
 
-  NUMERIC_ALWAYS_INLINE void setX(T rhs) noexcept { _numeric128_i32_set<T, 0>(val, rhs); }
-  NUMERIC_ALWAYS_INLINE void setY(T rhs) noexcept { _numeric128_i32_set<T, 1>(val, rhs); }
-  NUMERIC_ALWAYS_INLINE void setZ(T rhs) noexcept { _numeric128_i32_set<T, 2>(val, rhs); }
-  NUMERIC_ALWAYS_INLINE void setW(T rhs) noexcept { _numeric128_i32_set<T, 3>(val, rhs); }
-  NUMERIC_ALWAYS_INLINE void setAt(std::size_t i, T rhs) noexcept {
+  NUMERIC_INLINE_CONSTEXPR void __vectorcall setX(T rhs) noexcept { _numeric128_i32_set<T, 0>(val, rhs); }
+  NUMERIC_INLINE_CONSTEXPR void __vectorcall setY(T rhs) noexcept { _numeric128_i32_set<T, 1>(val, rhs); }
+  NUMERIC_INLINE_CONSTEXPR void __vectorcall setZ(T rhs) noexcept { _numeric128_i32_set<T, 2>(val, rhs); }
+  NUMERIC_INLINE_CONSTEXPR void __vectorcall setW(T rhs) noexcept { _numeric128_i32_set<T, 3>(val, rhs); }
+  NUMERIC_INLINE_CONSTEXPR void __vectorcall setAt(std::size_t i, T rhs) noexcept {
 #if _DEBUG
     assert(i >= 0 && i <= 3 && "index out of range [0-3]");
 #endif
     val.m128i_i32[i] = static_cast<int>(rhs);
   }
 
-  NUMERIC_ALWAYS_INLINE void setXY(_vec_storage<T, 2, 16> rhs) noexcept {
+  NUMERIC_ALWAYS_INLINE void __vectorcall setXY(_vec_storage<T, 2, 16> rhs) noexcept {
     if constexpr (__simd_feature_tags::has_sse4_1) {
       val = _mm_blend_epi16(val, rhs.val, 0x0F);
     } else {
       val = _mm_unpacklo_epi64(rhs.val, _mm_unpackhi_epi64(val, val));
     }
   }
-  NUMERIC_ALWAYS_INLINE void setZW(_vec_storage<T, 2, 16> rhs) noexcept {
+  NUMERIC_ALWAYS_INLINE void __vectorcall setZW(_vec_storage<T, 2, 16> rhs) noexcept {
     if constexpr (__simd_feature_tags::has_sse4_1) {
       val = _mm_blend_epi16(val, rhs.val, 0xF0);
     } else {

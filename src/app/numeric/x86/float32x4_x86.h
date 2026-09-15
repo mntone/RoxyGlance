@@ -7,19 +7,19 @@ namespace roxyg::numeric {
 
 template<std::floating_point T, int Index>
   requires (sizeof(T) == 4)
-NUMERIC_ALWAYS_INLINE T _numerics128_f32_get(__m128 val) {
+NUMERIC_ALWAYS_INLINE T _numeric128_f32_get(__m128 val) {
   static_assert(Index >= 0 && Index <= 3, "index out of range [0-3]");
   return static_cast<T>(val.m128_f32[Index]);
 }
 
 template<std::floating_point T, int Index>
   requires (sizeof(T) == 4)
-NUMERIC_ALWAYS_INLINE void _numerics128_f32_set(__m128& val, T scalar) {
+NUMERIC_ALWAYS_INLINE void _numeric128_f32_set(__m128& val, T scalar) {
   static_assert(Index >= 0 && Index <= 3, "index out of range [0-3]");
   val.m128_f32[Index] = static_cast<float>(scalar);
 }
 
-[[nodiscard]] NUMERIC_ALWAYS_INLINE __m128 _numerics128_rint_ps(__m128 v) noexcept {
+[[nodiscard]] NUMERIC_ALWAYS_INLINE __m128 _numeric128_rint_ps(__m128 v) noexcept {
   __m128 const magic = _mm_set_ps1(8388608.f); // 2^23
   __m128 const signed_magic = _mm_or_ps(magic, _mm_and_ps(v, _mm_set_ps1(-0.f)));
   __m128 const mask = _mm_cmplt_ps(_mm_andnot_ps(_mm_set_ps1(-0.f), v), magic);
@@ -35,10 +35,10 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
   using value_type = f32x4;
   value_type val;
 
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T x() const noexcept requires (N >= 1) { return _numerics128_f32_get<T, 0>(val); }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T y() const noexcept requires (N >= 2) { return _numerics128_f32_get<T, 1>(val); }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T z() const noexcept requires (N >= 3) { return _numerics128_f32_get<T, 2>(val); }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T w() const noexcept requires (N == 4) { return _numerics128_f32_get<T, 3>(val); }
+  [[nodiscard]] NUMERIC_ALWAYS_INLINE T x() const noexcept requires (N >= 1) { return _numeric128_f32_get<T, 0>(val); }
+  [[nodiscard]] NUMERIC_ALWAYS_INLINE T y() const noexcept requires (N >= 2) { return _numeric128_f32_get<T, 1>(val); }
+  [[nodiscard]] NUMERIC_ALWAYS_INLINE T z() const noexcept requires (N >= 3) { return _numeric128_f32_get<T, 2>(val); }
+  [[nodiscard]] NUMERIC_ALWAYS_INLINE T w() const noexcept requires (N == 4) { return _numeric128_f32_get<T, 3>(val); }
   [[nodiscard]] NUMERIC_ALWAYS_INLINE T at(std::size_t i) const noexcept {
 #if _DEBUG
     assert(i >= 0 && i <= 3 && "index out of range [0-3]");
@@ -57,10 +57,10 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     return ret;
   }
 
-  NUMERIC_ALWAYS_INLINE void setX(T rhs) noexcept requires (N >= 1) { _numerics128_f32_set<T, 0>(val, rhs); }
-  NUMERIC_ALWAYS_INLINE void setY(T rhs) noexcept requires (N >= 2) { _numerics128_f32_set<T, 1>(val, rhs); }
-  NUMERIC_ALWAYS_INLINE void setZ(T rhs) noexcept requires (N >= 3) { _numerics128_f32_set<T, 2>(val, rhs); }
-  NUMERIC_ALWAYS_INLINE void setW(T rhs) noexcept requires (N == 4) { _numerics128_f32_set<T, 3>(val, rhs); }
+  NUMERIC_ALWAYS_INLINE void setX(T rhs) noexcept requires (N >= 1) { _numeric128_f32_set<T, 0>(val, rhs); }
+  NUMERIC_ALWAYS_INLINE void setY(T rhs) noexcept requires (N >= 2) { _numeric128_f32_set<T, 1>(val, rhs); }
+  NUMERIC_ALWAYS_INLINE void setZ(T rhs) noexcept requires (N >= 3) { _numeric128_f32_set<T, 2>(val, rhs); }
+  NUMERIC_ALWAYS_INLINE void setW(T rhs) noexcept requires (N == 4) { _numeric128_f32_set<T, 3>(val, rhs); }
   NUMERIC_ALWAYS_INLINE void setAt(std::size_t i, T rhs) noexcept {
 #if _DEBUG
     assert(i >= 0 && i <= 3 && "index out of range [0-3]");
@@ -177,7 +177,7 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     if constexpr (__simd_feature_tags::has_sse4_1) {
       ret.val = _mm_ceil_ps(val);
     } else {
-      __m128 const rint_val = _numerics128_rint_ps(val);
+      __m128 const rint_val = _numeric128_rint_ps(val);
       __m128 const mask = _mm_cmplt_ps(rint_val, val);
       __m128 const adjustment = _mm_and_ps(mask, _mm_set_ps1(1.f));
       ret.val = _mm_add_ps(rint_val, adjustment);  // +1 if (rint < v)
@@ -189,7 +189,7 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     if constexpr (__simd_feature_tags::has_sse4_1) {
       ret.val = _mm_floor_ps(val);
     } else {
-      __m128 const rint_val = _numerics128_rint_ps(val);
+      __m128 const rint_val = _numeric128_rint_ps(val);
       __m128 const mask = _mm_cmpgt_ps(rint_val, val);
       __m128 const adjustment = _mm_and_ps(mask, _mm_set_ps1(1.f));
       ret.val = _mm_sub_ps(rint_val, adjustment);  // -1 if (rint > v)
@@ -201,7 +201,7 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     if constexpr (__simd_feature_tags::has_sse4_1) {
       ret.val = _mm_round_ps(val, _MM_FROUND_NEARBYINT);
     } else {
-      ret.val = _numerics128_rint_ps(val);
+      ret.val = _numeric128_rint_ps(val);
     }
     return ret;
   }
@@ -210,7 +210,7 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     if constexpr (__simd_feature_tags::has_sse4_1) {
       ret.val = _mm_round_ps(val, _MM_FROUND_TRUNC);
     } else {
-      __m128 const rint_val = _numerics128_rint_ps(val);
+      __m128 const rint_val = _numeric128_rint_ps(val);
       __m128 const abs_val = _mm_andnot_ps(_mm_set_ps1(-0.f), val);
       __m128 const abs_rint = _mm_andnot_ps(_mm_set_ps1(-0.f), rint_val);
       __m128 const mask = _mm_cmpgt_ps(abs_rint, abs_val);

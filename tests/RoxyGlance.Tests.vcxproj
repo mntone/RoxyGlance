@@ -102,13 +102,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="numerics_shared.h" />
+    <ClInclude Include="numeric_shared.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="settings_shared.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="numerics.cc" />
-    <ClCompile Include="numerics_float.cc" />
+    <ClCompile Include="numeric_float.cc" />
+    <ClCompile Include="numeric.cc" />
     <ClCompile Include="pch.cc">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

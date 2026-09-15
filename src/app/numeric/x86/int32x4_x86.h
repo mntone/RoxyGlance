@@ -7,14 +7,14 @@ namespace roxyg::numeric {
 
 template<std::signed_integral T, int Index>
   requires (sizeof(T) == 4)
-NUMERIC_ALWAYS_INLINE T _numerics128_i32_get(__m128i val) {
+NUMERIC_ALWAYS_INLINE T _numeric128_i32_get(__m128i val) {
   static_assert(Index >= 0 && Index <= 3, "index out of range [0-3]");
   return static_cast<T>(val.m128i_i32[Index]);
 }
 
 template<std::signed_integral T, int Index>
   requires (sizeof(T) == 4)
-NUMERIC_ALWAYS_INLINE void _numerics128_i32_set(__m128i& val, T scalar) {
+NUMERIC_ALWAYS_INLINE void _numeric128_i32_set(__m128i& val, T scalar) {
   static_assert(Index >= 0 && Index <= 3, "index out of range [0-3]");
   val.m128i_i32[Index] = static_cast<int>(scalar);
 }
@@ -28,10 +28,10 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
   using value_type = i32x4;
   value_type val;
 
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T x() const noexcept requires (N >= 1) { return _numerics128_i32_get<T, 0>(val); }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T y() const noexcept requires (N >= 2) { return _numerics128_i32_get<T, 1>(val); }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T z() const noexcept requires (N >= 3) { return _numerics128_i32_get<T, 2>(val); }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T w() const noexcept requires (N == 4) { return _numerics128_i32_get<T, 3>(val); }
+  [[nodiscard]] NUMERIC_ALWAYS_INLINE T x() const noexcept requires (N >= 1) { return _numeric128_i32_get<T, 0>(val); }
+  [[nodiscard]] NUMERIC_ALWAYS_INLINE T y() const noexcept requires (N >= 2) { return _numeric128_i32_get<T, 1>(val); }
+  [[nodiscard]] NUMERIC_ALWAYS_INLINE T z() const noexcept requires (N >= 3) { return _numeric128_i32_get<T, 2>(val); }
+  [[nodiscard]] NUMERIC_ALWAYS_INLINE T w() const noexcept requires (N == 4) { return _numeric128_i32_get<T, 3>(val); }
   [[nodiscard]] NUMERIC_ALWAYS_INLINE T at(std::size_t i) const noexcept {
 #if _DEBUG
     assert(i >= 0 && i <= 3 && "index out of range [0-3]");
@@ -50,10 +50,10 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     return ret;
   }
 
-  NUMERIC_ALWAYS_INLINE void setX(T rhs) noexcept requires (N >= 1) { _numerics128_i32_set<T, 0>(val, rhs); }
-  NUMERIC_ALWAYS_INLINE void setY(T rhs) noexcept requires (N >= 2) { _numerics128_i32_set<T, 1>(val, rhs); }
-  NUMERIC_ALWAYS_INLINE void setZ(T rhs) noexcept requires (N >= 3) { _numerics128_i32_set<T, 2>(val, rhs); }
-  NUMERIC_ALWAYS_INLINE void setW(T rhs) noexcept requires (N == 4) { _numerics128_i32_set<T, 3>(val, rhs); }
+  NUMERIC_ALWAYS_INLINE void setX(T rhs) noexcept requires (N >= 1) { _numeric128_i32_set<T, 0>(val, rhs); }
+  NUMERIC_ALWAYS_INLINE void setY(T rhs) noexcept requires (N >= 2) { _numeric128_i32_set<T, 1>(val, rhs); }
+  NUMERIC_ALWAYS_INLINE void setZ(T rhs) noexcept requires (N >= 3) { _numeric128_i32_set<T, 2>(val, rhs); }
+  NUMERIC_ALWAYS_INLINE void setW(T rhs) noexcept requires (N == 4) { _numeric128_i32_set<T, 3>(val, rhs); }
   NUMERIC_ALWAYS_INLINE void setAt(std::size_t i, T rhs) noexcept {
 #if _DEBUG
     assert(i >= 0 && i <= 3 && "index out of range [0-3]");

@@ -406,7 +406,7 @@ template<std::floating_point F, std::size_t N, std::size_t Align>
 
 }
 
-#ifndef DISABLE_NUMERICS_CAST_USING
+#ifndef DISABLE_NUMERIC_CAST_USING
 using namespace cast;
 #endif
 
@@ -453,7 +453,7 @@ using float4 = vec<float, 4>;
 
 }
 
-#ifndef DISABLE_NUMERICS_ALIASES_USING
+#ifndef DISABLE_NUMERIC_ALIASES_USING
 using namespace aliases;
 #endif
 

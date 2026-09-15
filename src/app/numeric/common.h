@@ -63,34 +63,34 @@ struct _vec_storage {
   using value_type = _basic_vec_storage<T, N>;
   alignas(Align) value_type val;
 
-  [[nodiscard]] constexpr T x() const noexcept requires (N >= 1) { return val[0]; }
-  [[nodiscard]] constexpr T y() const noexcept requires (N >= 2) { return val[1]; }
-  [[nodiscard]] constexpr T z() const noexcept requires (N >= 3) { return val[2]; }
-  [[nodiscard]] constexpr T w() const noexcept requires (N >= 4) { return val[3]; }
-  [[nodiscard]] constexpr T at(std::size_t i) const noexcept {
+  constexpr T x() const noexcept { return val[0]; }
+  constexpr T y() const noexcept { return val[1]; }
+  constexpr T z() const noexcept { return val[2]; }
+  constexpr T w() const noexcept { return val[3]; }
+  constexpr T at(std::size_t i) const noexcept {
 #if _DEBUG
     assert(i >= 0 && i < N && "index out of range");
 #endif
     return val.at(i);
   }
 
-  [[nodiscard]] constexpr _vec_storage<T, 2, Align> xy() const noexcept requires (N >= 2) {
+  constexpr _vec_storage<T, 2, Align> xy() const noexcept {
     _vec_storage<T, 2, Align> ret;
     ret.setX(x());
     ret.setY(y());
     return ret;
   }
-  [[nodiscard]] constexpr _vec_storage<T, 2, Align> zw() const noexcept requires (N >= 4) {
+  constexpr _vec_storage<T, 2, Align> zw() const noexcept {
     _vec_storage<T, 2, Align> ret;
     ret.setX(z());
     ret.setY(w());
     return ret;
   }
 
-  constexpr void setX(T rhs) noexcept requires (N >= 1) { val[0] = rhs; }
-  constexpr void setY(T rhs) noexcept requires (N >= 2) { val[1] = rhs; }
-  constexpr void setZ(T rhs) noexcept requires (N >= 3) { val[2] = rhs; }
-  constexpr void setW(T rhs) noexcept requires (N >= 4) { val[3] = rhs; }
+  constexpr void setX(T rhs) noexcept { val[0] = rhs; }
+  constexpr void setY(T rhs) noexcept { val[1] = rhs; }
+  constexpr void setZ(T rhs) noexcept { val[2] = rhs; }
+  constexpr void setW(T rhs) noexcept { val[3] = rhs; }
   constexpr void setAt(std::size_t i, T rhs) noexcept {
 #if _DEBUG
     assert(i >= 0 && i < N && "index out of range");
@@ -98,30 +98,30 @@ struct _vec_storage {
     val.at(i) = rhs;
   }
 
-  constexpr void setXY(_vec_storage<T, 2, Align> rhs) noexcept requires (N >= 2) {
+  constexpr void setXY(_vec_storage<T, 2, Align> rhs) noexcept {
     setAt(0, rhs.at(0));
     setAt(1, rhs.at(1));
   }
-  constexpr void setZW(_vec_storage<T, 2, Align> rhs) noexcept requires (N >= 4) {
+  constexpr void setZW(_vec_storage<T, 2, Align> rhs) noexcept {
     setAt(2, rhs.at(0));
     setAt(3, rhs.at(1));
   }
 
-  [[nodiscard]] constexpr static _vec_storage splat(T s) noexcept {
+  static constexpr _vec_storage splat(T s) noexcept {
     _vec_storage ret;
     for (std::size_t i = 0; i < N; ++i) {
       ret.setAt(i, s);
     }
     return ret;
   }
-  [[nodiscard]] constexpr static _vec_storage make(std::initializer_list<T> v) noexcept {
+  static constexpr _vec_storage make(std::initializer_list<T> v) noexcept {
     _vec_storage ret;
     for (std::size_t i = 0; i < N; ++i) {
       ret.setAt(i, v[i]);
     }
     return ret;
   }
-  [[nodiscard]] constexpr static _vec_storage concat(std::initializer_list<_vec_storage<T, 2, 16>> v) noexcept requires (N % 2 == 0) {
+  static constexpr _vec_storage concat(std::initializer_list<_vec_storage<T, 2, 16>> v) noexcept {
     _vec_storage ret;
     for (std::size_t i = 0; i < (N >> 1); ++i) {
       ret.setAt(2 * i, v[i].x());
@@ -130,7 +130,7 @@ struct _vec_storage {
     return ret;
   }
 
-  [[nodiscard]] friend constexpr bool operator==(_vec_storage lhs, _vec_storage rhs) noexcept {
+  friend constexpr bool operator==(_vec_storage lhs, _vec_storage rhs) noexcept {
     for (std::size_t i = 0; i < N; ++i) {
       if (lhs.at(i) != rhs.at(i)) {
         return false;
@@ -138,7 +138,7 @@ struct _vec_storage {
     }
     return true;
   }
-  [[nodiscard]] friend constexpr bool operator!=(_vec_storage lhs, _vec_storage rhs) noexcept {
+  friend constexpr bool operator!=(_vec_storage lhs, _vec_storage rhs) noexcept {
     for (std::size_t i = 0; i < N; ++i) {
       if (lhs.at(i) != rhs.at(i)) {
         return true;
@@ -219,28 +219,28 @@ struct _vec_storage {
     return *this;
   }
 
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage ceil() const noexcept requires std::floating_point<T> {
+  NUMERIC_ALWAYS_INLINE _vec_storage ceil() const noexcept requires std::floating_point<T> {
     _vec_storage ret;
     for (std::size_t i = 0; i < N; ++i) {
       ret.setAt(i, std::ceil(at(i)));
     }
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage floor() const noexcept requires std::floating_point<T> {
+  NUMERIC_ALWAYS_INLINE _vec_storage floor() const noexcept requires std::floating_point<T> {
     _vec_storage ret;
     for (std::size_t i = 0; i < N; ++i) {
       ret.setAt(i, std::floor(at(i)));
     }
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage rint() const noexcept requires std::floating_point<T> {
+  NUMERIC_ALWAYS_INLINE _vec_storage rint() const noexcept requires std::floating_point<T> {
     _vec_storage ret;
     for (std::size_t i = 0; i < N; ++i) {
       ret.setAt(i, std::rint(at(i)));
     }
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage trunc() const noexcept requires std::floating_point<T> {
+  NUMERIC_ALWAYS_INLINE _vec_storage trunc() const noexcept requires std::floating_point<T> {
     _vec_storage ret;
     for (std::size_t i = 0; i < N; ++i) {
       ret.setAt(i, std::trunc(at(i)));
@@ -249,35 +249,35 @@ struct _vec_storage {
   }
 
   static constexpr std::size_t long_storage_length = __storage_size<long, _vec_storage<T, N, Align>>();
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> _lceil() const noexcept requires std::floating_point<T> {
+  NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> _lceil() const noexcept requires std::floating_point<T> {
     _vec_storage<long, N, long_storage_length> ret;
     for (std::size_t i = 0; i < N; ++i) {
       ret.setAt(i, static_cast<long>(std::ceil(at(i))));
     }
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> _lfloor() const noexcept requires std::floating_point<T> {
+  NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> _lfloor() const noexcept requires std::floating_point<T> {
     _vec_storage<long, N, long_storage_length> ret;
     for (std::size_t i = 0; i < N; ++i) {
       ret.setAt(i, static_cast<long>(std::floor(at(i))));
     }
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> _lrint() const noexcept requires std::floating_point<T> {
+  NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> _lrint() const noexcept requires std::floating_point<T> {
     _vec_storage<long, N, long_storage_length> ret;
     for (std::size_t i = 0; i < N; ++i) {
       ret.setAt(i, std::lrint(at(i)));
     }
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> _lround() const noexcept requires std::floating_point<T> {
+  NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> _lround() const noexcept requires std::floating_point<T> {
     _vec_storage<long, N, long_storage_length> ret;
     for (std::size_t i = 0; i < N; ++i) {
       ret.setAt(i, std::lround(at(i)));
     }
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> _ltrunc() const noexcept requires std::floating_point<T> {
+  NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> _ltrunc() const noexcept requires std::floating_point<T> {
     _vec_storage<long, N, long_storage_length> ret;
     for (std::size_t i = 0; i < N; ++i) {
       ret.setAt(i, static_cast<long>(at(i)));

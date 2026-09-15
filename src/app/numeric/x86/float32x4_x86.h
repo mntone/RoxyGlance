@@ -19,7 +19,7 @@ NUMERIC_ALWAYS_INLINE void _numeric128_f32_set(__m128& val, T scalar) {
   val.m128_f32[Index] = static_cast<float>(scalar);
 }
 
-[[nodiscard]] NUMERIC_ALWAYS_INLINE __m128 _numeric128_rint_ps(__m128 v) noexcept {
+NUMERIC_ALWAYS_INLINE __m128 _numeric128_rint_ps(__m128 v) noexcept {
   __m128 const magic = _mm_set_ps1(8388608.f); // 2^23
   __m128 const signed_magic = _mm_or_ps(magic, _mm_and_ps(v, _mm_set_ps1(-0.f)));
   __m128 const mask = _mm_cmplt_ps(_mm_andnot_ps(_mm_set_ps1(-0.f), v), magic);
@@ -35,32 +35,32 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
   using value_type = f32x4;
   value_type val;
 
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T x() const noexcept requires (N >= 1) { return _numeric128_f32_get<T, 0>(val); }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T y() const noexcept requires (N >= 2) { return _numeric128_f32_get<T, 1>(val); }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T z() const noexcept requires (N >= 3) { return _numeric128_f32_get<T, 2>(val); }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T w() const noexcept requires (N == 4) { return _numeric128_f32_get<T, 3>(val); }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE T at(std::size_t i) const noexcept {
+  NUMERIC_ALWAYS_INLINE T x() const noexcept { return _numeric128_f32_get<T, 0>(val); }
+  NUMERIC_ALWAYS_INLINE T y() const noexcept { return _numeric128_f32_get<T, 1>(val); }
+  NUMERIC_ALWAYS_INLINE T z() const noexcept { return _numeric128_f32_get<T, 2>(val); }
+  NUMERIC_ALWAYS_INLINE T w() const noexcept { return _numeric128_f32_get<T, 3>(val); }
+  NUMERIC_ALWAYS_INLINE T at(std::size_t i) const noexcept {
 #if _DEBUG
     assert(i >= 0 && i <= 3 && "index out of range [0-3]");
 #endif
     return static_cast<T>(val.m128_f32[i]);
   }
 
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage<T, 2, 16> xy() const noexcept requires (N >= 2) {
+  NUMERIC_ALWAYS_INLINE _vec_storage<T, 2, 16> xy() const noexcept {
     _vec_storage<T, 2, 16> ret;
     ret.val = _mm_movelh_ps(val, val);
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage<T, 2, 16> zw() const noexcept requires (N == 4) {
+  NUMERIC_ALWAYS_INLINE _vec_storage<T, 2, 16> zw() const noexcept {
     _vec_storage<T, 2, 16> ret;
     ret.val = _mm_movehl_ps(val, val);
     return ret;
   }
 
-  NUMERIC_ALWAYS_INLINE void setX(T rhs) noexcept requires (N >= 1) { _numeric128_f32_set<T, 0>(val, rhs); }
-  NUMERIC_ALWAYS_INLINE void setY(T rhs) noexcept requires (N >= 2) { _numeric128_f32_set<T, 1>(val, rhs); }
-  NUMERIC_ALWAYS_INLINE void setZ(T rhs) noexcept requires (N >= 3) { _numeric128_f32_set<T, 2>(val, rhs); }
-  NUMERIC_ALWAYS_INLINE void setW(T rhs) noexcept requires (N == 4) { _numeric128_f32_set<T, 3>(val, rhs); }
+  NUMERIC_ALWAYS_INLINE void setX(T rhs) noexcept { _numeric128_f32_set<T, 0>(val, rhs); }
+  NUMERIC_ALWAYS_INLINE void setY(T rhs) noexcept { _numeric128_f32_set<T, 1>(val, rhs); }
+  NUMERIC_ALWAYS_INLINE void setZ(T rhs) noexcept { _numeric128_f32_set<T, 2>(val, rhs); }
+  NUMERIC_ALWAYS_INLINE void setW(T rhs) noexcept { _numeric128_f32_set<T, 3>(val, rhs); }
   NUMERIC_ALWAYS_INLINE void setAt(std::size_t i, T rhs) noexcept {
 #if _DEBUG
     assert(i >= 0 && i <= 3 && "index out of range [0-3]");
@@ -68,57 +68,57 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     val.m128_f32[i] = static_cast<float>(rhs);
   }
 
-  NUMERIC_ALWAYS_INLINE void setXY(_vec_storage<T, 2, 16> rhs) noexcept requires (N >= 2) {
+  NUMERIC_ALWAYS_INLINE void setXY(_vec_storage<T, 2, 16> rhs) noexcept {
     val = _mm_shuffle_ps(rhs.val, val, _MM_SHUFFLE(3, 2, 1, 0));
   }
-  NUMERIC_ALWAYS_INLINE void setZW(_vec_storage<T, 2, 16> rhs) noexcept requires (N == 4) {
+  NUMERIC_ALWAYS_INLINE void setZW(_vec_storage<T, 2, 16> rhs) noexcept {
     val = _mm_movelh_ps(val, rhs.val);
   }
 
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE static _vec_storage __vectorcall splat(T x) noexcept {
+  static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall splat(T x) noexcept {
     _vec_storage ret;
     ret.val = _mm_set_ps1(x);
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE static _vec_storage __vectorcall make(T x) noexcept requires (N == 1) {
+  static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall make(T x) noexcept {
     _vec_storage ret;
     ret.val = _mm_set_ps(0.f, 0.f, 0.f, x);
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE static _vec_storage __vectorcall make(T x, T y) noexcept requires (N == 2) {
+  static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall make(T x, T y) noexcept {
     _vec_storage ret;
     ret.val = _mm_set_ps(0.f, 0.f, y, x);
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE static _vec_storage __vectorcall make(T x, T y, T z) noexcept requires (N == 3) {
+  static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall make(T x, T y, T z) noexcept {
     _vec_storage ret;
     ret.val = _mm_set_ps(0.f, z, y, x);
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE static _vec_storage __vectorcall make(T x, T y, T z, T w) noexcept requires (N == 4) {
+  static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall make(T x, T y, T z, T w) noexcept {
     _vec_storage ret;
     ret.val = _mm_set_ps(w, z, y, x);
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE static _vec_storage __vectorcall concat(_vec_storage<T, 2, 16> xy, _vec_storage<T, 2, 16> zw) noexcept requires (N == 4) {
+  static NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall concat(_vec_storage<T, 2, 16> xy, _vec_storage<T, 2, 16> zw) noexcept {
     _vec_storage ret;
     ret.val = _mm_movelh_ps(xy.val, zw.val);
     return ret;
   }
 
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE bool operator==(_vec_storage lhs, _vec_storage rhs) noexcept {
+  friend NUMERIC_ALWAYS_INLINE bool operator==(_vec_storage lhs, _vec_storage rhs) noexcept {
     return _mm_movemask_ps(_mm_cmpeq_ps(lhs.val, rhs.val)) == 0xF;
   }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE bool operator!=(_vec_storage lhs, _vec_storage rhs) noexcept {
+  friend NUMERIC_ALWAYS_INLINE bool operator!=(_vec_storage lhs, _vec_storage rhs) noexcept {
     return _mm_movemask_ps(_mm_cmpeq_ps(lhs.val, rhs.val)) != 0xF;
   }
 
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall operator-() const noexcept {
+  NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall operator-() const noexcept {
     _vec_storage ret;
     ret.val = _mm_xor_ps(val, _mm_set_ps1(-0.f));
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall operator~() const noexcept {
+  NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall operator~() const noexcept {
     __m128i v = _mm_castps_si128(val);
     _vec_storage ret;
     ret.val = _mm_castsi128_ps(_mm_xor_si128(v, _mm_cmpeq_epi32(v, v)));
@@ -172,7 +172,7 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     return *this;
   }
 
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall ceil() const noexcept {
+  NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall ceil() const noexcept {
     _vec_storage ret;
     if constexpr (__simd_feature_tags::has_sse4_1) {
       ret.val = _mm_ceil_ps(val);
@@ -184,7 +184,7 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     }
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall floor() const noexcept {
+  NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall floor() const noexcept {
     _vec_storage ret;
     if constexpr (__simd_feature_tags::has_sse4_1) {
       ret.val = _mm_floor_ps(val);
@@ -196,7 +196,7 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     }
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall rint() const noexcept {
+  NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall rint() const noexcept {
     _vec_storage ret;
     if constexpr (__simd_feature_tags::has_sse4_1) {
       ret.val = _mm_round_ps(val, _MM_FROUND_NEARBYINT);
@@ -205,7 +205,7 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     }
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall trunc() const noexcept {
+  NUMERIC_ALWAYS_INLINE _vec_storage __vectorcall trunc() const noexcept {
     _vec_storage ret;
     if constexpr (__simd_feature_tags::has_sse4_1) {
       ret.val = _mm_round_ps(val, _MM_FROUND_TRUNC);
@@ -224,7 +224,7 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
   }
 
   static constexpr std::size_t long_storage_length = __storage_size<long, _vec_storage<T, N, 16>>();
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> __vectorcall _lceil() const noexcept {
+  NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> __vectorcall _lceil() const noexcept {
     _vec_storage<long, N, long_storage_length> ret;
     if constexpr (__simd_feature_tags::has_sse4_1) {
       ret.val = _mm_cvttps_epi32(_mm_ceil_ps(val));
@@ -234,7 +234,7 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     }
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> __vectorcall _lfloor() const noexcept {
+  NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> __vectorcall _lfloor() const noexcept {
     _vec_storage<long, N, long_storage_length> ret;
     if constexpr (__simd_feature_tags::has_sse4_1) {
       ret.val = _mm_cvttps_epi32(_mm_floor_ps(val));
@@ -244,7 +244,7 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     }
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> __vectorcall _lrint() const noexcept {
+  NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> __vectorcall _lrint() const noexcept {
     _vec_storage<long, N, long_storage_length> ret;
     if constexpr (__simd_feature_tags::has_sse4_1) {
       ret.val = _mm_cvttps_epi32(_mm_round_ps(val, _MM_FROUND_NEARBYINT));
@@ -254,7 +254,7 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     }
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> __vectorcall _lround() const noexcept {
+  NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> __vectorcall _lround() const noexcept {
     _vec_storage<long, N, long_storage_length> ret;
     {
       f32x4 const sign_mask = _mm_and_ps(val, _mm_set1_ps(-0.f));
@@ -263,7 +263,7 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     }
     return ret;
   }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> __vectorcall _ltrunc() const noexcept {
+  NUMERIC_ALWAYS_INLINE _vec_storage<long, N, long_storage_length> __vectorcall _ltrunc() const noexcept {
     _vec_storage<long, N, long_storage_length> ret;
     ret.val = _mm_cvttps_epi32(val);
     return ret;
@@ -271,7 +271,7 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
 
   template<std::signed_integral U>
     requires (sizeof(U) == 4)
-  [[nodiscard]] explicit NUMERIC_ALWAYS_INLINE __vectorcall operator _vec_storage<U, N, 16>() const noexcept {
+  explicit NUMERIC_ALWAYS_INLINE __vectorcall operator _vec_storage<U, N, 16>() const noexcept {
     _vec_storage<U, N, 16> ret;
     ret.val = _mm_cvttps_epi32(val);
     return ret;

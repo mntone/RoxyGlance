@@ -32,8 +32,11 @@ void CALLBACK StateWatcher::winEventProcStatic(
 ) noexcept {
   StateWatcher& watcher = StateWatcher::instance();
   if (event == EVENT_SYSTEM_FOREGROUND) {
-    State& windowState = watcher.cache_.getOrCreate(hwnd);
-    watcher.notify(&IWindowStateListener::onForegroundEvent, windowState);
+    State* const window_state = watcher.cache_.getOrCreate(hwnd);
+    if (!window_state) {
+      return;
+    }
+    watcher.notify(&IWindowStateListener::onForegroundEvent, *window_state);
   }
 
   if (object_id != OBJID_WINDOW || child_id != CHILDID_SELF) {
@@ -45,8 +48,11 @@ void CALLBACK StateWatcher::winEventProcStatic(
   }
 
   if (event == EVENT_OBJECT_SHOW) {
-    State& windowState = watcher.cache_.getOrCreate(hwnd);
-    watcher.notify(&IWindowStateListener::onShowEvent, windowState);
+    State* const window_state = watcher.cache_.getOrCreate(hwnd);
+    if (!window_state) {
+      return;
+    }
+    watcher.notify(&IWindowStateListener::onShowEvent, *window_state);
   } else {
     watcher.cache_.processWindowEvent(event, hwnd);
   }

@@ -4,7 +4,7 @@
 #include "../win32/monitor.h"
 
 struct MonitorCallbackData final {
-  roxyg::monitor::StateCache::StatesType states;
+  roxyg::monitor::StateCache::ContainerType states;
   winrt::hresult hresult;
 };
 
@@ -50,7 +50,7 @@ BOOL __stdcall StateCache::EnumDisplayMonitorsCallback(
 winrt::hresult StateCache::initialize() noexcept {
   int const monitor_count = win32::GetMonitorCount();
   if (monitor_count <= 0) {
-    states_.clear();
+    storage_.clear();
     return S_OK;
   }
 
@@ -71,6 +71,6 @@ winrt::hresult StateCache::initialize() noexcept {
     return data.hresult;
   }
 
-  states_ = std::move(data.states);
+  storage_ = std::move(data.states);
   return S_OK;
 }

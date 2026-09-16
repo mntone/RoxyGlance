@@ -30,8 +30,7 @@ winrt::hresult RelativeMoveAndResizeOperation::execute(OperationContext& ctx, wi
   if (dirty_) [[unlikely]] {
     HMONITOR hmonitor = win32::GetPrimaryHMonitor();
 
-    monitor::State* state;
-    ctx.monitor().getOrCreate(hmonitor, state);
+    monitor::State* state = ctx.monitor().getOrCreate(hmonitor);
     if (!state) {
       return E_OUTOFMEMORY;
     }

@@ -84,84 +84,115 @@ struct alignas(__alignup(sizeof(T), Align)) vec {
     }
   }
 
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE bool operator==(vec lhs, vec rhs) noexcept {
-    return lhs.storage == rhs.storage;
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR bool operator==(vec lhs, vec rhs) noexcept {
+    NUMERIC_IF_CONSTEVAL_{
+      for (std::size_t i = 0; i < N; ++i) {
+        if (lhs.storage.at(i) != rhs.storage.at(i)) {
+          return false;
+        }
+      }
+      return true;
+    } else {
+      return lhs.storage == rhs.storage;
+    }
   }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE bool operator!=(vec lhs, vec rhs) noexcept {
-    return lhs.storage != rhs.storage;
-  }
-
-  [[nodiscard]] constexpr vec operator+() const noexcept {
-    return *this;
-  }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE vec operator-() const noexcept requires (std::signed_integral<T> || std::floating_point<T>) {
-    vec ret;
-    ret.storage = -storage;
-    return ret;
-  }
-  [[nodiscard]] NUMERIC_ALWAYS_INLINE vec operator~() const noexcept {
-    vec ret;
-    ret.storage = ~storage;
-    return ret;
-  }
-
-  NUMERIC_ALWAYS_INLINE vec& operator+=(T rhs) noexcept {
-    storage += storage_type::splat(rhs);
-    return *this;
-  }
-  NUMERIC_ALWAYS_INLINE vec& operator+=(vec rhs) noexcept {
-    storage += rhs.storage;
-    return *this;
-  }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator+(vec lhs, T rhs) noexcept {
-    lhs += rhs;
-    return lhs;
-  }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator+(T lhs, vec rhs) noexcept {
-    rhs += lhs;
-    return rhs;
-  }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator+(vec lhs, vec rhs) noexcept {
-    lhs += rhs;
-    return lhs;
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR bool operator!=(vec lhs, vec rhs) noexcept {
+    NUMERIC_IF_CONSTEVAL_{
+      for (std::size_t i = 0; i < N; ++i) {
+        if (lhs.storage.at(i) != rhs.storage.at(i)) {
+          return true;
+        }
+      }
+      return false;
+    } else {
+      return lhs.storage != rhs.storage;
+    }
   }
 
-  NUMERIC_ALWAYS_INLINE vec& operator-=(T rhs) noexcept {
-    storage -= storage_type::splat(rhs);
+  [[nodiscard]] NUMERIC_INLINE_CONSTEXPR vec operator+() const noexcept {
     return *this;
   }
-  NUMERIC_ALWAYS_INLINE vec& operator-=(vec rhs) noexcept {
-    storage -= rhs.storage;
-    return *this;
+  [[nodiscard]] NUMERIC_INLINE_CONSTEXPR vec operator-() const noexcept requires (std::signed_integral<T> || std::floating_point<T>) {
+    NUMERIC_IF_CONSTEVAL_{
+      vec ret;
+      for (std::size_t i = 0; i < storage_type::storage_count; ++i) {
+        ret.storage.setAt(i, i < N ? -storage.at(i) : 0);
+      }
+      return ret;
+    } else {
+      return vec{-storage};
+    }
   }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator-(vec lhs, T rhs) noexcept {
-    lhs -= rhs;
-    return lhs;
-  }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator-(vec lhs, vec rhs) noexcept {
-    lhs -= rhs;
-    return lhs;
+  [[nodiscard]] NUMERIC_INLINE_CONSTEXPR vec operator~() const noexcept {
+    NUMERIC_IF_CONSTEVAL_{
+      vec ret;
+      for (std::size_t i = 0; i < storage_type::storage_count; ++i) {
+        ret.storage.setAt(i, i < N ? __logical_bit_not(storage.at(i)) : 0);
+      }
+      return ret;
+    } else {
+      return vec{~storage};
+    }
   }
 
-  NUMERIC_ALWAYS_INLINE vec& operator*=(T rhs) noexcept {
-    storage *= storage_type::splat(rhs);
+  NUMERIC_INLINE_CONSTEXPR vec& operator+=(vec rhs) noexcept {
+    NUMERIC_IF_CONSTEVAL_{
+      for (std::size_t i = 0; i < N; ++i) {
+        storage.setAt(i, storage.at(i) + rhs.storage.at(i));
+      }
+    } else {
+      storage += rhs.storage;
+    }
     return *this;
   }
-  NUMERIC_ALWAYS_INLINE vec& operator*=(vec rhs) noexcept {
-    storage *= rhs.storage;
+  NUMERIC_INLINE_CONSTEXPR vec& operator+=(T rhs) noexcept { return *this += splat(rhs); }
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator+(vec lhs, vec rhs) noexcept {
+    return lhs += rhs;
+  }
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator+(vec lhs, T rhs) noexcept {
+    return lhs += rhs;
+  }
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator+(T lhs, vec rhs) noexcept {
+    return rhs += lhs;
+  }
+
+  NUMERIC_INLINE_CONSTEXPR vec& operator-=(vec rhs) noexcept {
+    NUMERIC_IF_CONSTEVAL_{
+      for (std::size_t i = 0; i < N; ++i) {
+        storage.setAt(i, storage.at(i) - rhs.storage.at(i));
+      }
+    } else {
+      storage -= rhs.storage;
+    }
     return *this;
   }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator*(vec lhs, T rhs) noexcept {
-    lhs *= rhs;
-    return lhs;
+  NUMERIC_INLINE_CONSTEXPR vec& operator-=(T rhs) noexcept { return *this -= splat(rhs); }
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator-(vec lhs, vec rhs) noexcept {
+    return lhs -= rhs;
   }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator*(T lhs, vec rhs) noexcept {
-    rhs *= lhs;
-    return rhs;
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator-(vec lhs, T rhs) noexcept {
+    return lhs -= rhs;
   }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator*(vec lhs, vec rhs) noexcept {
-    lhs *= rhs;
-    return lhs;
+
+  NUMERIC_INLINE_CONSTEXPR vec& operator*=(vec rhs) noexcept {
+    NUMERIC_IF_CONSTEVAL_{
+      for (std::size_t i = 0; i < N; ++i) {
+        storage.setAt(i, storage.at(i) * rhs.storage.at(i));
+      }
+    } else {
+      storage *= rhs.storage;
+    }
+    return *this;
+  }
+  NUMERIC_INLINE_CONSTEXPR vec& operator*=(T rhs) noexcept { return *this *= splat(rhs); }
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator*(vec lhs, vec rhs) noexcept {
+    return lhs *= rhs;
+  }
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator*(vec lhs, T rhs) noexcept {
+    return lhs *= rhs;
+  }
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator*(T lhs, vec rhs) noexcept {
+    return rhs *= lhs;
   }
 
   template<std::integral U>
@@ -195,21 +226,22 @@ struct alignas(__alignup(sizeof(T), Align)) vec {
     return rhs;
   }
 
-  NUMERIC_ALWAYS_INLINE vec& operator/=(T rhs) noexcept {
-    storage /= storage_type::splat(rhs);
+  NUMERIC_INLINE_CONSTEXPR vec& operator/=(vec rhs) noexcept {
+    NUMERIC_IF_CONSTEVAL_{
+      for (std::size_t i = 0; i < N; ++i) {
+        storage.setAt(i, storage.at(i) / rhs.storage.at(i));
+      }
+    } else {
+      storage /= rhs.storage;
+    }
     return *this;
   }
-  NUMERIC_ALWAYS_INLINE vec& operator/=(vec rhs) noexcept {
-    storage /= rhs.storage;
-    return *this;
+  NUMERIC_INLINE_CONSTEXPR vec& operator/=(T rhs) noexcept { return *this /= splat(rhs); }
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator/(vec lhs, vec rhs) noexcept {
+    return lhs /= rhs;
   }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator/(vec lhs, T rhs) noexcept {
-    lhs /= rhs;
-    return lhs;
-  }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator/(vec lhs, vec rhs) noexcept {
-    lhs /= rhs;
-    return lhs;
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator/(vec lhs, T rhs) noexcept {
+    return lhs /= rhs;
   }
 
   template<std::integral U>
@@ -237,101 +269,103 @@ struct alignas(__alignup(sizeof(T), Align)) vec {
     return lhs;
   }
 
-  NUMERIC_ALWAYS_INLINE vec& operator&=(T rhs) noexcept requires std::integral<T> {
-    storage &= storage_type::splat(rhs);
+  NUMERIC_INLINE_CONSTEXPR vec& operator&=(vec rhs) noexcept {
+    NUMERIC_IF_CONSTEVAL_{
+      for (std::size_t i = 0; i < N; ++i) {
+        storage.setAt(i, __logical_bit_and(storage.at(i), rhs.storage.at(i)));
+      }
+    } else {
+      storage &= rhs.storage;
+    }
     return *this;
   }
-  NUMERIC_ALWAYS_INLINE vec& operator&=(vec rhs) noexcept {
-    storage &= rhs.storage;
-    return *this;
+  NUMERIC_INLINE_CONSTEXPR vec& operator&=(T rhs) noexcept { return *this &= splat(rhs); }
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator&(vec lhs, vec rhs) noexcept {
+    return lhs &= rhs;
   }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator&(vec lhs, T rhs) noexcept requires std::integral<T> {
-    lhs &= rhs;
-    return lhs;
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator&(vec lhs, T rhs) noexcept {
+    return lhs &= rhs;
   }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator&(T lhs, vec rhs) noexcept requires std::integral<T> {
-    rhs &= lhs;
-    return rhs;
-  }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator&(vec lhs, vec rhs) noexcept {
-    lhs &= rhs;
-    return lhs;
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator&(T lhs, vec rhs) noexcept {
+    return rhs &= lhs;
   }
 
-  NUMERIC_ALWAYS_INLINE vec& operator|=(T rhs) noexcept requires std::integral<T> {
-    storage |= storage_type::splat(rhs);
+  NUMERIC_INLINE_CONSTEXPR vec& operator|=(vec rhs) noexcept {
+    NUMERIC_IF_CONSTEVAL_{
+      for (std::size_t i = 0; i < N; ++i) {
+        storage.setAt(i, __logical_bit_or(storage.at(i), rhs.storage.at(i)));
+      }
+    } else {
+      storage |= rhs.storage;
+    }
     return *this;
   }
-  NUMERIC_ALWAYS_INLINE vec& operator|=(vec rhs) noexcept {
-    storage |= rhs.storage;
-    return *this;
+  NUMERIC_INLINE_CONSTEXPR vec& operator|=(T rhs) noexcept { return *this |= splat(rhs); }
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator|(vec lhs, vec rhs) noexcept {
+    return lhs |= rhs;
   }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator|(vec lhs, T rhs) noexcept requires std::integral<T> {
-    lhs |= rhs;
-    return lhs;
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator|(vec lhs, T rhs) noexcept {
+    return lhs |= rhs;
   }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator|(T lhs, vec rhs) noexcept requires std::integral<T> {
-    rhs |= lhs;
-    return rhs;
-  }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator|(vec lhs, vec rhs) noexcept {
-    lhs |= rhs;
-    return lhs;
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator|(T lhs, vec rhs) noexcept {
+    return rhs |= lhs;
   }
 
-  NUMERIC_ALWAYS_INLINE vec& operator^=(T rhs) noexcept requires std::integral<T> {
-    storage ^= storage_type::splat(rhs);
+  NUMERIC_INLINE_CONSTEXPR vec& operator^=(vec rhs) noexcept {
+    NUMERIC_IF_CONSTEVAL_{
+      for (std::size_t i = 0; i < N; ++i) {
+        storage.setAt(i, __logical_bit_xor(storage.at(i), rhs.storage.at(i)));
+      }
+    } else {
+      storage ^= rhs.storage;
+    }
     return *this;
   }
-  NUMERIC_ALWAYS_INLINE vec& operator^=(vec rhs) noexcept {
-    storage ^= rhs.storage;
-    return *this;
+  NUMERIC_INLINE_CONSTEXPR vec& operator^=(T rhs) noexcept { return *this ^= splat(rhs); }
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator^(vec lhs, vec rhs) noexcept {
+    return lhs ^= rhs;
   }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator^(vec lhs, T rhs) noexcept requires std::integral<T> {
-    lhs ^= rhs;
-    return lhs;
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator^(vec lhs, T rhs) noexcept {
+    return lhs ^= rhs;
   }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator^(T lhs, vec rhs) noexcept requires std::integral<T> {
-    rhs ^= lhs;
-    return rhs;
-  }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator^(vec lhs, vec rhs) noexcept {
-    lhs ^= rhs;
-    return lhs;
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator^(T lhs, vec rhs) noexcept {
+    return rhs ^= lhs;
   }
 
-  NUMERIC_ALWAYS_INLINE vec& operator>>=(T rhs) noexcept requires std::integral<T> {
-    storage >>= storage_type::splat(rhs);
+  NUMERIC_INLINE_CONSTEXPR vec& operator>>=(vec rhs) noexcept requires std::integral<T> {
+    NUMERIC_IF_CONSTEVAL_{
+      for (std::size_t i = 0; i < N; ++i) {
+        storage.setAt(i, storage.at(i) >> rhs.storage.at(i));
+      }
+    } else {
+      storage >>= rhs.storage;
+    }
     return *this;
   }
-  NUMERIC_ALWAYS_INLINE vec& operator>>=(vec rhs) noexcept requires std::integral<T> {
-    storage >>= rhs.storage;
-    return *this;
+  NUMERIC_INLINE_CONSTEXPR vec& operator>>=(T rhs) noexcept requires std::integral<T> { return *this >>= splat(rhs); }
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator>>(vec lhs, vec rhs) noexcept requires std::integral<T> {
+    return lhs >>= rhs;
   }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator>>(vec lhs, T rhs) noexcept requires std::integral<T> {
-    lhs >>= rhs;
-    return lhs;
-  }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator>>(vec lhs, vec rhs) noexcept requires std::integral<T> {
-    lhs >>= rhs;
-    return lhs;
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator>>(vec lhs, T rhs) noexcept requires std::integral<T> {
+    return lhs >>= rhs;
   }
 
-  NUMERIC_ALWAYS_INLINE vec& operator<<=(T rhs) noexcept requires std::integral<T> {
-    storage <<= storage_type::splat(rhs);
+  NUMERIC_INLINE_CONSTEXPR vec& operator<<=(vec rhs) noexcept requires std::integral<T> {
+    NUMERIC_IF_CONSTEVAL_{
+      for (std::size_t i = 0; i < N; ++i) {
+        storage.setAt(i, storage.at(i) << rhs.storage.at(i));
+      }
+    } else {
+      storage <<= rhs.storage;
+    }
     return *this;
   }
-  NUMERIC_ALWAYS_INLINE vec& operator<<=(vec rhs) noexcept requires std::integral<T> {
-    storage <<= rhs.storage;
-    return *this;
+  NUMERIC_INLINE_CONSTEXPR vec& operator<<=(T rhs) noexcept requires std::integral<T> { return *this <<= splat(rhs); }
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator<<(vec lhs, vec rhs) noexcept requires std::integral<T> {
+    return lhs <<= rhs;
   }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator<<(vec lhs, T rhs) noexcept requires std::integral<T> {
-    lhs <<= rhs;
-    return lhs;
-  }
-  [[nodiscard]] friend NUMERIC_ALWAYS_INLINE vec operator<<(vec lhs, vec rhs) noexcept requires std::integral<T> {
-    lhs <<= rhs;
-    return lhs;
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator<<(vec lhs, T rhs) noexcept requires std::integral<T> {
+    return lhs <<= rhs;
   }
 
   [[nodiscard]] constexpr vec cross(vec const& rhs) const noexcept requires (N == 3) {

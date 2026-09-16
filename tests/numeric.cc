@@ -288,11 +288,13 @@ TYPED_TEST(TypedVectorTest, VectorScalarOperators) {
     [](V const& a, T s) { return a * s; },
     [](T a, T b) { return a * b; }
   );
-  this->expectVectorScalarOperation(
-    "vector / scalar", input, scalar,
-    [](V const& a, T s) { return a / s; },
-    [](T a, T b) { return a / b; }
-  );
+  if constexpr (std::is_floating_point_v<T>) {
+    this->expectVectorScalarOperation(
+      "vector / scalar", input, scalar,
+      [](V const& a, T s) { return a / s; },
+      [](T a, T b) { return a / b; }
+    );
+  }
 
   if constexpr (std::integral<T>) {
     this->expectVectorScalarOperation(
@@ -348,16 +350,18 @@ TYPED_TEST(TypedVectorTest, VectorVectorOperators) {
     [](V const& a, V const& b) { return a * b; },
     [](T a, T b) { return a * b; }
   );
-  this->expectVectorVectorOperation(
-    "vector / vector", lhs, rhs,
-    [](V const& a, V const& b) { return a / b; },
-    [](T a, T b) { return a / b; }
-  );
-  this->expectVectorVectorOperation(
-    "vector / vector(+)", lhs, rhs_pos,
-    [](V const& a, V const& b) { return a / b; },
-    [](T a, T b) { return a / b; }
-  );
+  if constexpr (std::is_floating_point_v<T>) {
+    this->expectVectorVectorOperation(
+      "vector / vector", lhs, rhs,
+      [](V const& a, V const& b) { return a / b; },
+      [](T a, T b) { return a / b; }
+    );
+    this->expectVectorVectorOperation(
+      "vector / vector(+)", lhs, rhs_pos,
+      [](V const& a, V const& b) { return a / b; },
+      [](T a, T b) { return a / b; }
+    );
+  }
 
   this->expectVectorVectorOperation(
     "vector & vector", lhs, rhs,

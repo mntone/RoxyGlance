@@ -313,8 +313,8 @@ TYPED_TEST(ConstevalTypedVectorTest, VectorScalarOperators) {
     static_assert((a - s) == V::make(6), "a - s failed");
     static_assert((a * s) == V::make(-8), "a * s failed");
     static_assert((s * a) == V::make(-8), "s * a failed");
-    static_assert((a / c) == V::make(2), "a / c failed");
     if constexpr (std::is_floating_point_v<T>) {
+      static_assert((a / c) == V::make(2), "a / c failed");
       static_assert((a & s) == V::make(2), "a & b failed");
       static_assert((a | s) == V::make(-4), "a | b failed");
       static_assert((a ^ s) == V::make(__logical_bit_xor(4.f, -2.f)), "a ^ b failed");
@@ -332,8 +332,8 @@ TYPED_TEST(ConstevalTypedVectorTest, VectorScalarOperators) {
     static_assert((a - s) == V::make(6, 10), "a - s failed");
     static_assert((a * s) == V::make(-8, -16), "a * s failed");
     static_assert((s * a) == V::make(-8, -16), "s * a failed");
-    static_assert((a / c) == V::make(2, 4), "a / c failed");
     if constexpr (std::is_floating_point_v<T>) {
+      static_assert((a / c) == V::make(2, 4), "a / c failed");
       static_assert((a & s) == V::make(2, 2), "a & b failed");
       static_assert((a | s) == V::make(-4, -8), "a | b failed");
       static_assert((a ^ s) == V::make(__logical_bit_xor(4.f, -2.f), __logical_bit_xor(8.f, -2.f)), "a ^ b failed");
@@ -351,8 +351,8 @@ TYPED_TEST(ConstevalTypedVectorTest, VectorScalarOperators) {
     static_assert((a - s) == V::make(6, 10, 3), "a - s failed");
     static_assert((a * s) == V::make(-8, -16, -2), "a * s failed");
     static_assert((s * a) == V::make(-8, -16, -2), "s * a failed");
-    static_assert((a / c) == V::make(2, 4, static_cast<T>(0.5)), "a / c failed");
     if constexpr (std::is_floating_point_v<T>) {
+      static_assert((a / c) == V::make(2, 4, static_cast<T>(0.5)), "a / c failed");
       static_assert((a & s) == V::make(2, 2, 0), "a & b failed");
       static_assert((a | s) == V::make(-4, -8, -std::numeric_limits<T>::infinity()), "a | b failed");
       static_assert((a ^ s) == V::make(__logical_bit_xor(4.f, -2.f), __logical_bit_xor(8.f, -2.f), -std::numeric_limits<T>::infinity()), "a ^ b failed");
@@ -370,8 +370,8 @@ TYPED_TEST(ConstevalTypedVectorTest, VectorScalarOperators) {
     static_assert((a - s) == V::make(6, 10, 3, 2), "a - s failed");
     static_assert((a * s) == V::make(-8, -16, -2, -0), "a * s failed");
     static_assert((s * a) == V::make(-8, -16, -2, -0), "s * a failed");
-    static_assert((a / c) == V::make(2, 4, static_cast<T>(0.5), 0), "a / c failed");
     if constexpr (std::is_floating_point_v<T>) {
+      static_assert((a / c) == V::make(2, 4, static_cast<T>(0.5), 0), "a / c failed");
       static_assert((a & s) == V::make(2, 2, 0, 0), "a & b failed");
       static_assert((a | s) == V::make(-4, -8, -std::numeric_limits<T>::infinity(), -2), "a | b failed");
       static_assert((a ^ s) == V::make(__logical_bit_xor(4.f, -2.f), __logical_bit_xor(8.f, -2.f), -std::numeric_limits<T>::infinity(), -2), "a ^ b failed");
@@ -399,8 +399,8 @@ TYPED_TEST(ConstevalTypedVectorTest, VectorVectorOperators) {
     static_assert(a + b == V::make(2), "a + b failed");
     static_assert(a - b == V::make(6), "a - b failed");
     static_assert(a * b == V::make(-8), "a * b failed");
-    static_assert(a / b == V::make(-2), "a / b failed");
     if constexpr (std::is_floating_point_v<T>) {
+      static_assert(a / b == V::make(-2), "a / b failed");
       static_assert((a & b) == V::make(2), "a & b failed");
       static_assert((a | b) == V::make(-4), "a | b failed");
       static_assert((a ^ b) == V::make(__logical_bit_xor(4.f, -2.f)), "a ^ b failed");
@@ -418,8 +418,8 @@ TYPED_TEST(ConstevalTypedVectorTest, VectorVectorOperators) {
     static_assert(a + b == V::make(2, 12), "a + b failed");
     static_assert(a - b == V::make(6, 4), "a - b failed");
     static_assert(a * b == V::make(-8, 32), "a * b failed");
-    static_assert(a / b == V::make(-2, 2), "a / b failed");
     if constexpr (std::is_floating_point_v<T>) {
+      static_assert(a / b == V::make(-2, 2), "a / b failed");
       static_assert((a & b) == V::make(2, 2), "a & b failed");
       static_assert((a | b) == V::make(-4, 16), "a | b failed");
       static_assert((a ^ b) == V::make(__logical_bit_xor(4.f, -2.f), __logical_bit_xor(8.f, 4.f)), "a ^ b failed");
@@ -437,8 +437,8 @@ TYPED_TEST(ConstevalTypedVectorTest, VectorVectorOperators) {
     static_assert(a + b == V::make(2, 12, 0), "a + b failed");
     static_assert(a - b == V::make(6, 4, 2), "a - b failed");
     static_assert(a * b == V::make(-8, 32, -1), "a * b failed");
-    static_assert(a / b == V::make(-2, 2, -1), "a / b failed");
     if constexpr (std::is_floating_point_v<T>) {
+      static_assert(a / b == V::make(-2, 2, -1), "a / b failed");
       static_assert((a & b) == V::make(2, 2, 1), "a & b failed");
       static_assert((a | b) == V::make(-4, 16, -1), "a | b failed");
       static_assert((a ^ b) == V::make(__logical_bit_xor(4.f, -2.f), __logical_bit_xor(8.f, 4.f), -0), "a ^ b failed");
@@ -456,8 +456,8 @@ TYPED_TEST(ConstevalTypedVectorTest, VectorVectorOperators) {
     static_assert(a + b == V::make(2, 12, 0, 2), "a + b failed");
     static_assert(a - b == V::make(6, 4, 2, -2), "a - b failed");
     static_assert(a * b == V::make(-8, 32, -1, 0), "a * b failed");
-    static_assert(a / b == V::make(-2, 2, -1, 0), "a / b failed");
     if constexpr (std::is_floating_point_v<T>) {
+      static_assert(a / b == V::make(-2, 2, -1, 0), "a / b failed");
       static_assert((a & b) == V::make(2, 2, 1, 0), "a & b failed");
       static_assert((a | b) == V::make(-4, 16, -1, 2), "a | b failed");
       static_assert((a ^ b) == V::make(__logical_bit_xor(4.f, -2.f), __logical_bit_xor(8.f, 4.f), -0, 2), "a ^ b failed");

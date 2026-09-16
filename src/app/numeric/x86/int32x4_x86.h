@@ -180,12 +180,6 @@ struct _vec_storage<T, N, 16>: public __simd_vec_tags<T, N, 16> {
     val = _mm_mullo_epi32(val, rhs.val);
     return *this;
   }
-  NUMERIC_ALWAYS_INLINE _vec_storage& __vectorcall operator/=(_vec_storage rhs) noexcept {
-    for (std::size_t i = 0; i < N; ++i) {
-      setAt(i, at(i) / rhs.at(i));
-    }
-    return *this;
-  }
 
   NUMERIC_ALWAYS_INLINE _vec_storage& __vectorcall operator&=(_vec_storage rhs) noexcept {
     val = _mm_and_si128(val, rhs.val);

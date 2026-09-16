@@ -210,7 +210,7 @@ struct _vec_storage {
     }
     return *this;
   }
-  NUMERIC_ALWAYS_INLINE constexpr _vec_storage& operator/=(_vec_storage rhs) noexcept {
+  NUMERIC_ALWAYS_INLINE constexpr _vec_storage& operator/=(_vec_storage rhs) noexcept requires std::floating_point<T> {
     for (std::size_t i = 0; i < N; ++i) {
       val[i] /= rhs.val[i];
     }

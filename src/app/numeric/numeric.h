@@ -226,7 +226,7 @@ struct alignas(__alignup(sizeof(T), Align)) vec {
     return rhs;
   }
 
-  NUMERIC_INLINE_CONSTEXPR vec& operator/=(vec rhs) noexcept {
+  NUMERIC_INLINE_CONSTEXPR vec& operator/=(vec rhs) noexcept requires std::floating_point<T> {
     NUMERIC_IF_CONSTEVAL_{
       for (std::size_t i = 0; i < N; ++i) {
         storage.setAt(i, storage.at(i) / rhs.storage.at(i));
@@ -236,11 +236,11 @@ struct alignas(__alignup(sizeof(T), Align)) vec {
     }
     return *this;
   }
-  NUMERIC_INLINE_CONSTEXPR vec& operator/=(T rhs) noexcept { return *this /= splat(rhs); }
-  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator/(vec lhs, vec rhs) noexcept {
+  NUMERIC_INLINE_CONSTEXPR vec& operator/=(T rhs) noexcept requires std::floating_point<T> { return *this /= splat(rhs); }
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator/(vec lhs, vec rhs) noexcept requires std::floating_point<T> {
     return lhs /= rhs;
   }
-  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator/(vec lhs, T rhs) noexcept {
+  [[nodiscard]] friend NUMERIC_INLINE_CONSTEXPR vec operator/(vec lhs, T rhs) noexcept requires std::floating_point<T> {
     return lhs /= rhs;
   }
 

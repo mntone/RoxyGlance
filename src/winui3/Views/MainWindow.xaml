@@ -6,6 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:Mntone.RoxyGlance.ViewModels"
         mc:Ignorable="d"
+        Closed="Closed"
         Title="Roxy Glance">
 
   <Grid>

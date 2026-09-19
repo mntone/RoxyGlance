@@ -32,13 +32,15 @@ void winrt::impl::LogsViewModel::onCollectionChanged(utility::CollectionChange<l
   assert(!dispatcher_.HasThreadAccess());
 #endif
 
-  dispatcher_.TryEnqueue([that = get_weak(), change] {
+  dispatcher_.TryEnqueue([that = get_weak(), change] noexcept {
     winrt::impl::com_ref<winrt::impl::LogsViewModel> viewModel{that.get()};
-    if (enum_flags_test(change.type, utility::CollectionChangeType::kAdded)) {
-      viewModel->Logs_.InsertAt(change.index, make<impl::LogViewModel>(*change.item));
-    }
-    if (enum_flags_test(change.type, utility::CollectionChangeType::kRemoved)) {
-      viewModel->Logs_.RemoveAtEnd();
+    if (viewModel) {
+      if (enum_flags_test(change.type, utility::CollectionChangeType::kAdded)) {
+        viewModel->Logs_.InsertAt(change.index, make<impl::LogViewModel>(*change.item));
+      }
+      if (enum_flags_test(change.type, utility::CollectionChangeType::kRemoved)) {
+        viewModel->Logs_.RemoveAtEnd();
+      }
     }
   });
 }

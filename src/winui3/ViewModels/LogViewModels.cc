@@ -27,7 +27,7 @@ winrt::impl::LogsViewModel::~LogsViewModel() {
   unsetLogger();
 }
 
-void winrt::impl::LogsViewModel::onCollectionChanged(utility::CollectionChange<logging::Log> const& change) {
+void winrt::impl::LogsViewModel::onCollectionChanged(utility::CollectionChange<logging::Log> const& change) noexcept {
 #if _DEBUG
   assert(!dispatcher_.HasThreadAccess());
 #endif

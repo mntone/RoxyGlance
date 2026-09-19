@@ -21,7 +21,7 @@ public:
   void setLogger(roxyg::logging::Logger& logger);
 
 private:
-  void onCollectionChanged(roxyg::utility::CollectionChange<roxyg::logging::Log> const& change) override;
+  void onCollectionChanged(roxyg::utility::CollectionChange<roxyg::logging::Log> const& change) noexcept override;
 
 private:
   roxyg::logging::Logger* logger_;

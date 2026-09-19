@@ -19,7 +19,7 @@ struct CollectionChange {
 template<typename T>
 class ICollectionChangeListener {
 public:
-  virtual void onCollectionChanged(CollectionChange<T> const& change) = 0;
+  virtual void onCollectionChanged(CollectionChange<T> const& change) noexcept = 0;
 };
 
 }

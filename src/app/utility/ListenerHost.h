@@ -23,14 +23,16 @@ public:
   }
 
   template<typename Func, typename... Args>
-  void notify(Func func, Args&&... args) {
+  void notify(Func func, Args&&... args)
+    noexcept(std::is_nothrow_invocable_v<Func, Listener&, Args&&...>) {
     for (void* ptr : listeners_) {
       Listener* listener = static_cast<Listener*>(ptr);
       (listener->*func)(std::forward<Args>(args)...);
     }
   }
   template<typename Func, typename... Args>
-  void notify(Func func, Args&&... args) const {
+  void notify(Func func, Args&&... args) const
+    noexcept(std::is_nothrow_invocable_v<Func, Listener const&, Args&&...>) {
     for (void* ptr : listeners_) {
       Listener const* listener = static_cast<Listener const*>(ptr);
       (listener->*func)(std::forward<Args>(args)...);

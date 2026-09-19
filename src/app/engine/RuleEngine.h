@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../context/OperationContext.h"
+#include "../logging/LogHelper.h"
 #include "../settings/ISettingsListener.h"
 #include "../window/IWindowStateListener.h"
 
@@ -28,11 +29,16 @@ public:
   constexpr OperationContext const* operationContext() const noexcept { return operation_context_; }
   constexpr void setOperationContext(OperationContext* ctx) noexcept { operation_context_ = ctx; }
 
+  constexpr void setLogger(logging::Logger* logger) noexcept {
+    logger_.setLogger(logger);
+  }
+
 private:
   void checkRules(window::State& windowState) noexcept;
 
 private:
   OperationContext* operation_context_;
+  logging::LogHelper<logging::LogGroup::kEngine> logger_;
   std::atomic<std::shared_ptr<RuleSet const>> rule_set_;
 };
 

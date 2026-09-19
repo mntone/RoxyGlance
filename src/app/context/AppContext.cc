@@ -11,6 +11,7 @@ AppContext::AppContext() noexcept {
   log_adapter_.setLogger(&logger_);
 #endif
   engine_.setOperationContext(&operation_context_);
+  engine_.setLogger(&logger_);
   settings_store_.addListener(&engine_);
 
   window::StateWatcher& w = window::StateWatcher::instance();

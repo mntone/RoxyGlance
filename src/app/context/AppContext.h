@@ -32,9 +32,9 @@ public:
 
 private:
   OperationContext operation_context_;
+  logging::Logger logger_;
   engine::RuleEngine engine_;
   settings::SettingsStore settings_store_;  // <-- require this after engine!
-  logging::Logger logger_;
 
 #if _DEBUG
   debug::WindowEventLogAdapter log_adapter_;

@@ -16,8 +16,9 @@ class RuleEngine final
   RuleEngine& operator=(RuleEngine const&) = delete;
 
 public:
-  constexpr RuleEngine() noexcept
-    : operation_context_(nullptr) {
+  inline RuleEngine() noexcept
+    : operation_context_(nullptr)
+    , rule_set_(std::make_shared<RuleSet const>()) {
   }
 
   void onSettingsChanged(settings::UserSettingsDocument const& settings) noexcept override;
@@ -32,7 +33,7 @@ private:
 
 private:
   OperationContext* operation_context_;
-  RuleSet rule_set_;
+  std::atomic<std::shared_ptr<RuleSet const>> rule_set_;
 };
 
 }

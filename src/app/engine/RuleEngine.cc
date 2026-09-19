@@ -15,8 +15,10 @@ void RuleEngine::checkRules(window::State& windowState) noexcept {
     return;
   }
 
+  std::shared_ptr<RuleSet const> rule_set{rule_set_.load(std::memory_order_acquire)};
+
   bool matched;
-  for (auto& rule : rule_set_) {
+  for (auto& rule : *rule_set.get()) {
     matched = true;
     for (auto& [evaluate, data] : rule.condition) {
       if (!evaluate(data, windowState)) {
@@ -33,7 +35,8 @@ void RuleEngine::checkRules(window::State& windowState) noexcept {
 }
 
 void RuleEngine::onSettingsChanged(settings::UserSettingsDocument const& settings) noexcept {
-  rule_set_ = compiler::CompileRule(settings);
+  RuleSet const rule_set{compiler::CompileRule(settings)};
+  rule_set_.store(std::make_shared<RuleSet const>(std::move(rule_set)), std::memory_order_release);
 }
 
 void RuleEngine::onForegroundEvent(window::State& windowState) noexcept {

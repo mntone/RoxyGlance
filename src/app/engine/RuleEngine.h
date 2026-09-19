@@ -28,6 +28,9 @@ public:
   constexpr void setOperationContext(OperationContext* ctx) noexcept { operation_context_ = ctx; }
 
 private:
+  void checkRules(window::State& windowState) noexcept;
+
+private:
   OperationContext* operation_context_;
   RuleSet rule_set_;
 };

@@ -91,6 +91,9 @@
     <ClInclude Include="logging\Logger.h">
       <Filter>logging</Filter>
     </ClInclude>
+    <ClInclude Include="logging\LogHelper.h">
+      <Filter>logging</Filter>
+    </ClInclude>
     <ClInclude Include="monitor\MonitorState.h">
       <Filter>monitor</Filter>
     </ClInclude>
@@ -222,6 +225,9 @@
       <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="logging\Logger.cc">
+      <Filter>logging</Filter>
+    </ClCompile>
+    <ClCompile Include="logging\LogHelper.cc">
       <Filter>logging</Filter>
     </ClCompile>
     <ClCompile Include="monitor\MonitorState.cc">

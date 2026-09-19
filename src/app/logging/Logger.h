@@ -16,7 +16,7 @@ class Logger final
 public:
   Logger() noexcept;
 
-  void addLog(Log log);
+  void addLog(Log log) noexcept;
 
   constexpr ContainerType const& Logs() const noexcept { return logs_; }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../logging/Logger.h"
+#include "../logging/LogHelper.h"
 #include "../window/IWindowStateListener.h"
 
 namespace roxyg::debug {
@@ -22,14 +22,14 @@ public:
   }
 
   constexpr void setLogger(logging::Logger* logger) noexcept {
-    logger_ = logger;
+    logger_.setLogger(logger);
   }
 
 private:
   void handleEvent(window::State& state, std::wstring_view eventName) noexcept;
 
 private:
-  logging::Logger* logger_;
+  logging::LogHelper<logging::LogGroup::kDebug> logger_;
 };
 
 }

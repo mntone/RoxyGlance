@@ -13,5 +13,5 @@ void WindowEventLogAdapter::handleEvent(window::State& state, std::wstring_view 
     state.processId(),
     state.windowClass(),
     eventName);
-  logger_->addLog(logging::Log{ std::move(log) });
+  logger_.trace(std::move(log));
 }

@@ -14,13 +14,16 @@ inline constexpr size_t kLogSize = 64;
 using namespace roxyg::logging;
 using namespace roxyg::utility;
 
+static_assert(std::is_nothrow_move_constructible_v<Log>);
+static_assert(std::is_nothrow_move_assignable_v<Log>);
+
 Logger::Logger() noexcept
   : logs_(kLogSize) {
 }
 
-void Logger::addLog(Log log) {
-  bool is_full = logs_.full();
-  logs_.push_front(log);
+void Logger::addLog(Log log) noexcept {
+  bool const is_full = logs_.full();
+  logs_.push_front(std::move(log));
 
   CollectionChange change{
     is_full

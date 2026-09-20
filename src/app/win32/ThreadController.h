@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../win32/hresult.h"
+
 namespace roxyg::win32 {
 
 class ThreadController {
@@ -7,33 +9,38 @@ class ThreadController {
   ThreadController& operator=(ThreadController const&) = delete;
 
 protected:
-  struct ThreadState final {
+  enum class State: uint32_t {
+    kReady = 1 << 0,
+    kRunning = 1 << 1,
+    kStopping = 1 << 2,
+  };
+  struct ThreadInfo final {
     HANDLE hthread;
     DWORD thread_id;
   };
 
   ThreadController() noexcept;
-#if _DEBUG
-  ~ThreadController() noexcept;
-#endif
+  virtual ~ThreadController() noexcept;
 
   [[nodiscard]] winrt::hresult start(_beginthreadex_proc_type proc, void* params) noexcept;
-  [[nodiscard]] DWORD validateThreadAccess(ThreadState const& state) noexcept;
-  [[nodiscard]] DWORD reapThread(HANDLE hthread) noexcept;
+  [[nodiscard]] DWORD validateThreadAccess(ThreadInfo const& state) noexcept;
+  [[nodiscard]] winrt::hresult reapThread(HANDLE hthread) noexcept;
+  [[nodiscard]] winrt::hresult forceExitThread(HANDLE hthread) noexcept;
 
-  [[nodiscard]] inline ThreadState const threadState() const noexcept {
-    return state_.load(std::memory_order_acquire);
+  [[nodiscard]] inline ThreadInfo const threadInfo() const noexcept {
+    return data_.load(std::memory_order_acquire);
   }
   [[nodiscard]] inline HANDLE hThread() const noexcept {
-    return state_.load(std::memory_order_acquire).hthread;
+    return data_.load(std::memory_order_acquire).hthread;
   }
   [[nodiscard]] inline DWORD threadId() const noexcept {
-    return state_.load(std::memory_order_acquire).thread_id;
+    return data_.load(std::memory_order_acquire).thread_id;
   }
 
 protected:
   std::mutex mutex_;
-  std::atomic<ThreadState> state_;
+  std::atomic<ThreadInfo> data_;
+  State state_;
 };
 
 }

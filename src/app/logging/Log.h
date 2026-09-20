@@ -20,6 +20,7 @@ enum class LogGroup: uint_fast8_t {
   kEngine,
   kMonitor,
   kSettings,
+  kWin32,
   kWindow,
 };
 

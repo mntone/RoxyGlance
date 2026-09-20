@@ -18,7 +18,7 @@ winrt::hresult StateWatcher::start() noexcept {
 }
 
 winrt::hresult StateWatcher::stop() noexcept {
-  return winrt::impl::hresult_from_win32(worker_.stop());
+  return worker_.stop();
 }
 
 void CALLBACK StateWatcher::winEventProcStatic(

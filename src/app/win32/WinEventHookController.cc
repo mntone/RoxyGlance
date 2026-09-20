@@ -1,111 +1,127 @@
 #include "pch.h"
 #include "WinEventHookController.h"
+#include "ThreadContext.h"
 
-struct WinEventHookThreadParams final {
-  const DWORD event_min, event_max;
-  const WINEVENTPROC proc;
-  std::atomic<DWORD> status;
-  std::atomic<bool> ready;
-};
+#include "../win32/hresult.h"
 
-static __forceinline void notifyBeginThread(WinEventHookThreadParams& params) noexcept {
-  params.ready.store(true, std::memory_order_release);
-  params.ready.notify_one();
-}
+namespace {
 
-static unsigned int __stdcall WinEventHookWorker(void* p) noexcept {
-  WinEventHookThreadParams& params = *static_cast<WinEventHookThreadParams*>(p);
-  HWINEVENTHOOK hWinEventHook = SetWinEventHook(
-    params.event_min, params.event_max,
-    nullptr,
-    params.proc,
-    0, 0,
-    WINEVENT_OUTOFCONTEXT | WINEVENT_SKIPOWNPROCESS);
-  if (!hWinEventHook) {
-    params.status.store(WINRT_IMPL_GetLastError(), std::memory_order_relaxed);
-    notifyBeginThread(params);
-    _endthreadex(EXIT_FAILURE);
-    return 0;
-  }
+inline constexpr std::wstring_view kPostWinEventHookThreadQuitMessageFailedQuota
+  = L"Failed to post a quit message to the WinEvent hook thread. Not enough quota is available.";
+inline constexpr std::wstring_view kPostWinEventHookThreadQuitMessageFailed
+  = L"Failed to post a quit message to the WinEvent hook thread.";
+inline constexpr std::wstring_view kWaitForWinEventHookThreadExitFailed
+  = L"Failed to wait for the WinEvent hook thread to exit.";
+inline constexpr std::wstring_view kWaitForWinEventHookThreadExitTimeout
+  = L"The wait for the WinEvent hook thread to exit timed out.";
 
-  MSG msg;
-  [[maybe_unused]] BOOL const peek_result = PeekMessageW(&msg, nullptr, 0, 0, PM_NOREMOVE);
-  notifyBeginThread(params);
-
-  DWORD ret = EXIT_SUCCESS;
-  BOOL rc;
-  while ((rc = GetMessageW(&msg, nullptr, 0, 0)) != 0) {
-    if (rc == -1) {
-      ret = EXIT_FAILURE;  // invalid message pointer
-      break;
-    }
-    TranslateMessage(&msg);
-    DispatchMessageW(&msg);
-  }
-
-  rc = UnhookWinEvent(hWinEventHook);
-  if (rc == FALSE) {
-    ret = EXIT_FAILURE;
-  }
-
-  _endthreadex(ret);
-  return 0;
 }
 
 using namespace roxyg::win32;
 
+struct WinEventHookThreadContext final: public ThreadContext {
+  DWORD const event_min, event_max;
+  WINEVENTPROC const wndproc;
+};
+
+static unsigned int __stdcall WinEventHookWorker(void* p) noexcept {
+  WinEventHookThreadContext& ctx = *static_cast<WinEventHookThreadContext*>(p);
+
+  HWINEVENTHOOK hWinEventHook = SetWinEventHook(
+    ctx.event_min, ctx.event_max,
+    nullptr,
+    ctx.wndproc,
+    0, 0,
+    WINEVENT_OUTOFCONTEXT | WINEVENT_SKIPOWNPROCESS);
+  if (!hWinEventHook) {
+    ctx.notifyLastError();
+    return 0;
+  }
+  ctx.notify(S_OK);
+
+  winrt::hresult hr = S_OK;
+  BOOL rc;
+  MSG msg;
+  while ((rc = GetMessageW(&msg, nullptr, 0, 0)) > 0) {
+    TranslateMessage(&msg);
+    DispatchMessageW(&msg);
+  }
+  if (rc == -1) {
+    hr = hresult::LastErrorAsHResult();
+  }
+
+  rc = UnhookWinEvent(hWinEventHook);
+  if (rc == FALSE && hr == S_OK) {
+    hr = E_FAIL;
+  }
+
+  _endthreadex(hr);
+  return 0;
+}
+
 winrt::hresult WinEventHookController::start(
   DWORD event_min,
   DWORD event_max,
-  WINEVENTPROC proc
+  WINEVENTPROC wndproc
 ) noexcept {
-  WinEventHookThreadParams state{
-    event_min, event_max,
-    proc,
-    ERROR_SUCCESS, false,
+  WinEventHookThreadContext state{
+    .event_min = event_min,
+    .event_max = event_max,
+    .wndproc = wndproc,
   };
   winrt::hresult hr = ThreadController::start(WinEventHookWorker, &state);
   if (FAILED(hr)) {
     return hr;
   }
 
-  state.ready.wait(false, std::memory_order_acquire);
-
-  DWORD const status = state.status.load(std::memory_order_acquire);
-  if (status != ERROR_SUCCESS) {
+  winrt::hresult const hresult = state.wait_and_load();
+  if (hresult != S_OK) {
     [[maybe_unused]] DWORD const stop_status = stop();
-    return winrt::impl::hresult_from_win32(status);
   }
 
-  return S_OK;
+  return hresult;
 }
 
-DWORD WinEventHookController::stop(DWORD timeout) noexcept {
+winrt::hresult WinEventHookController::stop(DWORD timeout) noexcept {
   std::lock_guard<std::mutex> lock(mutex_);
+  if (state_ != State::kRunning) {
+    return hresult::kErrorInvalidOperation;
+  }
 
-  ThreadState const current_state{threadState()};
-  DWORD status = validateThreadAccess(current_state);
+  ThreadInfo const current_info{threadInfo()};
+  DWORD status = validateThreadAccess(current_info);
   if (status != ERROR_SUCCESS) {
-    return status;
+    return hresult::HResultFromWin32(status);
   }
 
-  BOOL rc = PostThreadMessageW(current_state.thread_id, WM_QUIT, 0, 0);
-  DWORD post_status, wait_timeout;
+  // Record the stopping state before requesting thread exit.
+  state_ = State::kStopping;
+
+  BOOL rc = PostThreadMessageW(current_info.thread_id, WM_QUIT, 0, 0);
+  DWORD delay;
   if (rc == FALSE) {
-    post_status = WINRT_IMPL_GetLastError();
-    wait_timeout = 0;  // force immediate return
+    DWORD const lasterr = WINRT_IMPL_GetLastError();
+    if (lasterr == ERROR_NOT_ENOUGH_QUOTA) {
+      delay = timeout;
+      logger_.notice(winrt::hstring{kPostWinEventHookThreadQuitMessageFailedQuota}, hresult::kErrorNotEnoughQuota);
+    } else {
+      delay = 0;  // force immediate return
+      logger_.error(winrt::hstring{kPostWinEventHookThreadQuitMessageFailed}, hresult::HResultFromWin32(lasterr));
+    }
   } else {
-    post_status = ERROR_TIMEOUT;
-    wait_timeout = timeout;
+    delay = timeout;
   }
 
-  status = WaitForSingleObject(current_state.hthread, wait_timeout);
-  switch (status) {
-  case WAIT_TIMEOUT:
-    return post_status;
-  case WAIT_FAILED:
-    return WINRT_IMPL_GetLastError();
+  status = WaitForSingleObject(current_info.hthread, delay);
+  if (status != WAIT_OBJECT_0) {
+    if (status == WAIT_TIMEOUT) {
+      logger_.error(winrt::hstring{kWaitForWinEventHookThreadExitTimeout}, hresult::kErrorTimeout);
+    } else {
+      winrt::hresult hr = hresult::LastErrorAsHResult();
+      logger_.error(winrt::hstring{kWaitForWinEventHookThreadExitFailed}, hr);
+    }
+    return forceExitThread(current_info.hthread);
   }
 
-  return reapThread(current_state.hthread);
+  return reapThread(current_info.hthread);
 }

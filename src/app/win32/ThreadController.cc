@@ -1,22 +1,21 @@
 #include "pch.h"
 #include "ThreadController.h"
 
-namespace {
-inline constexpr winrt::hresult kErrorInvalidOperation = winrt::impl::hresult_from_win32(ERROR_INVALID_OPERATION);
-}
+#include "../win32/hresult.h"
 
 using namespace roxyg::win32;
 
 ThreadController::ThreadController() noexcept
   : mutex_()
-  , state_({INVALID_HANDLE_VALUE, 0}) {
+  , data_({INVALID_HANDLE_VALUE, 0})
+  , state_(State::kReady) {
 }
 
-#if _DEBUG
 ThreadController::~ThreadController() noexcept {
+#if _DEBUG
   assert(hThread() == INVALID_HANDLE_VALUE);
-}
 #endif
+}
 
 winrt::hresult ThreadController::start(_beginthreadex_proc_type proc, void* params) noexcept {
   if (proc == nullptr) {
@@ -24,10 +23,13 @@ winrt::hresult ThreadController::start(_beginthreadex_proc_type proc, void* para
   }
 
   std::lock_guard<std::mutex> lock(mutex_);
+  if (state_ != State::kReady) {
+    return hresult::kErrorInvalidOperation;
+  }
 
   HANDLE const current_hthread{hThread()};
   if (current_hthread != INVALID_HANDLE_VALUE) {
-    return kErrorInvalidOperation;
+    return hresult::kErrorInvalidOperation;
   }
 
   // Clear the CRT error indicators before calling _beginthreadex
@@ -66,11 +68,12 @@ winrt::hresult ThreadController::start(_beginthreadex_proc_type proc, void* para
   }
 
   HANDLE const hthread = reinterpret_cast<HANDLE>(raw_thread);
-  state_.store({hthread, thread_id}, std::memory_order_release);
+  data_.store({hthread, thread_id}, std::memory_order_release);
+  state_ = State::kRunning;
   return S_OK;
 }
 
-DWORD ThreadController::validateThreadAccess(ThreadState const& state) noexcept {
+DWORD ThreadController::validateThreadAccess(ThreadInfo const& state) noexcept {
   if (INVALID_HANDLE_VALUE == state.hthread) {
     return ERROR_INVALID_OPERATION;
   }
@@ -80,18 +83,56 @@ DWORD ThreadController::validateThreadAccess(ThreadState const& state) noexcept 
   return ERROR_SUCCESS;
 }
 
-DWORD ThreadController::reapThread(HANDLE hthread) noexcept {
-  DWORD status = ERROR_SUCCESS;
-  BOOL rc = GetExitCodeThread(hthread, &status);
+winrt::hresult ThreadController::reapThread(HANDLE hthread) noexcept {
+#if _DEBUG
+  assert(state_ == State::kStopping);
+#endif
+
+  DWORD exit_code;
+  BOOL rc = GetExitCodeThread(hthread, &exit_code);
+
+  winrt::hresult hr;
   if (rc == FALSE) {
+    hr = hresult::LastErrorAsHResult();
+  } else {
+    hr = static_cast<HRESULT>(exit_code);
+  }
+
+  rc = CloseHandle(hthread);
+  if (rc == FALSE) {
+    return hresult::LastErrorAsHResult();
+  }
+
+  data_.store({INVALID_HANDLE_VALUE, 0}, std::memory_order_release);
+  state_ = State::kReady;
+  return hr;
+}
+
+winrt::hresult ThreadController::forceExitThread(HANDLE hthread) noexcept {
+#if _DEBUG
+  assert(state_ == State::kStopping);
+#endif
+
+  DWORD status = ERROR_SUCCESS;
+#pragma warning(push)
+#pragma warning(disable:6258)
+  BOOL rc = TerminateThread(hthread, 1);
+#pragma warning(pop)
+  if (rc == FALSE) {
+    status = WINRT_IMPL_GetLastError();
+  }
+
+  DWORD const wait_status = WaitForSingleObject(hthread, INFINITE);
+  if (wait_status == WAIT_FAILED) {
     status = WINRT_IMPL_GetLastError();
   }
 
   rc = CloseHandle(hthread);
   if (rc == FALSE) {
-    return WINRT_IMPL_GetLastError();
+    status = WINRT_IMPL_GetLastError();
   }
 
-  state_.store({INVALID_HANDLE_VALUE, 0}, std::memory_order_release);
-  return status;
+  data_.store({INVALID_HANDLE_VALUE, 0}, std::memory_order_release);
+  state_ = State::kReady;
+  return hresult::HResultFromWin32(status);
 }

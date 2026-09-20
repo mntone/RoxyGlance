@@ -15,12 +15,17 @@ AppContext::AppContext() noexcept {
   settings_store_.addListener(&engine_);
 
   window::StateWatcher& w = window::StateWatcher::instance();
+  w.setLogger(&logger_);
   w.addListener(&engine_);
 #if _DEBUG
   w.addListener(&log_adapter_);
 #endif
 
   settings_store_.reloadUserSettings();
+}
+
+AppContext::~AppContext() noexcept {
+  window::StateWatcher::instance().setLogger(nullptr);
 }
 
 winrt::hresult AppContext::initialize() {

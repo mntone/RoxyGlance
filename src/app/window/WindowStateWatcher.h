@@ -22,6 +22,10 @@ public:
     return instance;
   }
 
+  constexpr void setLogger(logging::Logger* logger) noexcept {
+    worker_.setLogger(logger);
+  }
+
 private:
   static void CALLBACK winEventProcStatic(
     HWINEVENTHOOK hWinEventHook,

@@ -123,6 +123,7 @@
     <ClInclude Include="win32\monitor.h" />
     <ClInclude Include="win32\string.h" />
     <ClInclude Include="win32\ThreadController.h" />
+    <ClInclude Include="win32\ThreadContext.h" />
     <ClInclude Include="win32\window.h" />
     <ClInclude Include="win32\WinEventHookController.h" />
     <ClInclude Include="window\IWindowStateListener.h" />

@@ -16,6 +16,7 @@ class AppContext final {
 
 public:
   AppContext() noexcept;
+  ~AppContext() noexcept;
 
   winrt::hresult initialize();
 

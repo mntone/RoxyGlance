@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "file.h"
+#include "hresult.h"
 
 #include <wil/resource.h>
 
@@ -16,13 +17,13 @@ winrt::hresult win32::ReadFile(std::filesystem::path filepath, std::string& cont
     nullptr
   );
   if (hfile == INVALID_HANDLE_VALUE) {
-    return winrt::impl::hresult_from_win32(WINRT_IMPL_GetLastError());
+    return hresult::LastErrorAsHResult();
   }
 
   wil::unique_hfile file(hfile);
   DWORD fileSize = GetFileSize(hfile, nullptr);
   if (fileSize == INVALID_FILE_SIZE) {
-    return winrt::impl::hresult_from_win32(WINRT_IMPL_GetLastError());
+    return hresult::LastErrorAsHResult();
   }
 
 #if defined(__cpp_lib_string_resize_and_overwrite) && __cpp_lib_string_resize_and_overwrite >= 202110L
@@ -31,7 +32,7 @@ winrt::hresult win32::ReadFile(std::filesystem::path filepath, std::string& cont
     DWORD bytesRead;
     BOOL const rc = ::ReadFile(hfile, buf, static_cast<DWORD>(bufSize), &bytesRead, nullptr);
     if (!rc) {
-      hr = winrt::impl::hresult_from_win32(WINRT_IMPL_GetLastError());
+      hr = hresult::LastErrorAsHResult();
       return 0;
     }
 
@@ -45,7 +46,7 @@ winrt::hresult win32::ReadFile(std::filesystem::path filepath, std::string& cont
   BOOL const rc = ::ReadFile(hfile, content.data(), fileSize, &bytesRead, nullptr);
   if (!rc) {
     content.resize(0);
-    return winrt::impl::hresult_from_win32(WINRT_IMPL_GetLastError());
+    return hresult::LastErrorAsHResult();
   }
 
   content.resize(bytesRead);

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "window.h"
+#include "hresult.h"
 
 using namespace roxyg::numeric;
 using namespace roxyg::win32;
@@ -8,7 +9,7 @@ winrt::hresult roxyg::win32::GetWindowShadowMargin(HWND hwnd, numeric::long4& sh
   long4 outerRect;
   BOOL rc = GetWindowRect(hwnd, reinterpret_cast<RECT*>(&outerRect));
   if (!rc) [[unlikely]] {
-    return winrt::impl::hresult_from_win32(WINRT_IMPL_GetLastError());
+    return hresult::LastErrorAsHResult();
   }
 
   long4 innerRect;

@@ -161,6 +161,9 @@
     <ClInclude Include="win32\file.h">
       <Filter>win32</Filter>
     </ClInclude>
+    <ClInclude Include="win32\hresult.h">
+      <Filter>win32</Filter>
+    </ClInclude>
     <ClInclude Include="win32\monitor.h">
       <Filter>win32</Filter>
     </ClInclude>

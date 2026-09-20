@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "string.h"
+#include "hresult.h"
 
 using namespace roxyg;
 
@@ -28,7 +29,7 @@ winrt::hresult win32::ConvertUtf8ToUtf16(
         buf, static_cast<int>(buf_size)
     );
     if (written <= 0) {
-      hr = winrt::impl::hresult_from_win32(WINRT_IMPL_GetLastError());
+      hr = hresult::LastErrorAsHResult();
       return 0;
     }
 
@@ -44,7 +45,7 @@ winrt::hresult win32::ConvertUtf8ToUtf16(
   );
   if (written <= 0) {
     utf16.resize(0);
-    return winrt::impl::hresult_from_win32(WINRT_IMPL_GetLastError());
+    return hresult::LastErrorAsHResult();
   }
 
   utf16.resize(written);

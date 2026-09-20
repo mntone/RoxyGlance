@@ -3,6 +3,7 @@
 
 #include "../context/OperationContext.h"
 #include "../monitor/MonitorStateCache.h"
+#include "../win32/hresult.h"
 #include "../win32/monitor.h"
 #include "../window/WindowStateCache.h"
 
@@ -16,7 +17,7 @@ static winrt::hresult applyWindowRect(HWND hwnd, long4 bounds) noexcept {
     bounds.x(), bounds.y(), bounds.z(), bounds.w(),
     SWP_NOZORDER | SWP_NOACTIVATE | SWP_DEFERERASE | SWP_ASYNCWINDOWPOS);
   if (!rc) [[unlikely]] {
-    return winrt::impl::hresult_from_win32(WINRT_IMPL_GetLastError());
+    return roxyg::win32::hresult::LastErrorAsHResult();
   }
 
   return S_OK;

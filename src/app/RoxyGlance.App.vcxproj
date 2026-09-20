@@ -119,6 +119,7 @@
     <ClInclude Include="utility\ListenerHost.h" />
     <ClInclude Include="utility\ValueCache.h" />
     <ClInclude Include="win32\file.h" />
+    <ClInclude Include="win32\hresult.h" />
     <ClInclude Include="win32\monitor.h" />
     <ClInclude Include="win32\string.h" />
     <ClInclude Include="win32\ThreadController.h" />

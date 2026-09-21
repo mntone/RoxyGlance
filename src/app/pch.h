@@ -9,6 +9,7 @@
 #include <cmath>
 #include <cstdint>
 #include <optional>
+#include <random>
 #include <string>
 #include <string_view>
 #include <utility>

@@ -115,8 +115,13 @@
     <ClInclude Include="settings\SettingsStore.h" />
     <ClInclude Include="settings\String.h" />
     <ClInclude Include="settings\UserSettings.h" />
+    <ClInclude Include="utility\backoff\jitter.h" />
+    <ClInclude Include="utility\backoff\exponential.h" />
+    <ClInclude Include="utility\backoff\fixed.h" />
+    <ClInclude Include="utility\macro.h" />
     <ClInclude Include="utility\ICollectionChangeListener.h" />
     <ClInclude Include="utility\ListenerHost.h" />
+    <ClInclude Include="utility\random.h" />
     <ClInclude Include="utility\ValueCache.h" />
     <ClInclude Include="win32\file.h" />
     <ClInclude Include="win32\hresult.h" />

@@ -40,6 +40,9 @@
     <Filter Include="utility">
       <UniqueIdentifier>{0a898882-105a-4499-9bb0-cee74d401613}</UniqueIdentifier>
     </Filter>
+    <Filter Include="utility\backoff">
+      <UniqueIdentifier>{ec5ecaf4-93e9-4d46-806b-e2ec5ac64375}</UniqueIdentifier>
+    </Filter>
     <Filter Include="win32">
       <UniqueIdentifier>{90f5552a-d3ea-440b-b9c8-b2249a5fecf0}</UniqueIdentifier>
     </Filter>
@@ -153,6 +156,21 @@
       <Filter>utility</Filter>
     </ClInclude>
     <ClInclude Include="utility\ListenerHost.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\backoff\exponential.h">
+      <Filter>utility\backoff</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\backoff\fixed.h">
+      <Filter>utility\backoff</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\backoff\jitter.h">
+      <Filter>utility\backoff</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\macro.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\random.h">
       <Filter>utility</Filter>
     </ClInclude>
     <ClInclude Include="utility\ValueCache.h">

@@ -22,6 +22,8 @@ inline constexpr std::wstring_view kWaitForWinEventHookThreadExitFailed
   = L"Failed to wait for the WinEvent hook thread to exit.";
 inline constexpr std::wstring_view kWaitForWinEventHookThreadExitTimeout
   = L"The wait for the WinEvent hook thread to exit timed out.";
+inline constexpr std::wstring_view kWinEventHookThreadExitRetryExpired
+  = L"The WinEvent hook thread did not exit within the retry limit.";
 
 }
 
@@ -74,7 +76,7 @@ static unsigned int __stdcall WinEventHookWorker(void* p) noexcept {
 }
 
 WinEventHookController::WinEventHookController(std::unique_ptr<utility::IRetryStateFactory>&& retry_factory) noexcept
-  : ThreadController()
+  : ThreadController(ThreadStopFailurePolicy::kFailFast)
   , retry_factory_(std::move(retry_factory)) {
 }
 
@@ -120,7 +122,7 @@ winrt::hresult WinEventHookController::start(
 
 winrt::hresult WinEventHookController::stop() noexcept {
   std::lock_guard<std::mutex> lock(mutex_);
-  if (state_ != State::kRunning) {
+  if (state_ != State::kRunning && state_ != State::kStopping) {
     return hresult::kErrorInvalidOperation;
   }
 
@@ -179,7 +181,12 @@ winrt::hresult WinEventHookController::stop() noexcept {
   } while (retry->available());
 
   if (retry->expired()) {
-    return forceExitThread(current_info.hthread);
+    if (stop_failure_policy_ == ThreadStopFailurePolicy::kFailFast) {
+      logger_.fatal(winrt::hstring{kWinEventHookThreadExitRetryExpired}, hresult::kErrorTimeout);
+      utility::fastfail();
+    }
+
+    return hresult::kErrorTimeout;
   }
 
   return reapThread(current_info.hthread);

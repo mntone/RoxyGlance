@@ -8,7 +8,15 @@ using namespace roxyg::win32;
 ThreadController::ThreadController() noexcept
   : mutex_()
   , data_({INVALID_HANDLE_VALUE, 0})
-  , state_(State::kReady) {
+  , state_(State::kReady)
+  , stop_failure_policy_(ThreadStopFailurePolicy::kReturnTimeout) {
+}
+
+ThreadController::ThreadController(ThreadStopFailurePolicy stop_failure_policy) noexcept
+  : mutex_()
+  , data_({INVALID_HANDLE_VALUE, 0})
+  , state_(State::kReady)
+  , stop_failure_policy_(stop_failure_policy) {
 }
 
 ThreadController::~ThreadController() noexcept {

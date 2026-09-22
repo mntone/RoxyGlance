@@ -121,32 +121,3 @@ winrt::hresult ThreadController::reapThread(HANDLE hthread) noexcept {
   state_ = State::kReady;
   return hr;
 }
-
-winrt::hresult ThreadController::forceExitThread(HANDLE hthread) noexcept {
-#if _DEBUG
-  assert(state_ == State::kStopping);
-#endif
-
-  DWORD status = ERROR_SUCCESS;
-#pragma warning(push)
-#pragma warning(disable:6258)
-  BOOL rc = TerminateThread(hthread, 1);
-#pragma warning(pop)
-  if (rc == FALSE) {
-    status = WINRT_IMPL_GetLastError();
-  }
-
-  DWORD const wait_status = WaitForSingleObject(hthread, INFINITE);
-  if (wait_status == WAIT_FAILED) {
-    status = WINRT_IMPL_GetLastError();
-  }
-
-  rc = CloseHandle(hthread);
-  if (rc == FALSE) {
-    status = WINRT_IMPL_GetLastError();
-  }
-
-  data_.store({INVALID_HANDLE_VALUE, 0}, std::memory_order_release);
-  state_ = State::kReady;
-  return hresult::HResultFromWin32(status);
-}

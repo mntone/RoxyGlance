@@ -30,7 +30,6 @@ protected:
 
   [[nodiscard]] winrt::hresult start(_beginthreadex_proc_type proc, void* params, ThreadInfo* info) noexcept;
   [[nodiscard]] winrt::hresult reapThread(HANDLE hthread) noexcept;
-  [[nodiscard]] winrt::hresult forceExitThread(HANDLE hthread) noexcept;
   [[nodiscard]] static winrt::hresult validateThreadAccess(ThreadInfo const& state) noexcept;
 
   [[nodiscard]] inline ThreadInfo const threadInfo() const noexcept {

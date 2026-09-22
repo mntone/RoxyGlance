@@ -85,14 +85,16 @@ winrt::hresult ThreadController::start(_beginthreadex_proc_type proc, void* para
   return S_OK;
 }
 
-DWORD ThreadController::validateThreadAccess(ThreadInfo const& state) noexcept {
+winrt::hresult ThreadController::validateThreadAccess(ThreadInfo const& state) noexcept {
+  DWORD err;
   if (INVALID_HANDLE_VALUE == state.hthread) {
-    return ERROR_INVALID_OPERATION;
+    err = ERROR_INVALID_OPERATION;
+  } else if (GetCurrentThreadId() == state.thread_id) {
+    err = ERROR_POSSIBLE_DEADLOCK;
+  } else {
+    err = ERROR_SUCCESS;
   }
-  if (GetCurrentThreadId() == state.thread_id) {
-    return ERROR_POSSIBLE_DEADLOCK;
-  }
-  return ERROR_SUCCESS;
+  return hresult::HResultFromWin32(err);
 }
 
 winrt::hresult ThreadController::reapThread(HANDLE hthread) noexcept {

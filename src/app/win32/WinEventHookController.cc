@@ -127,9 +127,11 @@ winrt::hresult WinEventHookController::stop() noexcept {
   }
 
   ThreadInfo const current_info{threadInfo()};
-  DWORD status = validateThreadAccess(current_info);
-  if (status != ERROR_SUCCESS) {
-    return hresult::HResultFromWin32(status);
+  {
+    winrt::hresult const hr = validateThreadAccess(current_info);
+    if (FAILED(hr)) {
+      return hr;
+    }
   }
 
   // Record the stopping state before requesting thread exit.

@@ -122,6 +122,8 @@
     <ClInclude Include="utility\ICollectionChangeListener.h" />
     <ClInclude Include="utility\ListenerHost.h" />
     <ClInclude Include="utility\random.h" />
+    <ClInclude Include="utility\RetryState.h" />
+    <ClInclude Include="utility\RetryState.inl" />
     <ClInclude Include="utility\ValueCache.h" />
     <ClInclude Include="win32\file.h" />
     <ClInclude Include="win32\hresult.h" />

@@ -173,6 +173,12 @@
     <ClInclude Include="utility\random.h">
       <Filter>utility</Filter>
     </ClInclude>
+    <ClInclude Include="utility\RetryState.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\RetryState.inl">
+      <Filter>utility</Filter>
+    </ClInclude>
     <ClInclude Include="utility\ValueCache.h">
       <Filter>utility</Filter>
     </ClInclude>

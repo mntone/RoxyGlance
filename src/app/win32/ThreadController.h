@@ -22,7 +22,7 @@ protected:
   ThreadController() noexcept;
   virtual ~ThreadController() noexcept;
 
-  [[nodiscard]] winrt::hresult start(_beginthreadex_proc_type proc, void* params) noexcept;
+  [[nodiscard]] winrt::hresult start(_beginthreadex_proc_type proc, void* params, ThreadInfo* info) noexcept;
   [[nodiscard]] DWORD validateThreadAccess(ThreadInfo const& state) noexcept;
   [[nodiscard]] winrt::hresult reapThread(HANDLE hthread) noexcept;
   [[nodiscard]] winrt::hresult forceExitThread(HANDLE hthread) noexcept;

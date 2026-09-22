@@ -167,6 +167,9 @@
     <ClInclude Include="utility\backoff\jitter.h">
       <Filter>utility\backoff</Filter>
     </ClInclude>
+    <ClInclude Include="utility\fastfail.h">
+      <Filter>utility</Filter>
+    </ClInclude>
     <ClInclude Include="utility\macro.h">
       <Filter>utility</Filter>
     </ClInclude>

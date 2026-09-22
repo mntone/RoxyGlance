@@ -118,6 +118,7 @@
     <ClInclude Include="utility\backoff\jitter.h" />
     <ClInclude Include="utility\backoff\exponential.h" />
     <ClInclude Include="utility\backoff\fixed.h" />
+    <ClInclude Include="utility\fastfail.h" />
     <ClInclude Include="utility\macro.h" />
     <ClInclude Include="utility\ICollectionChangeListener.h" />
     <ClInclude Include="utility\ListenerHost.h" />

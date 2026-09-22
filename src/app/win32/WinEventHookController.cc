@@ -2,10 +2,18 @@
 #include "WinEventHookController.h"
 #include "ThreadContext.h"
 
+#include "../utility/backoff/fixed.h"
+#include "../utility/backoff/exponential.h"
+#include "../utility/fastfail.h"
+#include "../utility/RetryState.inl"
 #include "../win32/hresult.h"
 
 namespace {
 
+inline constexpr std::wstring_view kWinEventHookRetryFactoryAllocationFailed
+  = L"Failed to allocate memory for the WinEvent hook retry state factory.";
+inline constexpr std::wstring_view kWinEventHookRetryStateAllocationFailed
+  = L"Failed to allocate memory for the WinEvent hook retry state.";
 inline constexpr std::wstring_view kPostWinEventHookThreadQuitMessageFailedQuota
   = L"Failed to post a quit message to the WinEvent hook thread. Not enough quota is available.";
 inline constexpr std::wstring_view kPostWinEventHookThreadQuitMessageFailed
@@ -16,6 +24,12 @@ inline constexpr std::wstring_view kWaitForWinEventHookThreadExitTimeout
   = L"The wait for the WinEvent hook thread to exit timed out.";
 
 }
+
+using WinEventHookExitBackoff = roxyg::utility::uint32_exponential_backoff<
+  1000, 10000,
+  2.f,
+  roxyg::utility::preferred_xorshift_equal_jitter_generator
+>;
 
 using namespace roxyg::win32;
 
@@ -59,6 +73,15 @@ static unsigned int __stdcall WinEventHookWorker(void* p) noexcept {
   return 0;
 }
 
+WinEventHookController::WinEventHookController(std::unique_ptr<utility::IRetryStateFactory>&& retry_factory) noexcept
+  : ThreadController()
+  , retry_factory_(std::move(retry_factory)) {
+}
+
+WinEventHookController::WinEventHookController() noexcept
+  : WinEventHookController(std::make_unique<utility::RetryStateFactory<1, utility::uint32_fixed_backoff<1000>>>()) {
+}
+
 winrt::hresult WinEventHookController::start(
   DWORD event_min,
   DWORD event_max,
@@ -69,20 +92,33 @@ winrt::hresult WinEventHookController::start(
     .event_max = event_max,
     .wndproc = wndproc,
   };
-  winrt::hresult hr = ThreadController::start(WinEventHookWorker, &state);
+  ThreadInfo info;
+  winrt::hresult hr = ThreadController::start(WinEventHookWorker, &state, &info);
   if (FAILED(hr)) {
     return hr;
   }
 
-  winrt::hresult const hresult = state.wait_and_load();
-  if (hresult != S_OK) {
+  hr = state.wait_and_load();
+  if (hr != S_OK) {
     [[maybe_unused]] DWORD const stop_status = stop();
+  } else {
+    size_t const seed = utility::make_preferred_seed(utility::get_tsc(), info.thread_id);
+    try {
+      std::unique_ptr<utility::IRetryStateFactory> state_factory{
+        std::make_unique<utility::RetryStateFactory<5, WinEventHookExitBackoff>>(WinEventHookExitBackoff{{seed}})
+      };
+      setRetryFactory(std::move(state_factory));
+    } catch (std::bad_alloc const&) {
+      // Fail fast here because stop() may be unable to allocate its retry state
+      // after this allocation failure, leaving the worker thread unrecoverable.
+      logger_.fatal(winrt::hstring{kWinEventHookRetryFactoryAllocationFailed}, E_OUTOFMEMORY);
+      utility::fastfail();
+    }
   }
-
-  return hresult;
+  return hr;
 }
 
-winrt::hresult WinEventHookController::stop(DWORD timeout) noexcept {
+winrt::hresult WinEventHookController::stop() noexcept {
   std::lock_guard<std::mutex> lock(mutex_);
   if (state_ != State::kRunning) {
     return hresult::kErrorInvalidOperation;
@@ -97,29 +133,52 @@ winrt::hresult WinEventHookController::stop(DWORD timeout) noexcept {
   // Record the stopping state before requesting thread exit.
   state_ = State::kStopping;
 
-  BOOL rc = PostThreadMessageW(current_info.thread_id, WM_QUIT, 0, 0);
-  DWORD delay;
-  if (rc == FALSE) {
-    DWORD const lasterr = WINRT_IMPL_GetLastError();
-    if (lasterr == ERROR_NOT_ENOUGH_QUOTA) {
-      delay = timeout;
-      logger_.notice(winrt::hstring{kPostWinEventHookThreadQuitMessageFailedQuota}, hresult::kErrorNotEnoughQuota);
-    } else {
-      delay = 0;  // force immediate return
-      logger_.error(winrt::hstring{kPostWinEventHookThreadQuitMessageFailed}, hresult::HResultFromWin32(lasterr));
-    }
-  } else {
-    delay = timeout;
+  std::unique_ptr<utility::IRetryState> retry;
+  try {
+    retry = retry_factory_->make();
+  } catch (std::bad_alloc const&) {
+    logger_.fatal(winrt::hstring{kWinEventHookRetryStateAllocationFailed}, E_OUTOFMEMORY);
+    utility::fastfail();
   }
 
-  status = WaitForSingleObject(current_info.hthread, delay);
-  if (status != WAIT_OBJECT_0) {
-    if (status == WAIT_TIMEOUT) {
-      logger_.error(winrt::hstring{kWaitForWinEventHookThreadExitTimeout}, hresult::kErrorTimeout);
+  do {
+    BOOL rc = PostThreadMessageW(current_info.thread_id, WM_QUIT, 0, 0);
+    bool retryable = true;
+    DWORD delay;
+    if (rc == FALSE) {
+      DWORD const lasterr = WINRT_IMPL_GetLastError();
+      if (lasterr == ERROR_NOT_ENOUGH_QUOTA) {
+        delay = retry->nextDelay();
+        logger_.notice(winrt::hstring{kPostWinEventHookThreadQuitMessageFailedQuota}, hresult::kErrorNotEnoughQuota);
+      } else {
+        retryable = false;
+        delay = 0;  // force immediate return
+        logger_.error(winrt::hstring{kPostWinEventHookThreadQuitMessageFailed}, hresult::HResultFromWin32(lasterr));
+      }
     } else {
-      winrt::hresult hr = hresult::LastErrorAsHResult();
-      logger_.error(winrt::hstring{kWaitForWinEventHookThreadExitFailed}, hr);
+      delay = retry->nextDelay();
     }
+
+    DWORD const wait_status = WaitForSingleObject(current_info.hthread, delay);
+    if (wait_status == WAIT_OBJECT_0) {
+      break;
+    } else {
+      if (wait_status == WAIT_TIMEOUT) {
+        logger_.error(winrt::hstring{kWaitForWinEventHookThreadExitTimeout}, hresult::kErrorTimeout);
+      } else {
+        winrt::hresult hr = hresult::LastErrorAsHResult();
+        logger_.error(winrt::hstring{kWaitForWinEventHookThreadExitFailed}, hr);
+      }
+      if (retryable) {
+        retry->advanceAttempt();
+      } else {
+        retry->forceExpire();
+        break;
+      }
+    }
+  } while (retry->available());
+
+  if (retry->expired()) {
     return forceExitThread(current_info.hthread);
   }
 

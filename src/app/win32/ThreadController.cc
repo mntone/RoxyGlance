@@ -17,7 +17,7 @@ ThreadController::~ThreadController() noexcept {
 #endif
 }
 
-winrt::hresult ThreadController::start(_beginthreadex_proc_type proc, void* params) noexcept {
+winrt::hresult ThreadController::start(_beginthreadex_proc_type proc, void* params, ThreadInfo* info) noexcept {
   if (proc == nullptr) {
     return E_INVALIDARG;
   }
@@ -37,7 +37,7 @@ winrt::hresult ThreadController::start(_beginthreadex_proc_type proc, void* para
   _set_doserrno(0);
   errno = 0;
 
-  unsigned int thread_id = 0;
+  unsigned int thread_id;
   uintptr_t const raw_thread = _beginthreadex(
     nullptr,
     0,
@@ -70,6 +70,10 @@ winrt::hresult ThreadController::start(_beginthreadex_proc_type proc, void* para
   HANDLE const hthread = reinterpret_cast<HANDLE>(raw_thread);
   data_.store({hthread, thread_id}, std::memory_order_release);
   state_ = State::kRunning;
+
+  if (info) {
+    *info = {hthread, thread_id};
+  }
   return S_OK;
 }
 

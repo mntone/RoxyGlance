@@ -8,6 +8,8 @@
 
 namespace {
 
+inline constexpr std::wstring_view kThreadNotReapedBeforeDestruction
+  = L"Message loop thread was not reaped before destruction.";
 inline constexpr std::wstring_view kRetryStateAllocationFailed
   = L"Failed to allocate memory for the thread stop retry state.";
 inline constexpr std::wstring_view kPostStopMessageFailedQuota
@@ -52,9 +54,16 @@ MessageLoopThreadController::MessageLoopThreadController() noexcept
 }
 
 MessageLoopThreadController::~MessageLoopThreadController() noexcept {
+  HANDLE const hthread = hThread();
+  if (hthread == INVALID_HANDLE_VALUE) {
+    return;
+  }
+
+  logger_.fatal(winrt::hstring{kThreadNotReapedBeforeDestruction}, hresult::kErrorInvalidOperation);
 #if _DEBUG
-  assert(hThread() == INVALID_HANDLE_VALUE);
+  assert(hthread == INVALID_HANDLE_VALUE);
 #endif
+  utility::fastfail();
 }
 
 winrt::hresult MessageLoopThreadController::start(_beginthreadex_proc_type proc, void* params, ThreadInfo* info) noexcept {

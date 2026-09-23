@@ -2,6 +2,8 @@
 #include "window.h"
 #include "hresult.h"
 
+#include <dwmapi.h>
+
 using namespace roxyg::numeric;
 using namespace roxyg::win32;
 

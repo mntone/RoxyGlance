@@ -103,6 +103,7 @@
       <AdditionalDependencies>dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <StackReserveSize>0x20000</StackReserveSize>
       <StackCommitSize>0x2000</StackCommitSize>
+      <DelayLoadDLLs>dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AdditionalOptions>/Brepro %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Manifest>

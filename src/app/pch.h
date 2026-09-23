@@ -26,7 +26,6 @@
 #include <magic_enum/magic_enum.hpp>
 
 #include <windows.h>
-#include <dwmapi.h>
 #include <unknwn.h>
 #include <hstring.h>
 

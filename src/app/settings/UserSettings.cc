@@ -5,7 +5,7 @@
 
 using namespace roxyg::settings;
 
-__forceinline static std::vector<Rule> readRules(c4::yml::NodeRef n) {
+static ROXYG_ALWAYS_INLINE std::vector<Rule> readRules(c4::yml::NodeRef n) {
   if (!n.has_child(key::kRules)) {
     return {};
   }

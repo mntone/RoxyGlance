@@ -14,11 +14,11 @@ protected:
 template<typename Listener>
 struct ListenerHost: public _ListenerHostBase {
 public:
-  __forceinline bool addListener(Listener* listener) {
+  ROXYG_ALWAYS_INLINE bool addListener(Listener* listener) {
     return _ListenerHostBase::addListener(listener);
   }
 
-  __forceinline bool removeListener(Listener* listener) {
+  ROXYG_ALWAYS_INLINE bool removeListener(Listener* listener) {
     return _ListenerHostBase::removeListener(listener);
   }
 

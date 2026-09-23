@@ -25,7 +25,7 @@ constexpr customize_t enum_name(roxyg::settings::ActionType value) noexcept {
 using namespace magic_enum;
 using namespace roxyg::settings;
 
-static __forceinline ActionType readActionType(c4::yml::ConstNodeRef n) {
+static ROXYG_ALWAYS_INLINE ActionType readActionType(c4::yml::ConstNodeRef n) {
   std::string const action_type = ReadStringFromNode(n);
   return enum_cast<ActionType>(action_type, case_insensitive)
     .value_or(ActionType::kUnknown);

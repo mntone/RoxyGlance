@@ -28,13 +28,13 @@ using namespace magic_enum;
 using namespace magic_enum::bitwise_operators;
 using namespace roxyg::settings;
 
-__forceinline static TriggerType loadTrigger(c4::yml::ConstNodeRef n) noexcept {
+static ROXYG_ALWAYS_INLINE TriggerType loadTrigger(c4::yml::ConstNodeRef n) noexcept {
   std::string const trigger_type = ReadStringFromNode(n);
   return enum_cast<TriggerType>(trigger_type, case_insensitive)
     .value_or(TriggerType::kNone);
 }
 
-__forceinline static TriggerType readTriggers(c4::yml::ConstNodeRef triggers) noexcept {
+static ROXYG_ALWAYS_INLINE TriggerType readTriggers(c4::yml::ConstNodeRef triggers) noexcept {
   if (triggers.invalid()) {
     return {};
   }
@@ -51,7 +51,7 @@ __forceinline static TriggerType readTriggers(c4::yml::ConstNodeRef triggers) no
   return ret;
 }
 
-__forceinline static Filter readFilter(c4::yml::NodeRef n) {
+static ROXYG_ALWAYS_INLINE Filter readFilter(c4::yml::NodeRef n) {
   if (!n.has_child(key::kWhere)) {
     c4::yml::NodeRef target;
     if (n.has_child(key::kWhen)) {
@@ -69,7 +69,7 @@ __forceinline static Filter readFilter(c4::yml::NodeRef n) {
   return Filter{ n[key::kWhere] };
 }
 
-__forceinline static Actions readActions(c4::yml::NodeRef actions) {
+static ROXYG_ALWAYS_INLINE Actions readActions(c4::yml::NodeRef actions) {
   if (actions.invalid()) {
     return {};
   }

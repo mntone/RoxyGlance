@@ -33,25 +33,25 @@ private:
 template<LogGroup Group>
 class LogHelper final: public LogHelperBase {
 public:
-  __forceinline void trace(winrt::hstring content, winrt::hresult hresult = S_FALSE) noexcept {
+  ROXYG_ALWAYS_INLINE void trace(winrt::hstring content, winrt::hresult hresult = S_FALSE) noexcept {
     log(LogLevel::kTrace, Group, std::move(content), hresult);
   }
-  __forceinline void debug(winrt::hstring content, winrt::hresult hresult = S_FALSE) noexcept {
+  ROXYG_ALWAYS_INLINE void debug(winrt::hstring content, winrt::hresult hresult = S_FALSE) noexcept {
     log(LogLevel::kDebug, Group, std::move(content), hresult);
   }
-  __forceinline void info(winrt::hstring content, winrt::hresult hresult = S_FALSE) noexcept {
+  ROXYG_ALWAYS_INLINE void info(winrt::hstring content, winrt::hresult hresult = S_FALSE) noexcept {
     log(LogLevel::kInfo, Group, std::move(content), hresult);
   }
-  __forceinline void notice(winrt::hstring content, winrt::hresult hresult = S_FALSE) noexcept {
+  ROXYG_ALWAYS_INLINE void notice(winrt::hstring content, winrt::hresult hresult = S_FALSE) noexcept {
     log(LogLevel::kNotice, Group, std::move(content), hresult);
   }
-  __forceinline void warn(winrt::hstring content, winrt::hresult hresult = E_FAIL) noexcept {
+  ROXYG_ALWAYS_INLINE void warn(winrt::hstring content, winrt::hresult hresult = E_FAIL) noexcept {
     log(LogLevel::kWarn, Group, std::move(content), hresult);
   }
-  __forceinline void error(winrt::hstring content, winrt::hresult hresult = E_FAIL) noexcept {
+  ROXYG_ALWAYS_INLINE void error(winrt::hstring content, winrt::hresult hresult = E_FAIL) noexcept {
     log(LogLevel::kError, Group, std::move(content), hresult);
   }
-  __forceinline void fatal(winrt::hstring content, winrt::hresult hresult = E_FAIL) noexcept {
+  ROXYG_ALWAYS_INLINE void fatal(winrt::hstring content, winrt::hresult hresult = E_FAIL) noexcept {
     log(LogLevel::kFatal, Group, std::move(content), hresult);
   }
 };

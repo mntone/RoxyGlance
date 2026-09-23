@@ -4,7 +4,7 @@
 
 namespace roxyg::win32 {
 
-__forceinline bool IsRootWindow(HWND hwnd) noexcept {
+ROXYG_ALWAYS_INLINE bool IsRootWindow(HWND hwnd) noexcept {
   HWND hRootWnd = GetAncestor(hwnd, GA_ROOT);
   return hRootWnd == hwnd;
 }

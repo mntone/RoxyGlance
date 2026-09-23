@@ -191,6 +191,9 @@
     <ClInclude Include="win32\hresult.h">
       <Filter>win32</Filter>
     </ClInclude>
+    <ClInclude Include="win32\MessageLoopThreadController.h">
+      <Filter>win32</Filter>
+    </ClInclude>
     <ClInclude Include="win32\monitor.h">
       <Filter>win32</Filter>
     </ClInclude>
@@ -198,9 +201,6 @@
       <Filter>win32</Filter>
     </ClInclude>
     <ClInclude Include="win32\ThreadContext.h">
-      <Filter>win32</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\ThreadController.h">
       <Filter>win32</Filter>
     </ClInclude>
     <ClInclude Include="win32\window.h">
@@ -297,10 +297,10 @@
     <ClCompile Include="win32\file.cc">
       <Filter>win32</Filter>
     </ClCompile>
-    <ClCompile Include="win32\string.cc">
+    <ClCompile Include="win32\MessageLoopThreadController.cc">
       <Filter>win32</Filter>
     </ClCompile>
-    <ClCompile Include="win32\ThreadController.cc">
+    <ClCompile Include="win32\string.cc">
       <Filter>win32</Filter>
     </ClCompile>
     <ClCompile Include="win32\window.cc">

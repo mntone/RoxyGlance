@@ -128,9 +128,9 @@
     <ClInclude Include="utility\ValueCache.h" />
     <ClInclude Include="win32\file.h" />
     <ClInclude Include="win32\hresult.h" />
+    <ClInclude Include="win32\MessageLoopThreadController.h" />
     <ClInclude Include="win32\monitor.h" />
     <ClInclude Include="win32\string.h" />
-    <ClInclude Include="win32\ThreadController.h" />
     <ClInclude Include="win32\ThreadContext.h" />
     <ClInclude Include="win32\window.h" />
     <ClInclude Include="win32\WinEventHookController.h" />
@@ -168,8 +168,8 @@
     </ClCompile>
     <ClCompile Include="utility\ListenerHost.cc" />
     <ClCompile Include="win32\file.cc" />
+    <ClCompile Include="win32\MessageLoopThreadController.cc" />
     <ClCompile Include="win32\string.cc" />
-    <ClCompile Include="win32\ThreadController.cc" />
     <ClCompile Include="win32\window.cc" />
     <ClCompile Include="win32\WinEventHookController.cc" />
     <ClCompile Include="window\WindowState.cc" />

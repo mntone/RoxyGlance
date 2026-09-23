@@ -1,7 +1,8 @@
 # Sources
-*.cc   text diff=cpp
-*.cpp  text diff=cpp
-*.h    text diff=cpp
+*.cc   text diff=cpp eol=lf
+*.cpp  text diff=cpp eol=lf
+*.h    text diff=cpp eol=lf
+*.inl  text diff=cpp eol=lf
 
 # Visual Studio
 *.props            text eol=crlf

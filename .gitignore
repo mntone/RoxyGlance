@@ -8,6 +8,8 @@ build/
 .vs/
 
 # Visual Studio auto generated files
+AppPackages/
+BundleArtifacts/
 Generated\ Files/
 
 # NuGet Packages

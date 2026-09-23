@@ -12,6 +12,8 @@
 #include <tuple>
 #include <type_traits>
 
+#include <boost/circular_buffer.hpp>
+#include <boost/container/static_vector.hpp>
 #include <boost/container/small_vector.hpp>
 #include <magic_enum/magic_enum.hpp>
 

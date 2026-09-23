@@ -109,6 +109,7 @@
   <ItemGroup>
     <ClCompile Include="backoff.cc" />
     <ClCompile Include="backoff_jitter.cc" />
+    <ClCompile Include="message_loop_thread_controller.cc" />
     <ClCompile Include="numeric_consteval.cc" />
     <ClCompile Include="numeric_float.cc" />
     <ClCompile Include="numeric.cc" />

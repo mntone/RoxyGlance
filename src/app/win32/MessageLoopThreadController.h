@@ -6,7 +6,7 @@
 
 namespace roxyg::win32 {
 
-enum class ThreadStopFailurePolicy: uint8_t {
+enum class ThreadStopFailurePolicy: int8_t {
   kReturnTimeout,
   kFailFast,
 };
@@ -16,10 +16,10 @@ class MessageLoopThreadController {
   MessageLoopThreadController& operator=(MessageLoopThreadController const&) = delete;
 
 protected:
-  enum class State: uint32_t {
-    kReady = 1 << 0,
-    kRunning = 1 << 1,
-    kStopping = 1 << 2,
+  enum class State: int8_t {
+    kReady,
+    kRunning,
+    kStopping,
   };
   struct ThreadInfo final {
     HANDLE hthread;
@@ -50,9 +50,6 @@ protected:
   }
   [[nodiscard]] inline HANDLE hThread() const noexcept {
     return data_.load(std::memory_order_acquire).hthread;
-  }
-  [[nodiscard]] inline DWORD threadId() const noexcept {
-    return data_.load(std::memory_order_acquire).thread_id;
   }
 
   void setRetryFactory(std::nullptr_t) = delete;

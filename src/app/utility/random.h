@@ -1,5 +1,4 @@
 #pragma once
-#include "macro.h"
 
 #if defined(__GNUC__) || defined(__clang__)
 # if defined(__i386__) || defined(__x86_64__)

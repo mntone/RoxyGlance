@@ -31,3 +31,4 @@
 #include <hstring.h>
 
 #include <winrt/base.h>
+#include "utility/macro.h"

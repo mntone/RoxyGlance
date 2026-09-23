@@ -35,3 +35,4 @@
 #include <winrt/Microsoft.Windows.AppLifecycle.h>
 
 #include <wil/cppwinrt_helpers.h>
+#include "../app/utility/macro.h"

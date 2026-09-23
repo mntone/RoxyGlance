@@ -1,5 +1,4 @@
 #pragma once
-#include "macro.h"
 
 #ifdef _MSC_VER
 # include <intrin.h>

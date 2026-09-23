@@ -19,3 +19,4 @@
 
 #include <winrt/base.h>
 #include <gtest/gtest.h>
+#include "app/utility/macro.h"

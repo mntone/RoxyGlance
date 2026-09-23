@@ -1,5 +1,4 @@
 #pragma once
-#include "../macro.h"
 #include "../random.h"
 
 namespace roxyg::utility {

@@ -73,14 +73,13 @@ std::wstring_view State::windowTitle() {
     return window_title_;
   }
 
-  SetLastError(0);
+  // GetWindowTextLengthW does not reset the last-error code on success.
+  SetLastError(ERROR_SUCCESS);
 
   int const len = GetWindowTextLengthW(hwnd_);
   if (len <= 0) {
+    winrt::check_win32(WINRT_IMPL_GetLastError());
     window_title_.clear();
-    if (len < 0) {
-      winrt::check_win32(WINRT_IMPL_GetLastError());
-    }
     return window_title_;
   }
 

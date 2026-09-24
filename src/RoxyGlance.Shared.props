@@ -3,6 +3,37 @@
     <OutDir>$(SolutionDir)build\$(Platform)-$(Configuration)\$(MSBuildProjectName)\</OutDir>
     <IntDir>$(SolutionDir)build\intermediate\$(Platform)-$(Configuration)\$(MSBuildProjectName)\</IntDir>
   </PropertyGroup>
+  <PropertyGroup Label="Versioning">
+    <RoxygVersionMajor>0</RoxygVersionMajor>
+    <RoxygVersionMinor>1</RoxygVersionMinor>
+    <RoxygVersionPatch>0</RoxygVersionPatch>
+    <RoxygVersionBuild Condition="$(RoxygVersionBuild)==''">$([System.DateTime]::Now.ToString(`yyyy`))</RoxygVersionBuild>
+    <RoxygVersionRevision Condition="$(RoxygVersionRevision)==''">$([System.DateTime]::Now.ToString(`MMdd`))</RoxygVersionRevision>
+    <RoxygVersionPreRelease>alpha</RoxygVersionPreRelease>
+    <RoxygVersionPreReleaseId Condition="'$(RoxygVersionPreReleaseId)'=='' and '$(RoxygVersionPreRelease)'=='alpha'">0</RoxygVersionPreReleaseId>
+    <RoxygVersionPreReleaseId Condition="'$(RoxygVersionPreReleaseId)'=='' and '$(RoxygVersionPreRelease.StartsWith(`alpha`))'">$(RoxygVersionPreRelease.Substring(5))</RoxygVersionPreReleaseId>
+    <RoxygVersionPreReleaseId Condition="'$(RoxygVersionPreReleaseId)'=='' and '$(RoxygVersionPreRelease)'=='beta'">50</RoxygVersionPreReleaseId>
+    <RoxygVersionPreReleaseId Condition="'$(RoxygVersionPreReleaseId)'=='' and '$(RoxygVersionPreRelease.StartsWith(`beta`))'">$([MSBuild]::Add(50, $([System.Convert]::ToUInt16($(RoxygVersionPreRelease.Substring(4)), 10))))</RoxygVersionPreReleaseId>
+    <RoxygVersionPreReleaseId Condition="'$(RoxygVersionPreReleaseId)'==''">100</RoxygVersionPreReleaseId>
+    <RoxygFileVersion>$(RoxygVersionMajor).$(RoxygVersionMinor).$(RoxygVersionBuild).$(RoxygVersionRevision)</RoxygFileVersion>
+    <RoxygFileVersionShort>$(RoxygVersionMajor).$(RoxygVersionMinor)</RoxygFileVersionShort>
+    <RoxygProductVersion Condition="'$(RoxygVersionPreReleaseId)'&lt; '100'">$(RoxygVersionMajor).$(RoxygVersionMinor).$(RoxygVersionPatch)-$(RoxygVersionPreRelease)</RoxygProductVersion>
+    <RoxygProductVersion Condition="'$(RoxygVersionPreReleaseId)'&gt;='100'">$(RoxygVersionMajor).$(RoxygVersionMinor).$(RoxygVersionPatch)</RoxygProductVersion>
+    <RoxygPreprocessorDefinitions>ROXYG_VER_FILE_VERSION=$(RoxygVersionMajor),$(RoxygVersionMinor),$(RoxygVersionBuild),$(RoxygVersionRevision);ROXYG_VER_FILE_VERSION_STRING=$(RoxygFileVersion);ROXYG_VER_PRODUCT_VERSION=$(RoxygVersionMajor),$(RoxygVersionMinor),$(RoxygVersionPatch),$(RoxygVersionPreReleaseId);ROXYG_VER_PRODUCT_VERSION_STRING=$(RoxygProductVersion)</RoxygPreprocessorDefinitions>
+  </PropertyGroup>
+  <ItemDefinitionGroup Label="Versioning">
+    <ClCompile>
+      <PreprocessorDefinitions>$(RoxygPreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <MinimumRequiredVersion>10.0</MinimumRequiredVersion>
+      <Version>$(RoxygFileVersionShort)</Version>
+      <AdditionalOptions>/OSVERSION:10.0 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>$(RoxygPreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>

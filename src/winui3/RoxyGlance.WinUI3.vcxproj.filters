@@ -5,6 +5,9 @@
       <UniqueIdentifier>{0a1c29b2-b1f8-4998-873f-803664116d26}</UniqueIdentifier>
       <Extensions>png</Extensions>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{71b3686a-fe8d-4529-a8fe-be6642819ac9}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ViewModels">
       <UniqueIdentifier>{432dbbe7-1129-44d3-95bb-77361d8acee6}</UniqueIdentifier>
     </Filter>
@@ -47,6 +50,9 @@
     <ClInclude Include="ViewModels\LogViewModels.h">
       <Filter>ViewModels</Filter>
     </ClInclude>
+    <ClInclude Include="Resources\resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">
@@ -70,6 +76,11 @@
     <Image Include="Assets\LockScreenLogo.scale-200.png">
       <Filter>Assets</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\app.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="app.manifest" />

@@ -20,6 +20,9 @@ template<typename T>
 class ICollectionChangeListener {
 public:
   virtual void onCollectionChanged(CollectionChange<T> const& change) noexcept = 0;
+
+protected:
+  ~ICollectionChangeListener() = default;
 };
 
 }

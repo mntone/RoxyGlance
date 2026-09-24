@@ -88,7 +88,8 @@ winrt::hresult WinEventHookController::start(
 
   hr = state.wait_and_load();
   if (hr != S_OK) {
-    [[maybe_unused]] DWORD const stop_status = stop();
+    // The worker thread already exited on its own; reap it without posting a stop message.
+    [[maybe_unused]] winrt::hresult const recover_hr = reapThreadAfterStartFailure(info.hthread);
   } else {
     size_t const seed = utility::make_preferred_seed(utility::get_tsc(), info.thread_id);
     try {

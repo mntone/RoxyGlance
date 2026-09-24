@@ -63,9 +63,6 @@ protected:
   [[nodiscard]] inline ThreadInfo const threadInfo() const noexcept {
     return data_.load(std::memory_order_acquire);
   }
-  [[nodiscard]] inline HANDLE hThread() const noexcept {
-    return data_.load(std::memory_order_acquire).hthread;
-  }
 
   void setRetryFactory(std::nullptr_t) = delete;
   constexpr void setRetryFactory(std::unique_ptr<utility::IRetryStateFactory>&& retry_factory) noexcept {

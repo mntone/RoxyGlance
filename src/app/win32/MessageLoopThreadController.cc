@@ -58,7 +58,7 @@ MessageLoopThreadController::MessageLoopThreadController() noexcept
 }
 
 MessageLoopThreadController::~MessageLoopThreadController() noexcept {
-  HANDLE const hthread = hThread();
+  HANDLE const hthread{threadInfo().hthread};
   if (hthread == INVALID_HANDLE_VALUE) {
     return;
   }
@@ -80,7 +80,7 @@ winrt::hresult MessageLoopThreadController::start(_beginthreadex_proc_type proc,
     return hresult::kErrorInvalidOperation;
   }
 
-  HANDLE const current_hthread{hThread()};
+  HANDLE const current_hthread{threadInfo().hthread};
   if (current_hthread != INVALID_HANDLE_VALUE) {
     return hresult::kErrorInvalidOperation;
   }

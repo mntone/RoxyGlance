@@ -52,7 +52,7 @@ public:
   }
 
   [[nodiscard]] winrt::hresult start(WorkerState* state) noexcept {
-    if (hThread() != INVALID_HANDLE_VALUE) {
+    if (threadInfo().hthread != INVALID_HANDLE_VALUE) {
       return MessageLoopThreadController::start(worker, state, nullptr);
     }
 
@@ -96,7 +96,7 @@ public:
   }
 
   [[nodiscard]] bool hasThread() const noexcept {
-    return hThread() != INVALID_HANDLE_VALUE;
+    return threadInfo().hthread != INVALID_HANDLE_VALUE;
   }
 
 protected:

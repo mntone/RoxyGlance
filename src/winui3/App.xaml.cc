@@ -20,7 +20,7 @@ using namespace ::winrt::Mntone::RoxyGlance::Views::implementation;
 /// executed, and as such is the logical equivalent of main() or WinMain().
 /// </summary>
 winrt::impl::App::App()
-  : window_(nullptr) {
+  : MainWindow_(nullptr) {
   winrt::check_hresult(AppDelegate_.initialize());
 
 #if defined _DEBUG && !defined DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION
@@ -38,12 +38,20 @@ winrt::impl::App::App()
 /// </summary>
 /// <param name="e">Details about the launch request and process.</param>
 void winrt::impl::App::OnLaunched([[maybe_unused]] winrt::LaunchActivatedEventArgs const& e) {
-  winrt::com_ptr<impl::LogsViewModel> view_model{make_self<impl::LogsViewModel>()};
-  view_model->setLogger(AppDelegate_.logger());
+  showMainWindow();
+}
 
-  winrt::com_ptr<impl::MainWindow> window{make_self<impl::MainWindow>()};
-  window->setLogs(view_model.as<ViewModels::LogsViewModel>());
+void winrt::impl::App::showMainWindow() {
+  winrt::com_ptr<impl::MainWindow> window{MainWindow_};
+  if (!window) {
+    winrt::com_ptr<impl::LogsViewModel> view_model{make_self<impl::LogsViewModel>()};
+    view_model->setLogger(AppDelegate_.logger());
 
-  window_ = window.as<winrt::Window>();
+    winrt::com_ptr<impl::MainWindow> new_window{make_self<impl::MainWindow>()};
+    new_window->setLogs(view_model.as<ViewModels::LogsViewModel>());
+
+    window = new_window;
+    MainWindow_ = new_window;
+  }
   window->Activate();
 }

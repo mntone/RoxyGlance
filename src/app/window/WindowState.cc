@@ -46,8 +46,8 @@ std::wstring_view State::windowClass() const {
   }
 
 #if defined(__cpp_lib_string_resize_and_overwrite) && __cpp_lib_string_resize_and_overwrite >= 202110L
-  window_class_.resize_and_overwrite(256, [this](wchar_t* buf, size_t bufSize) {
-    int const written = GetClassNameW(hwnd_, buf, static_cast<int>(bufSize));
+  window_class_.resize_and_overwrite(256, [hwnd = hwnd_](wchar_t* buf, size_t bufSize) {
+    int const written = GetClassNameW(hwnd, buf, static_cast<int>(bufSize));
     if (written <= 0) {
       winrt::throw_last_error();
     }
@@ -84,8 +84,8 @@ std::wstring_view State::windowTitle() {
   }
 
 #if defined(__cpp_lib_string_resize_and_overwrite) && __cpp_lib_string_resize_and_overwrite >= 202110L
-  window_title_.resize_and_overwrite(len, [this](wchar_t* buf, size_t bufSize) {
-    int const written = GetWindowTextW(hwnd_, buf, static_cast<int>(bufSize) + 1);
+  window_title_.resize_and_overwrite(len, [hwnd = hwnd_](wchar_t* buf, size_t bufSize) {
+    int const written = GetWindowTextW(hwnd, buf, static_cast<int>(bufSize) + 1);
     if (written <= 0) {
       winrt::throw_hresult(E_FAIL);
     }

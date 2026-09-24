@@ -5,6 +5,7 @@
 
 #include "constants.h"
 #include "../win32/file.h"
+#include "../win32/hresult.h"
 
 using namespace roxyg::settings;
 
@@ -16,17 +17,16 @@ void SettingsStore::reloadUserSettings() {
   std::string content;
   winrt::hresult hr = win32::ReadFile(filePath, content);
   switch (hr) {
-  case win32::hresult::kOk:
+  case S_OK:
     user_settings_.load(content);
     notify(&ISettingsListener::onSettingsChanged, user_settings_);
     break;
-  case win32::hresult::kFileNotFound:
-  case win32::hresult::kPathNotFound:
-  case win32::hresult::kInvalidUserBuffer:
+  case win32::hresult::kErrorFileNotFound:
+  case win32::hresult::kErrorInvalidUserBuffer:
     break;
-  case win32::hresult::kTooManyOpenFiles:
-  case win32::hresult::kAccessDenied:
-  case win32::hresult::kSharingViolation:
+  case win32::hresult::kErrorNotEnoughMemory:
+  case win32::hresult::kErrorAccessDenied:
+  case win32::hresult::kErrorSharingViolation:
     break; // TODO: retry
   default:
     winrt::check_hresult(hr);

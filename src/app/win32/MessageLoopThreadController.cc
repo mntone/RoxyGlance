@@ -8,6 +8,10 @@
 
 namespace {
 
+inline constexpr DWORD kStartFailureReapTimeoutMs = 1000;
+
+inline constexpr std::wstring_view kThreadDidNotExitAfterStartFailure
+  = L"Worker thread did not exit after a start() failure.";
 inline constexpr std::wstring_view kThreadNotReapedBeforeDestruction
   = L"Message loop thread was not reaped before destruction.";
 inline constexpr std::wstring_view kRetryStateAllocationFailed
@@ -124,6 +128,36 @@ winrt::hresult MessageLoopThreadController::start(_beginthreadex_proc_type proc,
     *info = {hthread, thread_id};
   }
   return S_OK;
+}
+
+winrt::hresult MessageLoopThreadController::reapThreadAfterStartFailure(HANDLE hthread) noexcept {
+  std::lock_guard<std::mutex> lock(mutex_);
+#if _DEBUG
+  assert(state_ == State::kRunning);
+#endif
+  state_ = State::kStopping;
+
+  // The thread already exited (or is about to) on its own, so a single bounded wait
+  // suffices; there is no stop message to redeliver by retrying.
+  DWORD const wait_status = WaitForSingleObject(hthread, kStartFailureReapTimeoutMs);
+  if (wait_status != WAIT_OBJECT_0) {
+    winrt::hresult hr;
+    if (wait_status == WAIT_TIMEOUT) {
+      logger_.error(winrt::hstring{kWaitForThreadExitTimeout}, hresult::kErrorTimeout);
+      hr = hresult::kErrorTimeout;
+    } else {
+      hr = hresult::LastErrorAsHResult();
+      logger_.error(winrt::hstring{kWaitForThreadExitFailed}, hr);
+    }
+
+    if (stop_failure_policy_ == ThreadStopFailurePolicy::kFailFast) {
+      logger_.fatal(winrt::hstring{kThreadDidNotExitAfterStartFailure}, hr);
+      utility::fastfail();
+    }
+    return hr;
+  }
+
+  return reapThread(hthread);
 }
 
 winrt::hresult MessageLoopThreadController::validateThreadAccess(ThreadInfo const& state) noexcept {

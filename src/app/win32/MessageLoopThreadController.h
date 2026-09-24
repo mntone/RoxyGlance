@@ -38,7 +38,22 @@ protected:
   virtual BOOL postStopMessage(intptr_t target) noexcept = 0;
 
   [[nodiscard]] winrt::hresult start(_beginthreadex_proc_type proc, void* params, ThreadInfo* info) noexcept;
+
+  /// <summary>
+  /// Reaps the worker thread after it failed to start, without posting a stop message.
+  /// </summary>
+  /// <param name="hthread">The handle of the worker thread to reap.</param>
+  /// <returns>The worker thread's exit code as an HRESULT, or a failure HRESULT if the reap itself failed.</returns>
+  [[nodiscard]] winrt::hresult reapThreadAfterStartFailure(HANDLE hthread) noexcept;
+
+  /// <summary>
+  /// Posts a stop message to the worker thread, waits for it to exit, and reaps it.
+  /// </summary>
+  /// <param name="hthread">The handle of the worker thread to stop.</param>
+  /// <param name="target">The postStopMessage() target identifying the worker thread.</param>
+  /// <returns>The worker thread's exit code as an HRESULT, or a failure HRESULT if the stop sequence failed.</returns>
   [[nodiscard]] winrt::hresult stopThread(HANDLE const hthread, intptr_t target) noexcept;
+
   [[nodiscard]] static winrt::hresult validateThreadAccess(ThreadInfo const& state) noexcept;
 
 private:

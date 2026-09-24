@@ -67,7 +67,7 @@ WinEventHookController::WinEventHookController(std::unique_ptr<utility::IRetrySt
 }
 
 WinEventHookController::WinEventHookController() noexcept
-  : MessageLoopThreadController() {
+  : MessageLoopThreadController(ThreadStopFailurePolicy::kFailFast) {
 }
 
 winrt::hresult WinEventHookController::start(

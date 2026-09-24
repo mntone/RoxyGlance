@@ -133,6 +133,7 @@
     <ClInclude Include="win32\string.h" />
     <ClInclude Include="win32\ThreadContext.h" />
     <ClInclude Include="win32\window.h" />
+    <ClInclude Include="win32\WindowController.h" />
     <ClInclude Include="win32\WinEventHookController.h" />
     <ClInclude Include="window\IWindowStateListener.h" />
     <ClInclude Include="window\WindowState.h" />
@@ -171,6 +172,7 @@
     <ClCompile Include="win32\MessageLoopThreadController.cc" />
     <ClCompile Include="win32\string.cc" />
     <ClCompile Include="win32\window.cc" />
+    <ClCompile Include="win32\WindowController.cc" />
     <ClCompile Include="win32\WinEventHookController.cc" />
     <ClCompile Include="window\WindowState.cc" />
     <ClCompile Include="window\WindowStateCache.cc" />

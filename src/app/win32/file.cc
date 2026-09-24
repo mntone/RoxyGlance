@@ -20,36 +20,54 @@ winrt::hresult win32::ReadFile(std::filesystem::path filepath, std::string& cont
     return hresult::LastErrorAsHResult();
   }
 
+  // GetFileSize does not reset the last-error code on success.
+  SetLastError(ERROR_SUCCESS);
+
   wil::unique_hfile file(hfile);
-  DWORD fileSize = GetFileSize(hfile, nullptr);
-  if (fileSize == INVALID_FILE_SIZE) {
-    return hresult::LastErrorAsHResult();
+  DWORD file_size = GetFileSize(hfile, nullptr);
+  if (file_size == INVALID_FILE_SIZE) {
+    DWORD const lasterr = WINRT_IMPL_GetLastError();
+    if (lasterr != ERROR_SUCCESS) {
+      return hresult::HResultFromWin32(lasterr);
+    }
   }
 
 #if defined(__cpp_lib_string_resize_and_overwrite) && __cpp_lib_string_resize_and_overwrite >= 202110L
-  winrt::hresult hr = S_OK;
-  content.resize_and_overwrite(fileSize, [&hr, hfile](char* buf, size_t bufSize) {
-    DWORD bytesRead;
-    BOOL const rc = ::ReadFile(hfile, buf, static_cast<DWORD>(bufSize), &bytesRead, nullptr);
-    if (!rc) {
-      hr = hresult::LastErrorAsHResult();
-      return 0;
+  try {
+    winrt::hresult hr = S_OK;
+    content.resize_and_overwrite(file_size, [&hr, hfile](char* buf, size_t bufSize) -> size_t {
+      DWORD bytes_read;
+      BOOL const rc = ::ReadFile(hfile, buf, static_cast<DWORD>(bufSize), &bytes_read, nullptr);
+      if (rc == FALSE) {
+        hr = hresult::LastErrorAsHResult();
+        return 0;
+      }
+
+      return static_cast<size_t>(bytes_read);
+    });
+    return hr;
+  } catch (std::bad_alloc const&) {
+    return E_OUTOFMEMORY;
+  } catch (std::length_error const&) {
+    return E_INVALIDARG;
+  }
+#else
+  try {
+    content.resize(file_size);
+
+    DWORD bytes_read;
+    BOOL const rc = ::ReadFile(hfile, content.data(), file_size, &bytes_read, nullptr);
+    if (rc == FALSE) {
+      content.resize(0);
+      return hresult::LastErrorAsHResult();
     }
 
-    return static_cast<int>(bytesRead);
-  });
-  return hr;
-#else
-  content.resize(fileSize);
-
-  DWORD bytesRead;
-  BOOL const rc = ::ReadFile(hfile, content.data(), fileSize, &bytesRead, nullptr);
-  if (!rc) {
-    content.resize(0);
-    return hresult::LastErrorAsHResult();
+    content.resize(bytes_read);
+    return S_OK;
+  } catch (std::bad_alloc const&) {
+    return E_OUTOFMEMORY;
+  } catch (std::length_error const&) {
+    return E_INVALIDARG;
   }
-
-  content.resize(bytesRead);
-  return S_OK;
 #endif
 }

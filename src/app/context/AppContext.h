@@ -18,7 +18,8 @@ public:
   AppContext() noexcept;
   ~AppContext() noexcept;
 
-  winrt::hresult initialize();
+  [[nodiscard]] winrt::hresult initialize();
+  [[nodiscard]] winrt::hresult exit() noexcept;
 
   [[nodiscard]] constexpr logging::Logger& logger() noexcept {
     return logger_;

@@ -12,7 +12,8 @@ public:
   AppDelegate() noexcept;
   ~AppDelegate() noexcept;
 
-  winrt::hresult initialize();
+  [[nodiscard]] winrt::hresult initialize();
+  [[nodiscard]] winrt::hresult exit() noexcept;
 
   [[nodiscard]] logging::Logger& logger() noexcept;
   [[nodiscard]] logging::Logger const& logger() const noexcept;

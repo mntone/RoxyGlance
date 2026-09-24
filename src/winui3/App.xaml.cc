@@ -5,7 +5,7 @@
 
 namespace winrt {
 using namespace ::winrt::Windows::Foundation;
-
+using namespace ::winrt::Microsoft::UI::Dispatching;
 using namespace ::winrt::Microsoft::UI::Xaml;
 
 namespace impl {
@@ -20,7 +20,8 @@ using namespace ::winrt::Mntone::RoxyGlance::Views::implementation;
 /// executed, and as such is the logical equivalent of main() or WinMain().
 /// </summary>
 winrt::impl::App::App()
-  : MainWindow_(nullptr) {
+  : dispatcher_(DispatcherQueue::GetForCurrentThread())
+  , MainWindow_(nullptr) {
   winrt::check_hresult(AppDelegate_.initialize());
 
 #if defined _DEBUG && !defined DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION
@@ -39,6 +40,23 @@ winrt::impl::App::App()
 /// <param name="e">Details about the launch request and process.</param>
 void winrt::impl::App::OnLaunched([[maybe_unused]] winrt::LaunchActivatedEventArgs const& e) {
   showMainWindow();
+}
+
+void winrt::impl::App::exitApp() {
+#if _DEBUG
+  assert(dispatcher_.HasThreadAccess());
+#endif
+
+  winrt::com_ptr<impl::MainWindow> window{MainWindow_};
+  if (window) {
+    MainWindow_ = nullptr;
+    window->Close();
+  }
+
+  winrt::hresult hr{AppDelegate_.exit()};
+  winrt::check_hresult(hr);
+
+  Exit();
 }
 
 void winrt::impl::App::showMainWindow() {

@@ -15,6 +15,10 @@ winrt::hresult AppDelegate::initialize() {
   return context_->initialize();
 }
 
+winrt::hresult AppDelegate::exit() noexcept {
+  return context_->exit();
+}
+
 logging::Logger& AppDelegate::logger() noexcept {
   return context_->logger();
 }

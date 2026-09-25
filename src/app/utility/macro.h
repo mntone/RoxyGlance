@@ -17,3 +17,22 @@
 #else
 #  define ROXYG_ALWAYS_INLINE inline
 #endif
+
+#ifdef _DEBUG
+# include <cassert>
+# define ROXYG_UNCHECKED_ASSERT(expr) assert(expr)
+#else
+# if defined(__cpp_attribute_assume) && __cpp_attribute_assume >= 202207L
+#  define ROXYG_UNCHECKED_ASSERT(expr) [[assume(expr)]]
+# elif defined(__has_cpp_attribute) && __has_cpp_attribute(assume)
+#  define ROXYG_UNCHECKED_ASSERT(expr) [[assume(expr)]]
+# elifdef __GNUC__
+#  define ROXYG_UNCHECKED_ASSERT(expr) do { if (!(expr)) { __builtin_unreachable(); }} while(0)
+# elifdef __clang__
+#  define ROXYG_UNCHECKED_ASSERT(expr) __builtin_assume(expr)
+# elifdef _MSC_VER
+#  define ROXYG_UNCHECKED_ASSERT(expr) __assume(expr)
+# else
+#  define ROXYG_UNCHECKED_ASSERT(expr) ((void)0)
+# endif
+#endif

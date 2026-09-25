@@ -6,6 +6,7 @@ inline constexpr ::winrt::hresult kErrorFileNotFound = ::winrt::impl::hresult_fr
 inline constexpr ::winrt::hresult kErrorAccessDenied = ::winrt::impl::hresult_from_win32(ERROR_ACCESS_DENIED);
 inline constexpr ::winrt::hresult kErrorNotEnoughMemory = ::winrt::impl::hresult_from_win32(ERROR_NOT_ENOUGH_MEMORY);
 inline constexpr ::winrt::hresult kErrorSharingViolation = ::winrt::impl::hresult_from_win32(ERROR_SHARING_VIOLATION);
+inline constexpr ::winrt::hresult kErrorAlreadyExists = ::winrt::impl::hresult_from_win32(ERROR_ALREADY_EXISTS);
 inline constexpr ::winrt::hresult kErrorOperationAborted = ::winrt::impl::hresult_from_win32(ERROR_OPERATION_ABORTED);
 inline constexpr ::winrt::hresult kErrorTimeout = ::winrt::impl::hresult_from_win32(ERROR_TIMEOUT);
 inline constexpr ::winrt::hresult kErrorInvalidUserBuffer = ::winrt::impl::hresult_from_win32(ERROR_INVALID_USER_BUFFER);

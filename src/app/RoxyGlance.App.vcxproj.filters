@@ -203,6 +203,9 @@
     <ClInclude Include="win32\ThreadContext.h">
       <Filter>win32</Filter>
     </ClInclude>
+    <ClInclude Include="win32\TrayIcon.h">
+      <Filter>win32</Filter>
+    </ClInclude>
     <ClInclude Include="win32\window.h">
       <Filter>win32</Filter>
     </ClInclude>
@@ -304,6 +307,9 @@
       <Filter>win32</Filter>
     </ClCompile>
     <ClCompile Include="win32\string.cc">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\TrayIcon.cc">
       <Filter>win32</Filter>
     </ClCompile>
     <ClCompile Include="win32\window.cc">

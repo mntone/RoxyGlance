@@ -132,6 +132,7 @@
     <ClInclude Include="win32\monitor.h" />
     <ClInclude Include="win32\string.h" />
     <ClInclude Include="win32\ThreadContext.h" />
+    <ClInclude Include="win32\TrayIcon.h" />
     <ClInclude Include="win32\window.h" />
     <ClInclude Include="win32\WindowController.h" />
     <ClInclude Include="win32\WinEventHookController.h" />
@@ -171,6 +172,7 @@
     <ClCompile Include="win32\file.cc" />
     <ClCompile Include="win32\MessageLoopThreadController.cc" />
     <ClCompile Include="win32\string.cc" />
+    <ClCompile Include="win32\TrayIcon.cc" />
     <ClCompile Include="win32\window.cc" />
     <ClCompile Include="win32\WindowController.cc" />
     <ClCompile Include="win32\WinEventHookController.cc" />

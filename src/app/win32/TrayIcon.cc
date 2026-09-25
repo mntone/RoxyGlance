@@ -52,8 +52,6 @@ inline constexpr std::wstring_view kTrayIconSetForegroundFailed
   = L"Failed to bring the tray menu owner window to the foreground.";
 inline constexpr std::wstring_view kTrayIconShowMenuFailed
   = L"Failed to display the tray menu.";
-inline constexpr std::wstring_view kTrayIconShowMenuInvalidMenu
-  = L"Failed to show the tray menu because the menu handle is invalid.";
 
 }
 
@@ -214,10 +212,7 @@ winrt::hresult TrayIcon::tryUnhookMessageProc(HHOOK const hhook) noexcept {
 }
 
 winrt::hresult TrayIcon::showMenu(HMENU hmenu, HWND hwnd, WPARAM wparam, DWORD thread_id) noexcept {
-  if (!hmenu) [[unlikely]] {
-    logger_.error(winrt::hstring{kTrayIconShowMenuInvalidMenu}, E_INVALIDARG);
-    return E_INVALIDARG;
-  }
+  ROXYG_UNCHECKED_ASSERT(hmenu);
 #if _DEBUG
   assert(IsMenu(hmenu));
 #endif

@@ -82,10 +82,11 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="ExtensionSettings" />
-  <ImportGroup Label="Shared">
+  <ImportGroup Label="ExtensionSettings">
     <Import Project="..\RoxyGlance.Shared.props" Label="RoxyGlance" />
+    <Import Project="..\RoxyGlance.Mui.props" />
   </ImportGroup>
+  <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -185,8 +186,11 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\app.rc">
-      <AdditionalOptions>/8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/8 /g1 /q Resources\app.rcconfig /fm"$(IntDir)app_LN.res" %(AdditionalOptions)</AdditionalOptions>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\app.rcconfig" />
   </ItemGroup>
   <!--
     Defining the "Msix" ProjectCapability here allows the Single-project MSIX Packaging
@@ -212,6 +216,7 @@
   <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
   </PropertyGroup>
+  <Import Project="..\RoxyGlance.Mui.targets" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\..\packages\Microsoft.WindowsAppSDK.Base.2.0.4\build\native\Microsoft.WindowsAppSDK.Base.targets" Condition="Exists('..\..\packages\Microsoft.WindowsAppSDK.Base.2.0.4\build\native\Microsoft.WindowsAppSDK.Base.targets')" />

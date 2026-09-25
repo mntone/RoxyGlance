@@ -1,0 +1,15 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemDefinitionGroup>
+    <MuiResourceCompile>
+      <MuiLinkMinimumRequiredVersion Condition="'$(MuiLinkMinimumRequiredVersion)'==''">10.0</MuiLinkMinimumRequiredVersion>
+      <MuiLinkOSVersion Condition="'$(MuiLinkOSVersion)'==''">10.0</MuiLinkOSVersion>
+      <MuiLinkVersion Condition="'$(MuiLinkVersion)'==''">1.0</MuiLinkVersion>
+      <MuiResourceConfig Condition="'%(MuiResourceCompile.MuiResourceConfig)'==''"></MuiResourceConfig>
+      <MuiResourceLanguage Condition="'%(MuiResourceCompile.MuiResourceLanguage)'==''">en-US</MuiResourceLanguage>
+      <MuiResourceLcid Condition="'%(MuiResourceCompile.MuiResourceLcid)'==''">0x0409</MuiResourceLcid>
+      <MuiResourceOutputFileName Condition="'%(MuiResourceCompile.MuiResourceOutputFileName)'==''">%(FileName).res</MuiResourceOutputFileName>
+      <MuiResourceMuiOutputFileName Condition="'%(MuiResourceCompile.MuiResourceMuiOutputFileName)'==''">%(FileName)_LN.res</MuiResourceMuiOutputFileName>
+      <MuiSuppressStartupBanner Condition="'$(MuiSuppressStartupBanner)'==''">true</MuiSuppressStartupBanner>
+    </MuiResourceCompile>
+  </ItemDefinitionGroup>
+</Project>

@@ -33,6 +33,9 @@
     <ResourceCompile>
       <PreprocessorDefinitions>$(RoxygPreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
+    <MuiResourceCompile>
+      <MuiLinkVersion>$(RoxygFileVersionShort)</MuiLinkVersion>
+    </MuiResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup>
     <ClCompile>

@@ -1,0 +1,93 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <UpToDateCheckInput Include="@(MuiResourceCompile)" />
+    <UpToDateCheckOutput Include="@(MuiResourceCompile->'%(MuiSatelliteOutputFile)')" />
+  </ItemGroup>
+  <Target Name="PrepareMuiResourceItems">
+    <ItemGroup>
+      <_MuiResourceCompileItems Include="@(MuiResourceCompile)">
+        <MuiResourceConfigFile>%(MuiResourceConfig)</MuiResourceConfigFile>
+        <MuiResourceDiscardOutputFile>$(IntDir)%(MuiResourceOutputFileName)</MuiResourceDiscardOutputFile>
+        <MuiResourceLcidHex>$([System.Globalization.CultureInfo]::GetCultureInfo('%(MuiResourceCompile.MuiResourceLanguage)').LCID.ToString('X4'))</MuiResourceLcidHex>
+        <!-- Use Traditional Sort for Spanish to avoid compatibility issues with older SDK versions. -->
+        <MuiResourceLcidHex Condition="'%(MuiResourceLanguage)'=='es-ES'">040A</MuiResourceLcidHex>
+        <MuiResourceMuiOutputFile>$(IntDir)%(MuiResourceMuiOutputFileName)</MuiResourceMuiOutputFile>
+        <MuiSatelliteRelativeOutputDir>%(MuiResourceLanguage)\</MuiSatelliteRelativeOutputDir>
+        <MuiSatelliteOutputDir>$(OutDir)%(_MuiResourceCompileItems.MuiSatelliteRelativeOutputDir)</MuiSatelliteOutputDir>
+        <MuiSatelliteOutputFileName>$(TargetFileName).mui</MuiSatelliteOutputFileName>
+        <MuiSatelliteOutputFile>%(_MuiResourceCompileItems.MuiSatelliteOutputDir)%(_MuiResourceCompileItems.MuiSatelliteOutputFileName)</MuiSatelliteOutputFile>
+        <MuiResourceAdditionalOptions>/8 /g1 /fm"%(_MuiResourceCompileItems.MuiResourceMuiOutputFile)" /q %(_MuiResourceCompileItems.MuiResourceConfigFile) $(AdditionalOptions)</MuiResourceAdditionalOptions>
+      </_MuiResourceCompileItems>
+    </ItemGroup>
+  </Target>
+  <Target Name="BuildMuiResources"
+          DependsOnTargets="PrepareMuiResourceItems"
+          Inputs="%(_MuiResourceCompileItems.Identity);%(_MuiResourceCompileItems.MuiResourceConfigFile)"
+          Outputs="%(_MuiResourceCompileItems.MuiResourceMuiOutputFile)">
+    <RC Condition                   ="'%(_MuiResourceCompileItems.ExcludedFromBuild)'!='true'"
+        AdditionalIncludeDirectories="%(_MuiResourceCompileItems.AdditionalIncludeDirectories)"
+        AdditionalOptions           ="%(_MuiResourceCompileItems.MuiResourceAdditionalOptions)"
+        Culture                     ="0x%(_MuiResourceCompileItems.MuiResourceLcidHex)"
+        IgnoreStandardIncludePath   ="%(_MuiResourceCompileItems.IgnoreStandardIncludePath)"
+        NullTerminateStrings        ="%(_MuiResourceCompileItems.NullTerminateStrings)"
+        PreprocessorDefinitions     ="%(_MuiResourceCompileItems.PreprocessorDefinitions)"
+        ResourceOutputFileName      ="%(_MuiResourceCompileItems.MuiResourceDiscardOutputFile)"
+        Source                      ="%(_MuiResourceCompileItems.Identity)"
+        SuppressStartupBanner       ="%(_MuiResourceCompileItems.MuiSuppressStartupBanner)"
+    />
+    <Delete Files="%(_MuiResourceCompileItems.MuiResourceDiscardOutputFile)"
+            Condition="Exists('%(_MuiResourceCompileItems.MuiResourceDiscardOutputFile)')" />
+    <Message Text="%(_MuiResourceCompileItems.Identity) -> %(_MuiResourceCompileItems.MuiResourceMuiOutputFile)" Importance="high" />
+    <Message Text="[MUI Build] Successfully generated resources for %(_ResourceCompileItems.MuiResourceLanguage) (LCID: %(_MuiResourceCompileItems.MuiResourceLcidHex))" />
+    <ItemGroup>
+      <FileWrites Include="%(_MuiResourceCompileItems.MuiResourceMuiOutputFile)" />
+    </ItemGroup>
+  </Target>
+  <Target Name="BuildMuiSatelliteDlls"
+          DependsOnTargets="BuildMuiResources"
+          AfterTargets="Link"
+          BeforeTargets="CopyFilesToOutputDirectory"
+          Inputs="%(_MuiResourceCompileItems.MuiResourceMuiOutputFile)"
+          Outputs="%(_MuiResourceCompileItems.MuiSatelliteOutputFile)">
+    <PropertyGroup>
+      <MuiResourceTarget Condition="'$(MuiResourceTarget)'=='' and '$(Platform)'=='Win32'">X86</MuiResourceTarget>
+      <MuiResourceTarget Condition="'$(MuiResourceTarget)'==''">$(Platform.ToUpper())</MuiResourceTarget>
+    </PropertyGroup>
+    <MakeDir Directories="%(_MuiResourceCompileItems.MuiSatelliteOutputDir)" />
+    <Link AdditionalOptions="/Brepro /CETCOMPAT /OSVERSION:%(_MuiResourceCompileItems.MuiLinkOSVersion)"
+          Sources="%(_MuiResourceCompileItems.MuiResourceMuiOutputFile)"
+          SuppressStartupBanner="%(_MuiResourceCompileItems.MuiSuppressStartupBanner)"
+          OutputFile="%(_MuiResourceCompileItems.MuiSatelliteOutputFile)"
+          DataExecutionPrevention="$(DataExecutionPrevention)"
+          HeapCommitSize="0"
+          HeapReserveSize="0"
+          IgnoreAllDefaultLibraries="true"
+          LargeAddressAware="$(LargeAddressAware)"
+          LinkDLL="true"
+          MinimumRequiredVersion="%(_MuiResourceCompileItems.MuiLinkMinimumRequiredVersion)"
+          NoEntryPoint="true"
+          RandomizedBaseAddress="$(RandomizedBaseAddress)"
+          StackCommitSize="0"
+          StackReserveSize="0"
+          SubSystem="Windows"
+          TargetMachine="Machine$(MuiResourceTarget)"
+          Version="%(_MuiResourceCompileItems.MuiLinkVersion)"
+    />
+    <Exec Command="muirct.exe -c &quot;$(TargetPath)&quot; -e &quot;%(_MuiResourceCompileItems.MuiSatelliteOutputFile)&quot;" />
+    <Message Text="%(_MuiResourceCompileItems.MuiResourceMuiOutputFile) -> %(_MuiResourceCompileItems.MuiSatelliteOutputFile)" Importance="high" />
+    <Message Text="[MUI Build] Successfully linked for %(_ResourceCompileItems.MuiResourceLanguage)" />
+    <ItemGroup>
+      <FileWrites Include="%(_MuiResourceCompileItems.MuiSatelliteOutputFile)" />
+    </ItemGroup>
+  </Target>
+  <Target Name="IncludeMuiToAppx" BeforeTargets="GetPackagingOutputs">
+    <ItemGroup>
+      <PackagingOutputs Include="%(_MuiResourceCompileItems.MuiSatelliteOutputFile)"
+                        Condition="Exists('%(_MuiResourceCompileItems.MuiSatelliteOutputFile)')">
+        <OutputGroup>ContentFiles</OutputGroup>
+        <ProjectName>$(ProjectName)</ProjectName>
+        <TargetPath>%(_MuiResourceCompileItems.MuiSatelliteRelativeOutputDir)%(_MuiResourceCompileItems.MuiSatelliteOutputFileName)</TargetPath>
+      </PackagingOutputs>
+    </ItemGroup>
+  </Target>
+</Project>

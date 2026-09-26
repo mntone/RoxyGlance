@@ -23,7 +23,7 @@ winrt::impl::App::App()
   : dispatcher_(DispatcherQueue::GetForCurrentThread())
   , MainWindow_(nullptr) {
   DispatcherShutdownMode(DispatcherShutdownMode::OnExplicitShutdown);
-  winrt::check_bool(AppDelegate_.addMessageListener(this));
+  ROXYG_DEBUG_ASSERT_SUCCEEDED(AppDelegate_.addMessageListener(this));
   winrt::check_hresult(AppDelegate_.initialize());
 
 #if defined _DEBUG && !defined DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION

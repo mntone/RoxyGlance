@@ -19,11 +19,11 @@ winrt::hresult AppDelegate::exit() noexcept {
   return context_->exit();
 }
 
-bool AppDelegate::addMessageListener(message::IMessageListener* listener) {
+winrt::hresult AppDelegate::addMessageListener(message::IMessageListener* listener) noexcept {
   return context_->messageWindow().addListener(listener);
 }
 
-bool AppDelegate::removeMessageListener(message::IMessageListener* listener) {
+winrt::hresult AppDelegate::removeMessageListener(message::IMessageListener* listener) noexcept {
   return context_->messageWindow().removeListener(listener);
 }
 

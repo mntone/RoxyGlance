@@ -8,19 +8,19 @@ protected:
   using ContainerType = boost::container::static_vector<void*, 3>;
   ContainerType listeners_;
 
-  bool addListener(void* listener);
-  bool removeListener(void* listener);
+  winrt::hresult addListener(void* listener) noexcept;
+  winrt::hresult removeListener(void* listener) noexcept;
 };
 }
 
 template<typename Listener>
 struct ListenerHost: public detail::ListenerHostBase {
 public:
-  ROXYG_ALWAYS_INLINE bool addListener(Listener* listener) {
+  [[nodiscard]] ROXYG_ALWAYS_INLINE winrt::hresult addListener(Listener* listener) noexcept {
     return detail::ListenerHostBase::addListener(listener);
   }
 
-  ROXYG_ALWAYS_INLINE bool removeListener(Listener* listener) {
+  ROXYG_ALWAYS_INLINE winrt::hresult removeListener(Listener* listener) noexcept {
     return detail::ListenerHostBase::removeListener(listener);
   }
 

@@ -19,6 +19,12 @@
 #endif
 
 #ifdef _DEBUG
+#define ROXYG_DEBUG_ASSERT_SUCCEEDED(expr) assert(SUCCEEDED(expr))
+#else
+#define ROXYG_DEBUG_ASSERT_SUCCEEDED(expr) ((void)(expr))
+#endif
+
+#ifdef _DEBUG
 # include <cassert>
 # define ROXYG_UNCHECKED_ASSERT(expr) assert(expr)
 #else

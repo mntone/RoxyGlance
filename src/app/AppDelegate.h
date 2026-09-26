@@ -16,8 +16,8 @@ public:
   [[nodiscard]] winrt::hresult initialize();
   [[nodiscard]] winrt::hresult exit() noexcept;
 
-  bool addMessageListener(message::IMessageListener* listener);
-  bool removeMessageListener(message::IMessageListener* listener);
+  [[nodiscard]] winrt::hresult addMessageListener(message::IMessageListener* listener) noexcept;
+  winrt::hresult removeMessageListener(message::IMessageListener* listener) noexcept;
 
   [[nodiscard]] logging::Logger& logger() noexcept;
   [[nodiscard]] logging::Logger const& logger() const noexcept;

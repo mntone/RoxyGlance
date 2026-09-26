@@ -31,15 +31,15 @@ AppContext::AppContext() noexcept {
 #endif
   engine_.setOperationContext(&operation_context_);
   engine_.setLogger(&logger_);
-  settings_store_.addListener(&engine_);
+  ROXYG_DEBUG_ASSERT_SUCCEEDED(settings_store_.addListener(&engine_));
   message_window_.setLogger(&logger_);
   context_logger_.setLogger(&logger_);
 
   window::StateWatcher& w = window::StateWatcher::instance();
   w.setLogger(&logger_);
-  w.addListener(&engine_);
+  ROXYG_DEBUG_ASSERT_SUCCEEDED(w.addListener(&engine_));
 #if _DEBUG
-  w.addListener(&log_adapter_);
+  ROXYG_DEBUG_ASSERT_SUCCEEDED(w.addListener(&log_adapter_));
 #endif
 }
 

@@ -71,5 +71,5 @@ void winrt::impl::LogsViewModel::setLogger(logging::Logger& logger) {
   Logs_.ReplaceAll(std::move(winrt_logs));
 
   logger_ = &logger;
-  logger.addListener(this);
+  ROXYG_DEBUG_ASSERT_SUCCEEDED(logger.addListener(this));
 }

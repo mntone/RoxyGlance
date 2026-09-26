@@ -3,33 +3,20 @@
 
 using namespace roxyg::utility;
 
-bool detail::ListenerHostBase::addListener(void* listener) {
-#if _DEBUG
-  if (!listener) [[unlikely]] {
-    throw winrt::hresult_invalid_argument(L"nullptr");
-  }
-#else
-  [[assume(listener != nullptr)]];
-#endif
+winrt::hresult detail::ListenerHostBase::addListener(void* listener) noexcept {
+  ROXYG_UNCHECKED_ASSERT(listener);
 
-
-  return listeners_.stable_emplace_back(listener);
+  return listeners_.stable_emplace_back(listener) ? S_OK : E_UNEXPECTED;
 }
 
-bool detail::ListenerHostBase::removeListener(void* listener) {
-#if _DEBUG
-  if (!listener) [[unlikely]] {
-    throw winrt::hresult_invalid_argument(L"nullptr");
-  }
-#else
-  [[assume(listener != nullptr)]];
-#endif
+winrt::hresult detail::ListenerHostBase::removeListener(void* listener) noexcept {
+  ROXYG_UNCHECKED_ASSERT(listener);
 
-  ContainerType::iterator it = std::remove(listeners_.begin(), listeners_.end(), listener);
+  ContainerType::const_iterator it = std::remove(listeners_.begin(), listeners_.end(), listener);
   if (it == listeners_.end()) [[unlikely]] {
-    return false;
+    return S_FALSE;
   }
 
   listeners_.erase(it, listeners_.end());
-  return true;
+  return S_OK;
 }

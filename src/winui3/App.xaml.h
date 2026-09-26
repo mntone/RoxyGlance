@@ -6,8 +6,9 @@
 
 namespace winrt::Mntone::RoxyGlance::implementation {
 
-struct App: AppT<App> {
+struct App: AppT<App>, roxyg::message::IMessageListener {
   App();
+  ~App() noexcept;
 
   void OnLaunched(Microsoft::UI::Xaml::LaunchActivatedEventArgs const&);
 
@@ -18,10 +19,14 @@ private:
   void exitApp();
   void showMainWindow();
 
+  void onAppExitRequested() noexcept override;
+  void onShowSettingsRequested() noexcept override;
+
 private:
   roxyg::AppDelegate AppDelegate_;
   Microsoft::UI::Dispatching::DispatcherQueue dispatcher_;
   winrt::com_ptr<winrt::Mntone::RoxyGlance::Views::implementation::MainWindow> MainWindow_;
+  winrt::event_token main_window_closed_token_;
 };
 
 }

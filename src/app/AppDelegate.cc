@@ -19,6 +19,14 @@ winrt::hresult AppDelegate::exit() noexcept {
   return context_->exit();
 }
 
+bool AppDelegate::addMessageListener(message::IMessageListener* listener) {
+  return context_->messageWindow().addListener(listener);
+}
+
+bool AppDelegate::removeMessageListener(message::IMessageListener* listener) {
+  return context_->messageWindow().removeListener(listener);
+}
+
 logging::Logger& AppDelegate::logger() noexcept {
   return context_->logger();
 }

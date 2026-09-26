@@ -16,6 +16,7 @@ enum class LogLevel: uint_fast8_t {
 enum class LogGroup: uint_fast8_t {
   kUnknown = 0,
   kCompiler,
+  kContext,
   kDebug,
   kEngine,
   kMonitor,

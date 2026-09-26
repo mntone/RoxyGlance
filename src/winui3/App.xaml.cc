@@ -22,6 +22,8 @@ using namespace ::winrt::Mntone::RoxyGlance::Views::implementation;
 winrt::impl::App::App()
   : dispatcher_(DispatcherQueue::GetForCurrentThread())
   , MainWindow_(nullptr) {
+  DispatcherShutdownMode(DispatcherShutdownMode::OnExplicitShutdown);
+  winrt::check_bool(AppDelegate_.addMessageListener(this));
   winrt::check_hresult(AppDelegate_.initialize());
 
 #if defined _DEBUG && !defined DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION
@@ -32,6 +34,10 @@ winrt::impl::App::App()
     }
   });
 #endif
+}
+
+winrt::impl::App::~App() noexcept {
+  assert(!main_window_closed_token_);
 }
 
 /// <summary>
@@ -49,13 +55,17 @@ void winrt::impl::App::exitApp() {
 
   winrt::com_ptr<impl::MainWindow> window{MainWindow_};
   if (window) {
+    winrt::event_token closed_token{main_window_closed_token_};
+    if (closed_token) {
+      main_window_closed_token_.value = 0;
+      window->Closed(closed_token);
+    }
+
     MainWindow_ = nullptr;
     window->Close();
   }
 
-  winrt::hresult hr{AppDelegate_.exit()};
-  winrt::check_hresult(hr);
-
+  [[maybe_unused]] winrt::hresult const hr = AppDelegate_.exit();
   Exit();
 }
 
@@ -68,8 +78,34 @@ void winrt::impl::App::showMainWindow() {
     winrt::com_ptr<impl::MainWindow> new_window{make_self<impl::MainWindow>()};
     new_window->setLogs(view_model.as<ViewModels::LogsViewModel>());
 
+    main_window_closed_token_ = new_window->Closed([that = get_weak()](
+      [[maybe_unused]] winrt::IInspectable const& sender,
+      [[maybe_unused]] winrt::WindowEventArgs const& args
+      ) noexcept {
+      winrt::impl::com_ref<winrt::impl::App> app{that.get()};
+      winrt::event_token token{app->main_window_closed_token_};
+      app->main_window_closed_token_.value = 0;
+
+      winrt::com_ptr<impl::MainWindow> window{app->MainWindow_};
+      app->MainWindow_ = nullptr;
+
+      window->Closed(token);
+    });
+
     window = new_window;
     MainWindow_ = new_window;
   }
   window->Activate();
+}
+
+void winrt::impl::App::onAppExitRequested() noexcept {
+  dispatcher_.TryEnqueue([this] {
+    exitApp();
+  });
+}
+
+void winrt::impl::App::onShowSettingsRequested() noexcept {
+  dispatcher_.TryEnqueue([this] {
+    showMainWindow();
+  });
 }

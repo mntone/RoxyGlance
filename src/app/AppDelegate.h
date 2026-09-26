@@ -1,5 +1,6 @@
 #pragma once
 #include "logging/Logger.h"
+#include "message/IMessageListener.h"
 
 namespace roxyg {
 
@@ -14,6 +15,9 @@ public:
 
   [[nodiscard]] winrt::hresult initialize();
   [[nodiscard]] winrt::hresult exit() noexcept;
+
+  bool addMessageListener(message::IMessageListener* listener);
+  bool removeMessageListener(message::IMessageListener* listener);
 
   [[nodiscard]] logging::Logger& logger() noexcept;
   [[nodiscard]] logging::Logger const& logger() const noexcept;

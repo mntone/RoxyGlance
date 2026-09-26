@@ -21,4 +21,12 @@ ROXYG_ALWAYS_INLINE ::winrt::hresult LastErrorAsHResult() noexcept {
   return HResultFromWin32(WINRT_IMPL_GetLastError());
 }
 
+ROXYG_ALWAYS_INLINE constexpr DWORD HResultToWin32(::winrt::hresult hr, DWORD defaultLastError = ERROR_CAN_NOT_COMPLETE) noexcept {
+  if (HRESULT_FACILITY(hr) == FACILITY_WIN32) {
+    return HRESULT_CODE(hr);
+  }
+
+  return defaultLastError;
+}
+
 }

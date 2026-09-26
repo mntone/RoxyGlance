@@ -1,0 +1,17 @@
+#include "resource.h"
+
+LANGUAGE 7, 1  // LANG_GERMAN, SUBLANG_GERMAN
+
+IDC_MENU_TRAY MENU
+BEGIN
+  POPUP ""
+  BEGIN
+    MENUITEM "&Einstellungen", IDM_TRAY_SETTINGS
+    MENUITEM "&Beenden",       IDM_TRAY_EXIT
+  END
+END
+
+STRINGTABLE
+BEGIN
+  IDS_MENU_DEBUG "&Debuggen"
+END

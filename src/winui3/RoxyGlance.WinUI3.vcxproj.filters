@@ -83,7 +83,49 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <MuiResourceCompile Include="Resources\app.de-DE.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
     <MuiResourceCompile Include="Resources\app.en-US.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.es-ES.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.fr-FR.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.id-ID.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.it-IT.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.ja-JP.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.ko-KR.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.nl-NL.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.pt-BR.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.ru-RU.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.th-TH.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.vi-VN.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.zh-CN.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.zh-TW.rc">
       <Filter>Resources</Filter>
     </MuiResourceCompile>
   </ItemGroup>

@@ -1,0 +1,17 @@
+#include "resource.h"
+
+LANGUAGE 13, 1  // LANG_DUTCH, SUBLANG_DUTCH
+
+IDC_MENU_TRAY MENU
+BEGIN
+  POPUP ""
+  BEGIN
+    MENUITEM "&Instellingen", IDM_TRAY_SETTINGS
+    MENUITEM "&Afsluiten",    IDM_TRAY_EXIT
+  END
+END
+
+STRINGTABLE
+BEGIN
+  IDS_MENU_DEBUG "&Foutopsporing"
+END

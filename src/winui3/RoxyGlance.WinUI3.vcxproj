@@ -188,8 +188,64 @@
     <ResourceCompile Include="Resources\app.rc">
       <AdditionalOptions>/8 /g1 /q Resources\app.rcconfig /fm"$(IntDir)app_LN.res" %(AdditionalOptions)</AdditionalOptions>
     </ResourceCompile>
+    <MuiResourceCompile Include="Resources\app.de-DE.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>de-DE</MuiResourceLanguage>
+    </MuiResourceCompile>
     <MuiResourceCompile Include="Resources\app.en-US.rc">
       <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.es-ES.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>es-ES</MuiResourceLanguage>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.fr-FR.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>fr-FR</MuiResourceLanguage>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.id-ID.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>id-ID</MuiResourceLanguage>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.it-IT.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>it-IT</MuiResourceLanguage>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.ja-JP.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>ja-JP</MuiResourceLanguage>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.ko-KR.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>ko-KR</MuiResourceLanguage>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.nl-NL.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>nl-NL</MuiResourceLanguage>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.pt-BR.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>pt-BR</MuiResourceLanguage>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.ru-RU.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>ru-RU</MuiResourceLanguage>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.th-TH.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>th-TH</MuiResourceLanguage>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.vi-VN.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>vi-VN</MuiResourceLanguage>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.zh-CN.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>zh-CN</MuiResourceLanguage>
+    </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.zh-TW.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>zh-TW</MuiResourceLanguage>
     </MuiResourceCompile>
   </ItemGroup>
   <ItemGroup>

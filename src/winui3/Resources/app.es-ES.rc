@@ -1,0 +1,17 @@
+#include "resource.h"
+
+LANGUAGE 10, 1  // LANG_SPANISH, SUBLANG_SPANISH
+
+IDC_MENU_TRAY MENU
+BEGIN
+  POPUP ""
+  BEGIN
+    MENUITEM "&Configuración", IDM_TRAY_SETTINGS
+    MENUITEM "&Salir",         IDM_TRAY_EXIT
+  END
+END
+
+STRINGTABLE
+BEGIN
+  IDS_MENU_DEBUG "&Depurar"
+END

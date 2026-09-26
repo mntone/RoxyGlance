@@ -96,6 +96,9 @@
     <ClInclude Include="logging\Log.h" />
     <ClInclude Include="logging\Logger.h" />
     <ClInclude Include="logging\LogHelper.h" />
+    <ClInclude Include="message\IMessageListener.h" />
+    <ClInclude Include="message\MessageWindow.h" />
+    <ClInclude Include="message\MessageWindowResource.h" />
     <ClInclude Include="monitor\MonitorState.h" />
     <ClInclude Include="monitor\MonitorStateCache.h" />
     <ClInclude Include="numeric\common.h" />
@@ -156,6 +159,7 @@
     <ClCompile Include="engine\RuleEngine.cc" />
     <ClCompile Include="logging\Logger.cc" />
     <ClCompile Include="logging\LogHelper.cc" />
+    <ClCompile Include="message\MessageWindow.cc" />
     <ClCompile Include="monitor\MonitorState.cc" />
     <ClCompile Include="monitor\MonitorStateCache.cc" />
     <ClCompile Include="settings\action\MoveAndResizeAction.cc" />

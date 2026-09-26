@@ -188,6 +188,9 @@
     <ResourceCompile Include="Resources\app.rc">
       <AdditionalOptions>/8 /g1 /q Resources\app.rcconfig /fm"$(IntDir)app_LN.res" %(AdditionalOptions)</AdditionalOptions>
     </ResourceCompile>
+    <MuiResourceCompile Include="Resources\app.en-US.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+    </MuiResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\app.rcconfig" />

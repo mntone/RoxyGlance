@@ -19,6 +19,9 @@
     <Filter Include="logging">
       <UniqueIdentifier>{e5db5388-40c4-42ee-947a-0adcd4421004}</UniqueIdentifier>
     </Filter>
+    <Filter Include="message">
+      <UniqueIdentifier>{9b4003cc-a5d4-4f1a-9c0a-f2db16c0ca0d}</UniqueIdentifier>
+    </Filter>
     <Filter Include="monitor">
       <UniqueIdentifier>{04e7fc81-168e-40cc-8e53-66ec387d6ec2}</UniqueIdentifier>
     </Filter>
@@ -96,6 +99,15 @@
     </ClInclude>
     <ClInclude Include="logging\LogHelper.h">
       <Filter>logging</Filter>
+    </ClInclude>
+    <ClInclude Include="message\IMessageListener.h">
+      <Filter>message</Filter>
+    </ClInclude>
+    <ClInclude Include="message\MessageWindow.h">
+      <Filter>message</Filter>
+    </ClInclude>
+    <ClInclude Include="message\MessageWindowResource.h">
+      <Filter>message</Filter>
     </ClInclude>
     <ClInclude Include="monitor\MonitorState.h">
       <Filter>monitor</Filter>
@@ -268,6 +280,9 @@
     </ClCompile>
     <ClCompile Include="logging\LogHelper.cc">
       <Filter>logging</Filter>
+    </ClCompile>
+    <ClCompile Include="message\MessageWindow.cc">
+      <Filter>message</Filter>
     </ClCompile>
     <ClCompile Include="monitor\MonitorState.cc">
       <Filter>monitor</Filter>

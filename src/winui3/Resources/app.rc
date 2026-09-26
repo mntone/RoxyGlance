@@ -1,6 +1,9 @@
 // Microsoft Visual C++ generated resource script.
 //
-#include "resource.h"
+
+// Included (not duplicated) so rc.exe always emits a base-resource entry for
+// every localizable resource, which is required for MUI to generate the .mui.
+#include "app.en-US.rc"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -16,7 +19,6 @@
 // English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////

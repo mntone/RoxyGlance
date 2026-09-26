@@ -143,15 +143,24 @@ WindowController::WindowController() noexcept
   , hwnd_(nullptr) {
 }
 
-winrt::hresult WindowController::start(wchar_t const* class_name) noexcept {
-  HINSTANCE hinstance = hinstance_;
-  if (!hinstance) {
-    hinstance = GetModuleHandleW(nullptr);
-    if (!hinstance) {
-      return hresult::LastErrorAsHResult();
-    }
-    hinstance_ = hinstance;
+winrt::hresult WindowController::initialize() noexcept {
+  HINSTANCE hinstance{hinstance_};
+  if (hinstance) {
+    return S_OK;
   }
+
+  hinstance = GetModuleHandleW(nullptr);
+  if (!hinstance) {
+    return hresult::LastErrorAsHResult();
+  }
+
+  hinstance_ = hinstance;
+  return S_OK;
+}
+
+winrt::hresult WindowController::start(wchar_t const* class_name) noexcept {
+  HINSTANCE const hinstance{hinstance_};
+  ROXYG_UNCHECKED_ASSERT(hinstance);
 
   WindowThreadContext state{
     .atomic_hwnd = nullptr,

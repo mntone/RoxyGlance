@@ -26,6 +26,8 @@ public:
 
   virtual LRESULT windowProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) noexcept = 0;
 
+  [[nodiscard]] static winrt::hresult initialize() noexcept;
+
 private:
   std::atomic<HWND> hwnd_;
   static HINSTANCE hinstance_;

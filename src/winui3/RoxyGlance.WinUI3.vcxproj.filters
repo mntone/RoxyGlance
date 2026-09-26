@@ -83,6 +83,11 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <MuiResourceCompile Include="Resources\app.en-US.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\app.rcconfig">
       <Filter>Resources</Filter>
     </None>

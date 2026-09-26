@@ -2,7 +2,8 @@
 
 namespace roxyg::utility {
 
-struct _ListenerHostBase {
+namespace detail {
+struct ListenerHostBase {
 protected:
   using ContainerType = boost::container::static_vector<void*, 3>;
   ContainerType listeners_;
@@ -10,16 +11,17 @@ protected:
   bool addListener(void* listener);
   bool removeListener(void* listener);
 };
+}
 
 template<typename Listener>
-struct ListenerHost: public _ListenerHostBase {
+struct ListenerHost: public detail::ListenerHostBase {
 public:
   ROXYG_ALWAYS_INLINE bool addListener(Listener* listener) {
-    return _ListenerHostBase::addListener(listener);
+    return detail::ListenerHostBase::addListener(listener);
   }
 
   ROXYG_ALWAYS_INLINE bool removeListener(Listener* listener) {
-    return _ListenerHostBase::removeListener(listener);
+    return detail::ListenerHostBase::removeListener(listener);
   }
 
   template<typename Func, typename... Args>

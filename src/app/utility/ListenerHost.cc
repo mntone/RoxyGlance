@@ -3,7 +3,7 @@
 
 using namespace roxyg::utility;
 
-bool _ListenerHostBase::addListener(void* listener) {
+bool detail::ListenerHostBase::addListener(void* listener) {
 #if _DEBUG
   if (!listener) [[unlikely]] {
     throw winrt::hresult_invalid_argument(L"nullptr");
@@ -16,7 +16,7 @@ bool _ListenerHostBase::addListener(void* listener) {
   return listeners_.stable_emplace_back(listener);
 }
 
-bool _ListenerHostBase::removeListener(void* listener) {
+bool detail::ListenerHostBase::removeListener(void* listener) {
 #if _DEBUG
   if (!listener) [[unlikely]] {
     throw winrt::hresult_invalid_argument(L"nullptr");

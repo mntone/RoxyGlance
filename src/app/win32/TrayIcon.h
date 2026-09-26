@@ -25,7 +25,17 @@ private:
   explicit TrayIcon(UINT cbmsg, HICON hicon, UINT flags) noexcept;
 
 public:
+  /// <summary>
+  /// Adds the icon to the notification area and associates it with the given window.
+  /// </summary>
+  /// <param name="hwnd">The window that receives the tray icon's callback message.</param>
+  /// <returns>S_OK on success or if already attached to <paramref name="hwnd"/>, or a failure HRESULT.</returns>
   winrt::hresult attach(HWND hwnd) noexcept;
+
+  /// <summary>
+  /// Removes the icon from the notification area.
+  /// </summary>
+  /// <returns>S_OK if detached or already not attached, or a failure HRESULT.</returns>
   winrt::hresult detach() noexcept;
 
   winrt::hresult restoreFocusToNotificationArea() const noexcept;

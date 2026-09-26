@@ -84,7 +84,7 @@ winrt::hresult TrayIcon::attach(HWND hwnd) noexcept {
       logger_.error(winrt::hstring{kTrayIconAttachWindowMismatch}, E_UNEXPECTED);
       return E_UNEXPECTED;
     }
-    return S_FALSE;
+    return S_OK;
   }
 
   TrayIcon const* current_that{that_};
@@ -134,8 +134,7 @@ winrt::hresult TrayIcon::attach(HWND hwnd) noexcept {
 winrt::hresult TrayIcon::detach() noexcept {
   HWND attached_hwnd{hwnd_};
   if (!attached_hwnd) {
-    logger_.error(winrt::hstring{kTrayIconDetachInvalidOperation}, hresult::kErrorInvalidOperation);
-    return hresult::kErrorInvalidOperation;
+    return S_OK;
   }
 
   TrayIcon const* current_that{that_};

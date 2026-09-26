@@ -9,6 +9,8 @@
 
 namespace {
 
+inline constexpr wchar_t kWinEventHookThreadName[] = L"WinEventHook Thread";
+
 inline constexpr std::wstring_view kWinEventHookRetryFactoryAllocationFailed
   = L"Failed to allocate memory for the WinEvent hook retry state factory.";
 
@@ -90,20 +92,26 @@ winrt::hresult WinEventHookController::start(
   if (hr != S_OK) {
     // The worker thread already exited on its own; reap it without posting a stop message.
     [[maybe_unused]] winrt::hresult const recover_hr = reapThreadAfterStartFailure(info.hthread);
-  } else {
-    size_t const seed = utility::make_preferred_seed(utility::get_tsc(), info.thread_id);
-    try {
-      std::unique_ptr<utility::IRetryStateFactory> state_factory{
-        std::make_unique<utility::RetryStateFactory<5, WinEventHookExitBackoff>>(WinEventHookExitBackoff{{seed}})
-      };
-      setRetryFactory(std::move(state_factory));
-    } catch (std::bad_alloc const&) {
-      // Fail fast here because stop() may be unable to allocate its retry state
-      // after this allocation failure, leaving the worker thread unrecoverable.
-      logger_.fatal(winrt::hstring{kWinEventHookRetryFactoryAllocationFailed}, E_OUTOFMEMORY);
-      utility::fastfail();
-    }
+    return hr;
   }
+
+  size_t const seed = utility::make_preferred_seed(utility::get_tsc(), info.thread_id);
+  try {
+    std::unique_ptr<utility::IRetryStateFactory> state_factory{
+      std::make_unique<utility::RetryStateFactory<5, WinEventHookExitBackoff>>(WinEventHookExitBackoff{{seed}})
+    };
+    setRetryFactory(std::move(state_factory));
+  } catch (std::bad_alloc const&) {
+    // Fail fast here because stop() may be unable to allocate its retry state
+    // after this allocation failure, leaving the worker thread unrecoverable.
+    logger_.fatal(winrt::hstring{kWinEventHookRetryFactoryAllocationFailed}, E_OUTOFMEMORY);
+    utility::fastfail();
+  }
+
+#if _DEBUG
+  SetThreadDescription(info.hthread, kWinEventHookThreadName);
+#endif
+
   return hr;
 }
 

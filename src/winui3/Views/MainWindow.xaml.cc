@@ -19,7 +19,7 @@ winrt::impl::MainWindow::MainWindow() noexcept
   : Logs_(nullptr) {
 }
 
-void winrt::impl::MainWindow::Closed(
+void winrt::impl::MainWindow::MainWindow_Closed(
   [[maybe_unused]] winrt::IInspectable const& sender,
   [[maybe_unused]] winrt::WindowEventArgs const& args
 ) noexcept {

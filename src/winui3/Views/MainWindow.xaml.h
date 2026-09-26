@@ -8,7 +8,7 @@ namespace winrt::Mntone::RoxyGlance::Views::implementation {
 struct MainWindow: MainWindowT<MainWindow> {
   MainWindow() noexcept;
 
-  void Closed(
+  void MainWindow_Closed(
     winrt::Windows::Foundation::IInspectable const& sender,
     winrt::Microsoft::UI::Xaml::WindowEventArgs const& args
   ) noexcept;

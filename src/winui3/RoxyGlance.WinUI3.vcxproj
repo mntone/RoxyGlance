@@ -101,10 +101,10 @@
       <AdditionalOptions>%(AdditionalOptions) /bigobj</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dwmapi.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <StackReserveSize>0x20000</StackReserveSize>
       <StackCommitSize>0x2000</StackCommitSize>
-      <DelayLoadDLLs>dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>dwmapi.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AdditionalOptions>/Brepro %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Manifest>

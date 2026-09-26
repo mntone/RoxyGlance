@@ -6,8 +6,6 @@
 
 #include "../win32/hresult.h"
 
-#pragma comment(lib, "Shell32.lib")
-
 struct NOTIFYICONDATAWSubset final {
   DWORD cbSize;
   HWND hWnd;

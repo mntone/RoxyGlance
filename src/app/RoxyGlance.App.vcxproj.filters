@@ -260,6 +260,9 @@
     <ClCompile Include="compiler\filter\CompileFilter.cc">
       <Filter>compiler\filter</Filter>
     </ClCompile>
+    <ClCompile Include="compiler\filter\ProcessImageNameMatcher.cc">
+      <Filter>compiler\filter</Filter>
+    </ClCompile>
     <ClCompile Include="compiler\filter\WindowClassMatcher.cc">
       <Filter>compiler\filter</Filter>
     </ClCompile>

@@ -5,6 +5,7 @@
 
 namespace roxyg::compiler::filter {
 
+engine::Predicate CompileProcessImageName(settings::StringAndCompareType const& conf);
 engine::Predicate CompileWindowClass(settings::StringAndCompareType const& conf);
 engine::Predicate CompileWindowTitle(settings::StringAndCompareType const& conf);
 

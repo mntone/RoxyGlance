@@ -152,6 +152,7 @@
     <ClCompile Include="compiler\CompileAction.cc" />
     <ClCompile Include="compiler\CompileRule.cc" />
     <ClCompile Include="compiler\filter\CompileFilter.cc" />
+    <ClCompile Include="compiler\filter\ProcessImageNameMatcher.cc" />
     <ClCompile Include="compiler\filter\WindowClassMatcher.cc" />
     <ClCompile Include="compiler\filter\WindowTitleMatcher.cc" />
     <ClCompile Include="context\AppContext.cc" />

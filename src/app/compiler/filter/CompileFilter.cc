@@ -9,6 +9,11 @@ using namespace roxyg::engine;
 PredicateSet filter::CompileFilter(settings::Filter const& filter) {
   PredicateSet condition;
 
+  settings::StringAndCompareType const& processImageName = filter.processImageName();
+  if (processImageName.first != settings::StringCompareType::kNone) {
+    condition.emplace_back(filter::CompileProcessImageName(processImageName));
+  }
+
   settings::StringAndCompareType const& windowClass = filter.windowClass();
   if (windowClass.first != settings::StringCompareType::kNone) {
     condition.emplace_back(filter::CompileWindowClass(windowClass));

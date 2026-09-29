@@ -11,6 +11,8 @@ using namespace roxyg::engine;
 using namespace roxyg::numeric;
 
 static winrt::hresult applyWindowRect(HWND hwnd, long4 bounds) noexcept {
+  ROXYG_UNCHECKED_ASSERT(hwnd != nullptr);
+
   BOOL rc = SetWindowPos(
     hwnd,
     nullptr,
@@ -29,11 +31,9 @@ winrt::hresult AbsoluteMoveAndResizeOperation::execute([[maybe_unused]] Operatio
 
 winrt::hresult RelativeMoveAndResizeOperation::execute(OperationContext& ctx, window::State& windowState) noexcept {
   if (dirty_) [[unlikely]] {
-    HMONITOR hmonitor = win32::GetPrimaryHMonitor();
-
-    monitor::State* state = ctx.monitor().getOrCreate(hmonitor);
+    monitor::State* state = ctx.monitor().get(hmonitor_);
     if (!state) {
-      return E_OUTOFMEMORY;
+      return win32::hresult::kErrorInvalidOperation;
     }
 
     // Calc the new window bounds from relative bounds.

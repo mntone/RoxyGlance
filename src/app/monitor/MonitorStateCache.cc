@@ -81,3 +81,12 @@ winrt::hresult StateCache::initialize() noexcept {
   storage_ = std::move(data.states);
   return S_OK;
 }
+
+State const* StateCache::findById(int id) const noexcept {
+  for (auto const& [_, val] : storage_) {
+    if (val.id() == id) {
+      return &val;
+    }
+  }
+  return nullptr;
+}

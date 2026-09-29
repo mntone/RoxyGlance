@@ -81,6 +81,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AppDelegate.h" />
+    <ClInclude Include="compiler\CompilationContext.h" />
     <ClInclude Include="compiler\CompileAction.h" />
     <ClInclude Include="compiler\CompileRule.h" />
     <ClInclude Include="compiler\filter\CompileFilterPrivate.h" />
@@ -146,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppDelegate.cc" />
+    <ClCompile Include="compiler\CompilationContext.cpp" />
     <ClCompile Include="compiler\CompileAction.cc" />
     <ClCompile Include="compiler\CompileRule.cc" />
     <ClCompile Include="compiler\filter\CompileFilter.cc" />

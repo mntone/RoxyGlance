@@ -26,19 +26,21 @@ class RelativeMoveAndResizeOperation final: public Operation {
   RelativeMoveAndResizeOperation& operator=(RelativeMoveAndResizeOperation const&) = delete;
 
 public:
-  explicit constexpr RelativeMoveAndResizeOperation(numeric::float4 relative_bounds) noexcept
-    : dirty_(true)
+  explicit constexpr RelativeMoveAndResizeOperation(HMONITOR hmonitor, numeric::float4 relative_bounds) noexcept
+    : hmonitor_(hmonitor)
     , bounds_(numeric::long4::make(0, 0, 0, 0))
-    , relative_bounds_(std::move(relative_bounds)) {
+    , relative_bounds_(std::move(relative_bounds))
+    , dirty_(true) {
   }
   virtual ~RelativeMoveAndResizeOperation() noexcept = default;
 
   winrt::hresult execute(OperationContext& ctx, window::State& windowState) noexcept override;
 
 private:
-  bool dirty_;
+  HMONITOR hmonitor_;
   numeric::long4 bounds_;
   numeric::float4 relative_bounds_;
+  bool dirty_;
 };
 
 }

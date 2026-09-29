@@ -17,6 +17,8 @@ class StateCache final
 public:
   [[nodiscard]] winrt::hresult initialize() noexcept;
 
+  [[nodiscard]] State const* findById(int id) const noexcept;
+
 private:
   static BOOL CALLBACK EnumDisplayMonitorsCallback(HMONITOR hmonitor, HDC, LPRECT lprcMonitor, LPARAM data) noexcept;
 };

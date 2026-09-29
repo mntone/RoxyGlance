@@ -42,8 +42,14 @@ void RuleEngine::checkRules(window::State& windowState) noexcept {
 }
 
 void RuleEngine::onSettingsChanged(settings::UserSettingsDocument const& settings) noexcept {
+  OperationContext* operationContext{operation_context_};
+  if (!operationContext) {
+    return;
+  }
+
+  compiler::CompilationContext ctx{operationContext->monitor()};
   try {
-    RuleSet rule_set{compiler::CompileRule(settings)};
+    RuleSet rule_set{compiler::CompileRule(ctx, settings)};
     rule_set_.store(std::make_shared<RuleSet const>(std::move(rule_set)), std::memory_order_release);
   } catch (std::bad_alloc const&) {
     logger_.error(winrt::hstring{kRuleCompilationOutOfMemory}, E_OUTOFMEMORY);

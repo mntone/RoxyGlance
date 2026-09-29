@@ -8,7 +8,7 @@ using namespace roxyg;
 using namespace roxyg::compiler;
 using namespace roxyg::engine;
 
-RuleSet compiler::CompileRule(settings::UserSettingsDocument const& settings) {
+RuleSet compiler::CompileRule(CompilationContext& ctx, settings::UserSettingsDocument const& settings) {
   settings::UserSettings const* root = settings.root();
   if (!root) {
     return {};
@@ -16,7 +16,7 @@ RuleSet compiler::CompileRule(settings::UserSettingsDocument const& settings) {
 
   RuleSet rules;
   for (auto const& rule : root->rules()) {
-    OperationSet operations{CompileAction(rule.actions())};
+    OperationSet operations{CompileAction(ctx, rule.actions())};
     if (operations.empty()) {
       continue;
     }

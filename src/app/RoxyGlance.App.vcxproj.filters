@@ -55,6 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppDelegate.h" />
+    <ClInclude Include="compiler\CompilationContext.h">
+      <Filter>compiler</Filter>
+    </ClInclude>
     <ClInclude Include="compiler\CompileAction.h">
       <Filter>compiler</Filter>
     </ClInclude>
@@ -242,6 +245,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppDelegate.cc" />
+    <ClCompile Include="compiler\CompilationContext.cpp">
+      <Filter>compiler</Filter>
+    </ClCompile>
     <ClCompile Include="compiler\CompileAction.cc">
       <Filter>compiler</Filter>
     </ClCompile>

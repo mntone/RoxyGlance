@@ -6,6 +6,6 @@
 
 namespace roxyg::compiler {
 
-extern engine::OperationSet CompileAction(CompilationContext& ctx, settings::Actions const& action);
+engine::OperationSet CompileAction(CompilationContext& ctx, settings::Actions const& action);
 
 }

@@ -5,6 +5,6 @@
 
 namespace roxyg::compiler::filter {
 
-extern engine::PredicateSet CompileFilter(settings::Filter const& filter);
+engine::PredicateSet CompileFilter(settings::Filter const& filter);
 
 }

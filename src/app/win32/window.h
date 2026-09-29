@@ -9,6 +9,6 @@ ROXYG_ALWAYS_INLINE bool IsRootWindow(HWND hwnd) noexcept {
   return hRootWnd == hwnd;
 }
 
-extern winrt::hresult GetWindowShadowMargin(HWND hwnd, numeric::long4& shadowMargin) noexcept;
+winrt::hresult GetWindowShadowMargin(HWND hwnd, numeric::long4& shadowMargin) noexcept;
 
 }

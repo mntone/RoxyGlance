@@ -5,7 +5,7 @@
 
 namespace roxyg::compiler::filter {
 
-extern engine::Predicate CompileWindowClass(settings::StringAndCompareType const& conf);
-extern engine::Predicate CompileWindowTitle(settings::StringAndCompareType const& conf);
+engine::Predicate CompileWindowClass(settings::StringAndCompareType const& conf);
+engine::Predicate CompileWindowTitle(settings::StringAndCompareType const& conf);
 
 }

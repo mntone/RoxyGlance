@@ -3,17 +3,17 @@
 
 namespace roxyg::settings {
 
-extern long ReadLongFromNode(c4::yml::ConstNodeRef node);
-extern long ReadBoundedLongFromNode(c4::yml::ConstNodeRef node, long min_val, long max_val);
-extern long ReadBoundedLongFromNodeOrDefault(c4::yml::ConstNodeRef node, long min_val, long max_val, long def_val);
+long ReadLongFromNode(c4::yml::ConstNodeRef node);
+long ReadBoundedLongFromNode(c4::yml::ConstNodeRef node, long min_val, long max_val);
+long ReadBoundedLongFromNodeOrDefault(c4::yml::ConstNodeRef node, long min_val, long max_val, long def_val);
 
-extern float ReadFloatFromNode(c4::yml::ConstNodeRef node);
-extern float ReadBoundedFloatFromNode(c4::yml::ConstNodeRef node, float min_val, float max_val);
-extern float ReadBoundedFloatFromNodeOrDefault(c4::yml::ConstNodeRef node, float min_val, float max_val, float def_val);
+float ReadFloatFromNode(c4::yml::ConstNodeRef node);
+float ReadBoundedFloatFromNode(c4::yml::ConstNodeRef node, float min_val, float max_val);
+float ReadBoundedFloatFromNodeOrDefault(c4::yml::ConstNodeRef node, float min_val, float max_val, float def_val);
 
-extern std::string ReadStringFromNode(c4::yml::ConstNodeRef node);
-extern std::wstring ReadStringAsUtf16FromNode(c4::yml::ConstNodeRef node);
-extern StringAndCompareType ReadStringAndCompareTypeFromNode(c4::yml::ConstNodeRef node);
+std::string ReadStringFromNode(c4::yml::ConstNodeRef node);
+std::wstring ReadStringAsUtf16FromNode(c4::yml::ConstNodeRef node);
+StringAndCompareType ReadStringAndCompareTypeFromNode(c4::yml::ConstNodeRef node);
 
 ROXYG_ALWAYS_INLINE int ReadIntFromNode(c4::yml::ConstNodeRef node) {
   return static_cast<int>(ReadLongFromNode(node));

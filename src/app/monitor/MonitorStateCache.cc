@@ -39,7 +39,14 @@ BOOL __stdcall StateCache::EnumDisplayMonitorsCallback(
   }
 
   try {
-    data.states.try_emplace(hmonitor, hmonitor, display_area);
+    auto it = data.states.try_emplace(hmonitor, hmonitor, display_area);
+    ROXYG_UNCHECKED_ASSERT(it.second);
+
+    winrt::hresult const hr = it.first->second.initialize();
+    if (FAILED(hr)) {
+      data.hresult = hr;
+      return FALSE;
+    }
   } catch (std::bad_alloc const&) {
     data.hresult = E_OUTOFMEMORY;
     return FALSE;

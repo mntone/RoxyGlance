@@ -1,31 +1,29 @@
 #include "pch.h"
 #include "MonitorState.h"
 
+#include "../win32/hresult.h"
+
 using namespace roxyg::monitor;
 
-State::State(HMONITOR hmonitor, numeric::float4 display_area) noexcept
+State::State(HMONITOR handle, numeric::float4 display_area) noexcept
   : display_area_(display_area)
   , work_area_(numeric::float4::make(0.f, 0.f, 0.f, 0.f))
-  , hmonitor_(hmonitor)
-  , device_name_()
-  , display_area_dirty_(false)
-  , work_area_dirty_(true) {
+  , handle_(handle)
+  , id_(0) {
 }
 
-State::State(HMONITOR hmonitor) noexcept
+State::State(HMONITOR handle) noexcept
   : display_area_(numeric::float4::make(0.f, 0.f, 0.f, 0.f))
   , work_area_(numeric::float4::make(0.f, 0.f, 0.f, 0.f))
-  , hmonitor_(hmonitor)
-  , device_name_()
-  , display_area_dirty_(true)
-  , work_area_dirty_(true) {
+  , handle_(handle)
+  , id_(0) {
 }
 
-void State::updateArea() {
+winrt::hresult State::initialize() noexcept {
   MONITORINFOEXW info{sizeof(MONITORINFOEXW)};
-  BOOL rc = GetMonitorInfoW(hmonitor_, &info);
-  if (!rc) {
-    winrt::throw_hresult(E_FAIL);
+  BOOL const rc = GetMonitorInfoW(handle_, &info);
+  if (rc == FALSE) {
+    return win32::hresult::kErrorInvalidMonitorHandle;
   }
 
   display_area_ = static_cast<numeric::float4>(numeric::long4::make(
@@ -40,7 +38,6 @@ void State::updateArea() {
     info.rcWork.right - info.rcWork.left,
     info.rcWork.bottom - info.rcWork.top
   ));
-  device_name_ = info.szDevice;
-  display_area_dirty_ = false;
-  work_area_dirty_ = false;
+  id_ = _wtoi(&info.szDevice[11]);
+  return S_OK;
 }

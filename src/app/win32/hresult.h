@@ -9,6 +9,7 @@ inline constexpr ::winrt::hresult kErrorSharingViolation = ::winrt::impl::hresul
 inline constexpr ::winrt::hresult kErrorAlreadyExists = ::winrt::impl::hresult_from_win32(ERROR_ALREADY_EXISTS);
 inline constexpr ::winrt::hresult kErrorOperationAborted = ::winrt::impl::hresult_from_win32(ERROR_OPERATION_ABORTED);
 inline constexpr ::winrt::hresult kErrorTimeout = ::winrt::impl::hresult_from_win32(ERROR_TIMEOUT);
+inline constexpr ::winrt::hresult kErrorInvalidMonitorHandle = ::winrt::impl::hresult_from_win32(ERROR_INVALID_MONITOR_HANDLE);
 inline constexpr ::winrt::hresult kErrorInvalidUserBuffer = ::winrt::impl::hresult_from_win32(ERROR_INVALID_USER_BUFFER);
 inline constexpr ::winrt::hresult kErrorNotEnoughQuota = ::winrt::impl::hresult_from_win32(ERROR_NOT_ENOUGH_QUOTA);
 inline constexpr ::winrt::hresult kErrorInvalidOperation = ::winrt::impl::hresult_from_win32(ERROR_INVALID_OPERATION);

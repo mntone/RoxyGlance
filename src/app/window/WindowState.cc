@@ -1,20 +1,21 @@
 #include "pch.h"
 #include "WindowState.h"
 
+#include "../win32/process.h"
+
 using namespace roxyg::window;
 
-DWORD State::processId() const {
-  if (process_id_loaded_) [[likely]] {
-    return process_id_;
+winrt::hresult State::updateProcessInfo() {
+  win32::ProcessInfo info;
+  winrt::hresult const hr = win32::GetProcessInfoFromHWND(hwnd_, info);
+  if (FAILED(hr)) {
+    return hr;
   }
 
-  DWORD processId;
-  DWORD const rc = GetWindowThreadProcessId(hwnd_, &processId);
-  winrt::check_bool(rc);
-
-  process_id_ = processId;
-  process_id_loaded_ = true;
-  return process_id_;
+  process_id_ = info.id;
+  process_image_name_ = std::move(info.filepath);
+  process_info_loaded_ = true;
+  return S_OK;
 }
 
 HMONITOR State::hMonitor() noexcept {

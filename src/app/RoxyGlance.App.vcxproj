@@ -134,6 +134,7 @@
     <ClInclude Include="win32\hresult.h" />
     <ClInclude Include="win32\MessageLoopThreadController.h" />
     <ClInclude Include="win32\monitor.h" />
+    <ClInclude Include="win32\process.h" />
     <ClInclude Include="win32\string.h" />
     <ClInclude Include="win32\ThreadContext.h" />
     <ClInclude Include="win32\TrayIcon.h" />
@@ -177,6 +178,7 @@
     <ClCompile Include="utility\ListenerHost.cc" />
     <ClCompile Include="win32\file.cc" />
     <ClCompile Include="win32\MessageLoopThreadController.cc" />
+    <ClCompile Include="win32\process.cc" />
     <ClCompile Include="win32\string.cc" />
     <ClCompile Include="win32\TrayIcon.cc" />
     <ClCompile Include="win32\window.cc" />

@@ -8,7 +8,7 @@ using namespace roxyg::settings;
 
 Filter::Filter(c4::yml::NodeRef node)
   : node_(std::move(node))
-  , process_name_(ReadStringAndCompareTypeFromNode(node_[key::kProcessKey]))
+  , process_image_name_(ReadStringAndCompareTypeFromNode(node_[key::kProcessKey]))
   , window_class_(ReadStringAndCompareTypeFromNode(node_[key::kWindowClassKey]))
   , window_title_(ReadStringAndCompareTypeFromNode(node_[key::kWindowTitleKey])) {
 }

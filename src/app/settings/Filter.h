@@ -7,8 +7,8 @@ class Filter final {
 public:
   explicit Filter(c4::yml::NodeRef node);
 
-  [[nodiscard]] constexpr settings::StringAndCompareType const& processName() const noexcept {
-    return process_name_;
+  [[nodiscard]] constexpr settings::StringAndCompareType const& processImageName() const noexcept {
+    return process_image_name_;
   }
   [[nodiscard]] constexpr settings::StringAndCompareType const& windowClass() const noexcept {
     return window_class_;
@@ -19,7 +19,7 @@ public:
 
 private:
   c4::yml::NodeRef node_;
-  settings::StringAndCompareType process_name_;
+  settings::StringAndCompareType process_image_name_;
   settings::StringAndCompareType window_class_;
   settings::StringAndCompareType window_title_;
 };

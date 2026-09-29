@@ -24,6 +24,15 @@ TEST(NodeHelper, ReadBoundedLong) {
   EXPECT_THROW(loadFromYaml("-1", ReadBoundedLongFromNode, 0, 16), winrt::hresult_invalid_argument);
 }
 
+TEST(NodeHelper, ReadBoundedLongOrDefault) {
+  EXPECT_EQ(loadFromYaml("", ReadBoundedLongFromNodeOrDefault, 0, 16, 4), 4);
+  EXPECT_EQ(loadFromYaml("0", ReadBoundedLongFromNodeOrDefault, 0, 16, 4), 0);
+  EXPECT_EQ(loadFromYaml("16", ReadBoundedLongFromNodeOrDefault, 0, 16, 4), 16);
+  EXPECT_THROW(loadFromYaml("17", ReadBoundedLongFromNodeOrDefault, 0, 16, 4), winrt::hresult_invalid_argument);
+  EXPECT_THROW(loadFromYaml("-1", ReadBoundedLongFromNodeOrDefault, 0, 16, 4), winrt::hresult_invalid_argument);
+  EXPECT_THROW(loadFromYaml("invalid", ReadBoundedLongFromNodeOrDefault, 0, 16, 4), winrt::hresult_invalid_argument);
+}
+
 
 // ---[ Float ]--------------------------------------------
 

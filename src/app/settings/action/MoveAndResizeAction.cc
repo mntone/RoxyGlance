@@ -18,10 +18,12 @@ AbsoluteMoveAndResizeAction::AbsoluteMoveAndResizeAction(c4::yml::NodeRef node)
 
 RelativeMoveAndResizeAction::RelativeMoveAndResizeAction(c4::yml::NodeRef node)
   : node_(std::move(node))
+  , name_(ReadStringAndCompareTypeFromNode(node_[key::kMonitorName]))
   , window_bounds_(numeric::float4::make(
     ReadBoundedFloatFromNodeOrDefault(node_[key::kPosX], 0.f, 1.f, 0.5f),
     ReadBoundedFloatFromNodeOrDefault(node_[key::kPosY], 0.f, 1.f, 0.5f),
     ReadBoundedFloatFromNodeOrDefault(node_[key::kWidth], 0.f, 1.f, 1.f),
     ReadBoundedFloatFromNodeOrDefault(node_[key::kHeight], 0.f, 1.f, 1.f)
-  )) {
+  ))
+  , id_(ReadBoundedIntFromNodeOrDefault(node_[key::kMonitorId], 1, 16, 0)) {
 }

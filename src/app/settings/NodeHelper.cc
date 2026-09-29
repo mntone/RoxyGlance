@@ -37,6 +37,22 @@ long settings::ReadBoundedLongFromNode(c4::yml::ConstNodeRef node, long min_val,
   return val;
 }
 
+long settings::ReadBoundedLongFromNodeOrDefault(c4::yml::ConstNodeRef node, long min_val, long max_val, long def_val) {
+  if (node.invalid() || !node.has_val()) {
+    return def_val;
+  }
+
+  long val;
+  auto check_val = c4::fmt::overflow_checked(val);
+  if (!c4::yml::read(node, &check_val)) {
+    throw winrt::hresult_invalid_argument(message::kInvalidNumberMessage);
+  }
+  if (val < min_val || max_val < val) {
+    throw winrt::hresult_invalid_argument(winrt::format(message::kValueOutOfRangeMessage, val));
+  }
+  return val;
+}
+
 float settings::ReadFloatFromNode(c4::yml::ConstNodeRef node) {
   if (node.invalid() || !node.has_val()) {
     throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);

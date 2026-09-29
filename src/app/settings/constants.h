@@ -10,6 +10,7 @@ namespace key {
 inline constexpr c4::csubstr kRules = "rules";  // std::vector<Rule>
 
 // rules[].*
+inline constexpr c4::csubstr kName = "name";
 inline constexpr c4::csubstr kWhen = "when";    // TriggerType
 inline constexpr c4::csubstr kWhere = "where";  // Filter
 inline constexpr c4::csubstr kThen = "then";    // Action
@@ -20,8 +21,9 @@ inline constexpr c4::csubstr kWindowClassKey = "class";
 inline constexpr c4::csubstr kWindowTitleKey = "title";
 
 // rules[].then.*
-inline constexpr c4::csubstr kName = "name";
 inline constexpr c4::csubstr kType = "type";
+inline constexpr c4::csubstr kMonitorId = "id";
+inline constexpr c4::csubstr kMonitorName = "name";
 inline constexpr c4::csubstr kPosX = "x";
 inline constexpr c4::csubstr kPosY = "y";
 inline constexpr c4::csubstr kWidth = "width";

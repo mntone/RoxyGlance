@@ -17,11 +17,13 @@ OperationSet compiler::CompileAction(settings::Actions const& actions) {
     {
       auto const& detail = settings::action::AbsoluteMoveAndResizeAction(action.node());
       operations.emplace_back(std::make_shared<AbsoluteMoveAndResizeOperation>(detail.windowBounds()));
+      break;
     }
     case AT::kRelativeMoveAndResize:
     {
       auto const& detail = settings::action::RelativeMoveAndResizeAction(action.node());
       operations.emplace_back(std::make_shared<RelativeMoveAndResizeOperation>(detail.windowBounds()));
+      break;
     }
     default:
       break;

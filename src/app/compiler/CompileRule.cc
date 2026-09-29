@@ -18,7 +18,7 @@ RuleSet compiler::CompileRule(settings::UserSettingsDocument const& settings) {
   for (auto const& rule : root->rules()) {
     OperationSet operations{CompileAction(rule.actions())};
     if (operations.empty()) {
-      break;
+      continue;
     }
 
     PredicateSet predicates{filter::CompileFilter(rule.filter())};

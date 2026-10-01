@@ -9,12 +9,12 @@
   <Identity
     Name="d2722275-f973-4bff-882e-5e318cc0c571"
     Publisher="CN=mntone"
-    Version="1.0.0.0" />
+    Version="0.1.0.0" />
   <mp:PhoneIdentity PhoneProductId="d2722275-f973-4bff-882e-5e318cc0c571" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
   <Properties>
     <DisplayName>Roxy Glance</DisplayName>
     <PublisherDisplayName>mntone</PublisherDisplayName>
-    <Logo>Assets\StoreLogo.png</Logo>
+    <Logo>Assets\Store.png</Logo>
   </Properties>
   <Dependencies>
     <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.17763.0" MaxVersionTested="10.0.26226.0" />
@@ -31,9 +31,18 @@
         DisplayName="Roxy Glance"
         Description="Roxy Glance"
         BackgroundColor="transparent"
-        Square150x150Logo="Assets\Square150x150Logo.png"
-        Square44x44Logo="Assets\Square44x44Logo.png">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
+        Square150x150Logo="Assets\TileM.png"
+        Square44x44Logo="Assets\Icon.png">
+        <uap:DefaultTile
+          Square71x71Logo="Assets\TileS.png"
+          Square310x310Logo="Assets\TileL.png"
+          Wide310x150Logo="Assets\TileW.png">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="square150x150Logo"/>
+            <uap:ShowOn Tile="square310x310Logo"/>
+            <uap:ShowOn Tile="wide310x150Logo"/>
+          </uap:ShowNameOnTiles>
+        </uap:DefaultTile >
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
     </Application>

@@ -81,6 +81,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AppDelegate.h" />
+    <ClInclude Include="AppResource.h" />
     <ClInclude Include="compiler\CompilationContext.h" />
     <ClInclude Include="compiler\CompileAction.h" />
     <ClInclude Include="compiler\CompileRule.h" />

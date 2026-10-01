@@ -2,6 +2,7 @@
 #include "MessageWindow.h"
 #include "MessageWindowResource.h"
 
+#include "../AppResource.h"
 #include "../win32/hresult.h"
 
 namespace {
@@ -26,6 +27,7 @@ Window::Window() noexcept
   , hinstance_(nullptr)
   , tray_icon_{
     kMessageWindowMessageTrayCommand,
+    LoadIconW(GetModuleHandleW(nullptr), MAKEINTRESOURCE(icon::kAppMain)),
   } {
 }
 

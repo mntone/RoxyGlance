@@ -55,25 +55,160 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Assets\Wide310x150Logo.scale-200.png">
+    <Image Include="Assets\Icon.scale-100.png">
       <Filter>Assets</Filter>
     </Image>
-    <Image Include="Assets\StoreLogo.png">
+    <Image Include="Assets\Icon.scale-125.png">
       <Filter>Assets</Filter>
     </Image>
-    <Image Include="Assets\Square150x150Logo.scale-200.png">
+    <Image Include="Assets\Icon.scale-150.png">
       <Filter>Assets</Filter>
     </Image>
-    <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
+    <Image Include="Assets\Icon.scale-200.png">
       <Filter>Assets</Filter>
     </Image>
-    <Image Include="Assets\Square44x44Logo.scale-200.png">
+    <Image Include="Assets\Icon.scale-225.png">
       <Filter>Assets</Filter>
     </Image>
-    <Image Include="Assets\SplashScreen.scale-200.png">
+    <Image Include="Assets\Icon.scale-250.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.scale-300.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.scale-400.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.scale-500.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-16.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-16_altform-unplated.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-20.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-20_altform-unplated.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-24.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-24_altform-unplated.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-28.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-28_altform-unplated.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-32.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-32_altform-unplated.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-36.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-36_altform-unplated.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-40.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-40_altform-unplated.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-48.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-48_altform-unplated.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-64.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-64_altform-unplated.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-256.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Icon.targetsize-256_altform-unplated.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SplashScreen.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Store.scale-100.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Store.scale-125.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Store.scale-150.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Store.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Store.scale-225.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Store.scale-250.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Store.scale-300.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Store.scale-400.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Store.scale-500.png">
       <Filter>Assets</Filter>
     </Image>
     <Image Include="Assets\LockScreenLogo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\TileL.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\TileM.scale-100.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\TileM.scale-125.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\TileM.scale-150.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\TileM.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\TileM.scale-225.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\TileM.scale-250.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\TileM.scale-300.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\TileM.scale-400.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\TileM.scale-500.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\TileS.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\TileW.png">
       <Filter>Assets</Filter>
     </Image>
   </ItemGroup>

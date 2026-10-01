@@ -4,9 +4,16 @@
 #include "Views.MainWindow.g.cpp"
 #endif
 
+#include <winrt/Microsoft.UI.Interop.h>
+#include <winrt/Microsoft.UI.Windowing.h>
+
+#include "../../app/AppResource.h"
+
 namespace winrt {
 using namespace ::winrt::Windows::Foundation;
 
+using namespace ::winrt::Microsoft::UI;
+using namespace ::winrt::Microsoft::UI::Windowing;
 using namespace ::winrt::Microsoft::UI::Xaml;
 
 namespace impl {
@@ -17,6 +24,9 @@ using namespace ::winrt::Mntone::RoxyGlance::Views::implementation;
 
 winrt::impl::MainWindow::MainWindow() noexcept
   : Logs_(nullptr) {
+  HICON const hIcon{LoadIconW(GetModuleHandleW(nullptr), MAKEINTRESOURCE(roxyg::icon::kAppMain))};
+  IconId const iconId{GetIconIdFromIcon(hIcon)};
+  AppWindow().SetIcon(iconId);
 }
 
 void winrt::impl::MainWindow::MainWindow_Closed(

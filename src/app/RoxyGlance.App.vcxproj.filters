@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppDelegate.h" />
+    <ClInclude Include="AppResource.h" />
     <ClInclude Include="compiler\CompilationContext.h">
       <Filter>compiler</Filter>
     </ClInclude>

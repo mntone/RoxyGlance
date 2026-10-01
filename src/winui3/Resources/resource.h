@@ -26,6 +26,7 @@
 #define VER_PRODUCT_VERSION_STRING  "0.0.0-unknown"
 #endif
 
+#include "../../app/AppResource.h"                    // 101 is reserved.
 #include "../../app/message/MessageWindowResource.h"  // 103, 403xx is reserved.
 
 // Next default values for new objects

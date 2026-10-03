@@ -73,12 +73,12 @@ detail::TrayIconBase::~TrayIconBase() noexcept {
 #endif
 
 winrt::hresult detail::TrayIconBase::attach(TrayIconConfig const config, HWND hwnd, bool force) noexcept {
-  HWND attached_hwnd{hwnd_};
+  HWND const attached_hwnd{hwnd_};
+  if (attached_hwnd && attached_hwnd != hwnd) {
+    logger_.error(winrt::hstring{kTrayIconAttachWindowMismatch}, E_UNEXPECTED);
+    return E_UNEXPECTED;
+  }
   if (!force && attached_hwnd) {
-    if (attached_hwnd != hwnd) {
-      logger_.error(winrt::hstring{kTrayIconAttachWindowMismatch}, E_UNEXPECTED);
-      return E_UNEXPECTED;
-    }
     return S_OK;
   }
 

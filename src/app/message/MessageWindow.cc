@@ -9,6 +9,7 @@ namespace {
 
 inline constexpr UINT kMessageWindowMessageTrayCommand = WM_APP + 1;
 inline constexpr wchar_t kMessageWindowClass[] = L"Mntone.RoxyGlance.MessageWindow";
+inline constexpr std::wstring_view kMessageWindowTrayMessage = L"Roxy Glance";
 
 }
 
@@ -28,6 +29,8 @@ Window::Window() noexcept
   , tray_icon_{
     kMessageWindowMessageTrayCommand,
     LoadIconW(GetModuleHandleW(nullptr), MAKEINTRESOURCE(icon::kAppMain)),
+    kMessageWindowTrayMessage.data(),
+    kMessageWindowTrayMessage.size(),
   } {
 }
 

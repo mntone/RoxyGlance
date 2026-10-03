@@ -57,18 +57,24 @@ using namespace roxyg::win32;
 
 thread_local TrayIcon* TrayIcon::that_{nullptr};
 
-TrayIcon::TrayIcon(UINT cbmsg, HICON hicon, UINT flags) noexcept
+TrayIcon::TrayIcon(UINT cbmsg, HICON hicon, wchar_t const* message_ptr, size_t message_len, UINT flags) noexcept
   : hwnd_(nullptr)
   , hicon_(hicon)
+  , message_ptr_(message_ptr)
+  , message_len_(message_len)
   , hhook_(nullptr)
   , cbmsg_(cbmsg)
   , flags_(flags) {
+  ROXYG_UNCHECKED_ASSERT(message_len < (sizeof(NOTIFYICONDATAW::szTip) / sizeof(WCHAR)));
 }
 TrayIcon::TrayIcon(UINT cbmsg) noexcept
-  : TrayIcon(cbmsg, nullptr, NIF_MESSAGE) {
+  : TrayIcon(cbmsg, nullptr, nullptr, 0, NIF_MESSAGE) {
 }
 TrayIcon::TrayIcon(UINT cbmsg, HICON hicon) noexcept
-  : TrayIcon(cbmsg, hicon, NIF_MESSAGE | NIF_ICON) {
+  : TrayIcon(cbmsg, hicon, nullptr, 0, NIF_MESSAGE | NIF_ICON) {
+}
+TrayIcon::TrayIcon(UINT cbmsg, HICON hicon, wchar_t const* message_ptr, size_t message_len) noexcept
+  : TrayIcon(cbmsg, hicon, message_ptr, message_len, NIF_MESSAGE | NIF_ICON | NIF_TIP | NIF_SHOWTIP) {
 }
 
 #if _DEBUG
@@ -106,6 +112,11 @@ winrt::hresult TrayIcon::attach(HWND hwnd) noexcept {
     .szInfo = 0,
   };
   data.uVersion = NOTIFYICON_VERSION_4;
+
+  if (message_ptr_) {
+    errno_t const err = wcsncpy_s(data.szTip, message_ptr_, message_len_);
+    ROXYG_UNCHECKED_ASSERT(err != EINVAL && err != ERANGE);
+  }
 
   BOOL rc = Shell_NotifyIconW(NIM_ADD, &data);
   if (rc == FALSE) [[unlikely]] {

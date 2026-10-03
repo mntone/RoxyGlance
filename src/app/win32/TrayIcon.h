@@ -17,12 +17,14 @@ class TrayIcon final {
 public:
   explicit TrayIcon(UINT cbmsg) noexcept;
   explicit TrayIcon(UINT cbmsg, HICON hicon) noexcept;
+  TrayIcon(UINT cbmsg, HICON hicon, std::nullptr_t, size_t message_len) = delete;
+  explicit TrayIcon(UINT cbmsg, HICON hicon, wchar_t const* message_ptr, size_t message_len) noexcept;
 #if _DEBUG
   ~TrayIcon() noexcept;
 #endif
 
 private:
-  explicit TrayIcon(UINT cbmsg, HICON hicon, UINT flags) noexcept;
+  explicit TrayIcon(UINT cbmsg, HICON hicon, wchar_t const* message_ptr, size_t message_len, UINT flags) noexcept;
 
 public:
   /// <summary>
@@ -57,6 +59,8 @@ private:
 private:
   HWND hwnd_;
   HICON const hicon_;
+  wchar_t const* const message_ptr_;
+  size_t const message_len_;
   HHOOK hhook_;
   UINT const cbmsg_, flags_;
   mutable logging::LogHelper<logging::LogGroup::kWin32> logger_;

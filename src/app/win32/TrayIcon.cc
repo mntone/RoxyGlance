@@ -56,37 +56,23 @@ inline constexpr std::wstring_view kTrayIconShowMenuFailed
 
 using namespace roxyg::win32;
 
-thread_local TrayIcon* TrayIcon::that_{nullptr};
+thread_local detail::TrayIconBase* detail::TrayIconBase::that_{nullptr};
 
-UINT TrayIcon::kTaskbarCreatedWindowCommand{WM_NULL};
+UINT detail::TrayIconBase::kTaskbarCreatedWindowCommand{WM_NULL};
 
-TrayIcon::TrayIcon(UINT cbmsg, HICON hicon, wchar_t const* message_ptr, size_t message_len, UINT flags) noexcept
+detail::TrayIconBase::TrayIconBase() noexcept
   : hwnd_(nullptr)
-  , hicon_(hicon)
-  , message_ptr_(message_ptr)
-  , message_len_(message_len)
   , hhook_(nullptr)
-  , cbmsg_(cbmsg)
-  , flags_(flags) {
-  ROXYG_UNCHECKED_ASSERT(message_len < (sizeof(NOTIFYICONDATAW::szTip) / sizeof(WCHAR)));
-}
-TrayIcon::TrayIcon(UINT cbmsg) noexcept
-  : TrayIcon(cbmsg, nullptr, nullptr, 0, NIF_MESSAGE) {
-}
-TrayIcon::TrayIcon(UINT cbmsg, HICON hicon) noexcept
-  : TrayIcon(cbmsg, hicon, nullptr, 0, NIF_MESSAGE | NIF_ICON) {
-}
-TrayIcon::TrayIcon(UINT cbmsg, HICON hicon, wchar_t const* message_ptr, size_t message_len) noexcept
-  : TrayIcon(cbmsg, hicon, message_ptr, message_len, NIF_MESSAGE | NIF_ICON | NIF_TIP | NIF_SHOWTIP) {
+  , logger_() {
 }
 
 #if _DEBUG
-TrayIcon::~TrayIcon() noexcept {
+detail::TrayIconBase::~TrayIconBase() noexcept {
   assert(hwnd_ == nullptr);
 }
 #endif
 
-winrt::hresult TrayIcon::attach(HWND hwnd, bool force) noexcept {
+winrt::hresult detail::TrayIconBase::attach(TrayIconConfig const config, HWND hwnd, bool force) noexcept {
   HWND attached_hwnd{hwnd_};
   if (!force && attached_hwnd) {
     if (attached_hwnd != hwnd) {
@@ -96,7 +82,7 @@ winrt::hresult TrayIcon::attach(HWND hwnd, bool force) noexcept {
     return S_OK;
   }
 
-  TrayIcon const* current_that{that_};
+  TrayIconBase const* current_that{that_};
   if (current_that != nullptr && current_that != this) {
     logger_.error(winrt::hstring{kTrayIconAttachAlreadyExists}, hresult::kErrorAlreadyExists);
     return hresult::kErrorAlreadyExists;
@@ -106,9 +92,9 @@ winrt::hresult TrayIcon::attach(HWND hwnd, bool force) noexcept {
     .cbSize = sizeof(NOTIFYICONDATAW),
     .hWnd = hwnd,
     .uID = kTrayIconId,
-    .uFlags = flags_,
-    .uCallbackMessage = cbmsg_,
-    .hIcon = hicon_,
+    .uFlags = config.flags,
+    .uCallbackMessage = config.callback_message,
+    .hIcon = config.icon_handle,
     .szTip = 0,
     .dwState = 0,
     .dwStateMask = 0,
@@ -116,8 +102,8 @@ winrt::hresult TrayIcon::attach(HWND hwnd, bool force) noexcept {
   };
   data.uVersion = NOTIFYICON_VERSION_4;
 
-  if (message_ptr_) {
-    errno_t const err = wcsncpy_s(data.szTip, message_ptr_, message_len_);
+  if (config.message_ptr) {
+    errno_t const err = wcsncpy_s(data.szTip, config.message_ptr, config.message_len);
     ROXYG_UNCHECKED_ASSERT(err != EINVAL && err != ERANGE);
   }
 
@@ -145,13 +131,13 @@ winrt::hresult TrayIcon::attach(HWND hwnd, bool force) noexcept {
   return S_OK;
 }
 
-winrt::hresult TrayIcon::detach() noexcept {
+winrt::hresult detail::TrayIconBase::detach() noexcept {
   HWND attached_hwnd{hwnd_};
   if (!attached_hwnd) {
     return S_OK;
   }
 
-  TrayIcon const* current_that{that_};
+  TrayIconBase const* current_that{that_};
   if (current_that == nullptr || current_that != this) {
     logger_.error(winrt::hstring{kTrayIconDetachInvalidOperation}, hresult::kErrorInvalidOperation);
     return hresult::kErrorInvalidOperation;
@@ -174,7 +160,7 @@ winrt::hresult TrayIcon::detach() noexcept {
   return S_OK;
 }
 
-winrt::hresult TrayIcon::restoreFocusToNotificationArea() const noexcept {
+winrt::hresult detail::TrayIconBase::restoreFocusToNotificationArea() const noexcept {
   NOTIFYICONDATAWSubset data{
     sizeof(NOTIFYICONDATAWSubset),
     hwnd_,
@@ -189,8 +175,8 @@ winrt::hresult TrayIcon::restoreFocusToNotificationArea() const noexcept {
   return S_OK;
 }
 
-LRESULT __stdcall TrayIcon::menuMessageProc(int code, WPARAM wparam, LPARAM lparam) noexcept {
-  TrayIcon const* that{that_};
+LRESULT __stdcall detail::TrayIconBase::menuMessageProc(int code, WPARAM wparam, LPARAM lparam) noexcept {
+  TrayIconBase const* that{that_};
   if (!that) [[unlikely]] {
     return 0;
   }
@@ -204,7 +190,7 @@ LRESULT __stdcall TrayIcon::menuMessageProc(int code, WPARAM wparam, LPARAM lpar
   return CallNextHookEx(that->hhook_, code, wparam, lparam);
 }
 
-winrt::hresult TrayIcon::tryUnhookMessageProc(HHOOK const hhook) noexcept {
+winrt::hresult detail::TrayIconBase::tryUnhookMessageProc(HHOOK const hhook) noexcept {
   ROXYG_UNCHECKED_ASSERT(hhook);
 
   BOOL const rc = UnhookWindowsHookEx(hhook);
@@ -222,7 +208,7 @@ winrt::hresult TrayIcon::tryUnhookMessageProc(HHOOK const hhook) noexcept {
   return S_OK;
 }
 
-winrt::hresult TrayIcon::showMenu(HMENU hmenu, HWND hwnd, WPARAM wparam, DWORD thread_id) noexcept {
+winrt::hresult detail::TrayIconBase::showMenu(HMENU hmenu, HWND hwnd, WPARAM wparam, DWORD thread_id) noexcept {
   ROXYG_UNCHECKED_ASSERT(hmenu);
 #if _DEBUG
   assert(IsMenu(hmenu));
@@ -276,12 +262,12 @@ winrt::hresult TrayIcon::showMenu(HMENU hmenu, HWND hwnd, WPARAM wparam, DWORD t
 }
 
 #if _DEBUG
-void TrayIcon::validateIconId(LPARAM lparam) const noexcept {
+void detail::TrayIconBase::validateIconId(LPARAM lparam) const noexcept {
   assert(static_cast<UINT>(HIWORD(lparam)) == kTrayIconId);
 }
 #endif
 
-winrt::hresult TrayIcon::initialize() noexcept {
+winrt::hresult detail::TrayIconBase::initialize() noexcept {
   if (kTaskbarCreatedWindowCommand != WM_NULL) {
     return S_OK;
   }

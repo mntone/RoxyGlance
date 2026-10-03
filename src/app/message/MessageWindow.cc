@@ -2,13 +2,9 @@
 #include "MessageWindow.h"
 #include "MessageWindowResource.h"
 
-#include "../AppResource.h"
 #include "../win32/hresult.h"
 
 namespace {
-
-inline constexpr UINT kMessageWindowMessageTrayCommand = WM_APP + 1;
-inline constexpr std::wstring_view kMessageWindowTrayMessage = L"Roxy Glance";
 
 inline constexpr roxyg::win32::WindowStartParams kMessageWindowStartParams{
   .class_name = L"Mntone.RoxyGlance.MessageWindow",
@@ -31,13 +27,7 @@ detail::unique_hmenu Window::hmenu_{nullptr};
 
 Window::Window() noexcept
   : WindowController()
-  , hinstance_(nullptr)
-  , tray_icon_{
-    kMessageWindowMessageTrayCommand,
-    LoadIconW(GetModuleHandleW(nullptr), MAKEINTRESOURCE(icon::kAppMain)),
-    kMessageWindowTrayMessage.data(),
-    kMessageWindowTrayMessage.size(),
-  } {
+  , tray_icon_() {
 }
 
 winrt::hresult Window::initialize() noexcept {
@@ -45,18 +35,18 @@ winrt::hresult Window::initialize() noexcept {
     return S_OK;
   }
 
-  winrt::hresult hr = win32::TrayIcon::initialize();
-  if (FAILED(hr)) {
-    return hr;
-  }
-
-  hr = WindowController::initialize();
+  winrt::hresult hr = WindowController::initialize();
   if (FAILED(hr)) {
     return hr;
   }
 
   HINSTANCE const hinstance{hInstance()};
   ROXYG_UNCHECKED_ASSERT(hinstance);
+
+  hr = TrayIcon::initialize(hinstance);
+  if (FAILED(hr)) {
+    return hr;
+  }
 
   HMENU const hmenu = LoadMenuW(hinstance, MAKEINTRESOURCEW(menu::kTray));
   if (!hmenu) {
@@ -73,7 +63,7 @@ winrt::hresult Window::start() noexcept {
 
 LRESULT Window::windowProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) noexcept {
   switch (message) {
-  case kMessageWindowMessageTrayCommand:
+  case detail::kMessageWindowMessageTrayCommand:
 #if _DEBUG
     tray_icon_.validateIconId(lparam);
 #endif
@@ -123,7 +113,7 @@ LRESULT Window::windowProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam
     return 0;
   }
 
-  if (message == win32::TrayIcon::kTaskbarCreatedWindowCommand) {
+  if (message == TrayIcon::kTaskbarCreatedWindowCommand) {
     tray_icon_.attach(hwnd, /* force= */ true);
     return 0;
   }

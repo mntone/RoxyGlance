@@ -12,9 +12,9 @@ inline constexpr std::wstring_view kMessageWindowTrayMessage = L"Roxy Glance";
 
 inline constexpr roxyg::win32::WindowStartParams kMessageWindowStartParams{
   .class_name = L"Mntone.RoxyGlance.MessageWindow",
-  .parent_hwnd = HWND_MESSAGE,
-  .window_exstyle = 0,
-  .window_style = 0,
+  .parent_hwnd = nullptr,
+  .window_exstyle = WS_EX_NOPARENTNOTIFY | WS_EX_NOREDIRECTIONBITMAP | WS_EX_NOACTIVATE,
+  .window_style = WS_POPUP | WS_DISABLED,
 };
 
 }
@@ -45,7 +45,12 @@ winrt::hresult Window::initialize() noexcept {
     return S_OK;
   }
 
-  winrt::hresult hr = WindowController::initialize();
+  winrt::hresult hr = win32::TrayIcon::initialize();
+  if (FAILED(hr)) {
+    return hr;
+  }
+
+  hr = WindowController::initialize();
   if (FAILED(hr)) {
     return hr;
   }
@@ -115,6 +120,11 @@ LRESULT Window::windowProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam
   }
   case WM_CLOSE:
     DestroyWindow(hwnd);
+    return 0;
+  }
+
+  if (message == win32::TrayIcon::kTaskbarCreatedWindowCommand) {
+    tray_icon_.attach(hwnd, /* force= */ true);
     return 0;
   }
   return DefWindowProcW(hwnd, message, wparam, lparam);

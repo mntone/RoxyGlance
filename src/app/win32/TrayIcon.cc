@@ -22,6 +22,7 @@ static ROXYG_ALWAYS_INLINE constexpr POINT LongPtrToPoint(LONG_PTR lparam) noexc
 namespace {
 
 inline constexpr UINT kTrayIconId = 1;
+inline constexpr wchar_t kTaskbarCreatedCommandName[] = L"TaskbarCreated";
 
 inline constexpr std::wstring_view kTrayIconAttachWindowMismatch
   = L"Failed to attach the tray icon because it is already attached to a different window.";
@@ -57,6 +58,8 @@ using namespace roxyg::win32;
 
 thread_local TrayIcon* TrayIcon::that_{nullptr};
 
+UINT TrayIcon::kTaskbarCreatedWindowCommand{WM_NULL};
+
 TrayIcon::TrayIcon(UINT cbmsg, HICON hicon, wchar_t const* message_ptr, size_t message_len, UINT flags) noexcept
   : hwnd_(nullptr)
   , hicon_(hicon)
@@ -83,9 +86,9 @@ TrayIcon::~TrayIcon() noexcept {
 }
 #endif
 
-winrt::hresult TrayIcon::attach(HWND hwnd) noexcept {
+winrt::hresult TrayIcon::attach(HWND hwnd, bool force) noexcept {
   HWND attached_hwnd{hwnd_};
-  if (attached_hwnd) {
+  if (!force && attached_hwnd) {
     if (attached_hwnd != hwnd) {
       logger_.error(winrt::hstring{kTrayIconAttachWindowMismatch}, E_UNEXPECTED);
       return E_UNEXPECTED;
@@ -277,3 +280,17 @@ void TrayIcon::validateIconId(LPARAM lparam) const noexcept {
   assert(static_cast<UINT>(HIWORD(lparam)) == kTrayIconId);
 }
 #endif
+
+winrt::hresult TrayIcon::initialize() noexcept {
+  if (kTaskbarCreatedWindowCommand != WM_NULL) {
+    return S_OK;
+  }
+
+  UINT const taskbar_created{RegisterWindowMessageW(kTaskbarCreatedCommandName)};
+  if (taskbar_created == WM_NULL) {
+    return win32::hresult::LastErrorAsHResult();
+  }
+
+  kTaskbarCreatedWindowCommand = taskbar_created;
+  return S_OK;
+}

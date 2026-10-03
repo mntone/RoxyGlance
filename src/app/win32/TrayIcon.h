@@ -31,8 +31,9 @@ public:
   /// Adds the icon to the notification area and associates it with the given window.
   /// </summary>
   /// <param name="hwnd">The window that receives the tray icon's callback message.</param>
+  /// <param name="force">Whether to issue NIM_ADD even if the icon is already attached.</param>
   /// <returns>S_OK on success or if already attached to <paramref name="hwnd"/>, or a failure HRESULT.</returns>
-  winrt::hresult attach(HWND hwnd) noexcept;
+  winrt::hresult attach(HWND hwnd, bool force = false) noexcept;
 
   /// <summary>
   /// Removes the icon from the notification area.
@@ -51,6 +52,8 @@ public:
     logger_.setLogger(logger);
   }
 
+  [[nodiscard]] static winrt::hresult initialize() noexcept;
+
 private:
   winrt::hresult tryUnhookMessageProc(HHOOK const hhook) noexcept;
 
@@ -66,6 +69,9 @@ private:
   mutable logging::LogHelper<logging::LogGroup::kWin32> logger_;
 
   static thread_local TrayIcon* that_;
+
+public:
+  static UINT kTaskbarCreatedWindowCommand;
 };
 
 }

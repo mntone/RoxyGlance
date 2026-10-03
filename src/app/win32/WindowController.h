@@ -5,13 +5,19 @@
 
 namespace roxyg::win32 {
 
+struct WindowStartParams final {
+  wchar_t const* class_name;
+  HWND parent_hwnd;
+  DWORD window_exstyle, window_style;
+};
+
 class WindowController
   : public MessageLoopThreadController {
 protected:
   WindowController() noexcept;
   WindowController(std::nullptr_t) = delete;
 
-  [[nodiscard]] winrt::hresult start(wchar_t const* class_name) noexcept;
+  [[nodiscard]] winrt::hresult start(WindowStartParams const& params) noexcept;
 
   BOOL postStopMessage(intptr_t target) noexcept override final;
 

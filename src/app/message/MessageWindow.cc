@@ -8,8 +8,14 @@
 namespace {
 
 inline constexpr UINT kMessageWindowMessageTrayCommand = WM_APP + 1;
-inline constexpr wchar_t kMessageWindowClass[] = L"Mntone.RoxyGlance.MessageWindow";
 inline constexpr std::wstring_view kMessageWindowTrayMessage = L"Roxy Glance";
+
+inline constexpr roxyg::win32::WindowStartParams kMessageWindowStartParams{
+  .class_name = L"Mntone.RoxyGlance.MessageWindow",
+  .parent_hwnd = HWND_MESSAGE,
+  .window_exstyle = 0,
+  .window_style = 0,
+};
 
 }
 
@@ -57,7 +63,7 @@ winrt::hresult Window::initialize() noexcept {
 }
 
 winrt::hresult Window::start() noexcept {
-  return win32::WindowController::start(kMessageWindowClass);
+  return win32::WindowController::start(kMessageWindowStartParams);
 }
 
 LRESULT Window::windowProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) noexcept {

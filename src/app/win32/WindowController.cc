@@ -57,8 +57,8 @@ static LRESULT __stdcall WindowProc(HWND hwnd, UINT message, WPARAM wparam, LPAR
 struct WindowThreadContext final: public ThreadContext {
   std::atomic<HWND> atomic_hwnd;
   HINSTANCE const hinstance;
-  wchar_t const* const class_name;
   void* const controller;
+  WindowStartParams const& params;
 
   ROXYG_ALWAYS_INLINE HWND hWnd() const noexcept {
     return atomic_hwnd.load(std::memory_order_acquire);
@@ -80,10 +80,10 @@ static unsigned int __stdcall WindowWorker(void* p) noexcept {
     .cbWndExtra = 0,
     .hInstance = ctx.hinstance,
     .hIcon = nullptr,
-    .hCursor = LoadCursorW(nullptr, IDC_ARROW),
+    .hCursor = nullptr,
     .hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1),
     .lpszMenuName = nullptr,
-    .lpszClassName = ctx.class_name,
+    .lpszClassName = ctx.params.class_name,
     .hIconSm = nullptr,
   };
   if (RegisterClassExW(&wcex) == 0) {
@@ -91,19 +91,19 @@ static unsigned int __stdcall WindowWorker(void* p) noexcept {
   }
 
   HWND const hwnd = CreateWindowExW(
-    0,
-    ctx.class_name,
+    ctx.params.window_exstyle,
+    ctx.params.class_name,
     L"",
-    0,
+    ctx.params.window_style,
     CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-    HWND_MESSAGE,
+    ctx.params.parent_hwnd,
     nullptr,
     ctx.hinstance,
     ctx.controller
   );
   if (!hwnd) {
     winrt::hresult const hr{hresult::LastErrorAsHResult()};
-    [[maybe_unused]] BOOL const rc = UnregisterClassW(ctx.class_name, ctx.hinstance);
+    [[maybe_unused]] BOOL const rc = UnregisterClassW(ctx.params.class_name, ctx.hinstance);
     ctx.notify(hr);
     _endthreadex(EXIT_FAILURE);
     return 0;
@@ -158,15 +158,15 @@ winrt::hresult WindowController::initialize() noexcept {
   return S_OK;
 }
 
-winrt::hresult WindowController::start(wchar_t const* class_name) noexcept {
+winrt::hresult WindowController::start(WindowStartParams const& params) noexcept {
   HINSTANCE const hinstance{hinstance_};
   ROXYG_UNCHECKED_ASSERT(hinstance);
 
   WindowThreadContext state{
     .atomic_hwnd = nullptr,
     .hinstance = hinstance,
-    .class_name = class_name,
     .controller = this,
+    .params = params,
   };
   ThreadInfo info;
   winrt::hresult hr = MessageLoopThreadController::start(WindowWorker, &state, &info);

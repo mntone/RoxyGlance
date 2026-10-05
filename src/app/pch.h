@@ -19,7 +19,6 @@
 #include <boost/circular_buffer.hpp>
 #include <boost/container/small_vector.hpp>
 #include <boost/container/static_vector.hpp>
-#include <boost/static_string.hpp>
 #include <boost/unordered/unordered_flat_map.hpp>
 #include <c4/std/std.hpp>
 #include <c4/yml/yml.hpp>

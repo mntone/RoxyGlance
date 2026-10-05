@@ -2,7 +2,6 @@
   "dependencies": [
     "boost-circular-buffer",
     "boost-container",
-    "boost-static-string",
     "boost-unordered",
     "gtest",
     "magic-enum",

@@ -5,7 +5,7 @@
 namespace roxyg::engine {
 
 struct Rule final {
-  OperationSet operations;
+  Operation operation;
   PredicateSet condition;
 };
 

@@ -34,9 +34,7 @@ void RuleEngine::checkRules(window::State& windowState) noexcept {
       }
     }
     if (matched) {
-      for (auto& operation : rule.operations) {
-        operation->execute(*ctx, windowState);
-      }
+      rule.operation->execute(*ctx, windowState);
     }
   }
 }

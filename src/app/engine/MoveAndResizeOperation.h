@@ -5,7 +5,7 @@
 
 namespace roxyg::engine {
 
-class AbsoluteMoveAndResizeOperation final: public Operation {
+class AbsoluteMoveAndResizeOperation final: public IOperation {
   AbsoluteMoveAndResizeOperation(AbsoluteMoveAndResizeOperation const&) = delete;
   AbsoluteMoveAndResizeOperation& operator=(AbsoluteMoveAndResizeOperation const&) = delete;
 
@@ -21,7 +21,7 @@ private:
   numeric::long4 const bounds_;
 };
 
-class RelativeMoveAndResizeOperation final: public Operation {
+class RelativeMoveAndResizeOperation final: public IOperation {
   RelativeMoveAndResizeOperation(RelativeMoveAndResizeOperation const&) = delete;
   RelativeMoveAndResizeOperation& operator=(RelativeMoveAndResizeOperation const&) = delete;
 

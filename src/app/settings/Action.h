@@ -25,6 +25,4 @@ private:
   ActionType type_;
 };
 
-using Actions = boost::container::small_vector<Action, 1>;
-
 }

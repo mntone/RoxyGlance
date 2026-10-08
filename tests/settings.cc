@@ -63,15 +63,15 @@ where:
   process: msedge.exe$
   title: ^Main Browser$
 then:
-  - type: relative_move_and_resize
-    width: 0.75
+  type: relative_move_and_resize
+  width: 0.75
 )";
   auto const rule = loadFromYaml<Rule>(yaml);
   EXPECT_EQ(rule.name(), L"Test Name"sv);
   EXPECT_EQ(rule.trigger(), TT::kApplicationInit | TT::kWindowShow);
   EXPECT_EQ(rule.filter().processImageName(), std::make_pair(CT::kEndsWith, L"msedge.exe"));
   EXPECT_EQ(rule.filter().windowTitle(), std::make_pair(CT::kEquals, L"Main Browser"));
-  EXPECT_EQ(rule.actions()[0].type(), AT::kRelativeMoveAndResize);
+  EXPECT_EQ(rule.action().type(), AT::kRelativeMoveAndResize);
 }
 
 }  // namespace test::roxyg::settings

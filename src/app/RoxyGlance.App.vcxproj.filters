@@ -282,9 +282,6 @@
     <ClCompile Include="engine\MoveAndResizeOperation.cc">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="engine\Operation.cc">
-      <Filter>engine</Filter>
-    </ClCompile>
     <ClCompile Include="engine\RuleEngine.cc">
       <Filter>engine</Filter>
     </ClCompile>

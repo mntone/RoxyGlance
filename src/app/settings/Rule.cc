@@ -69,30 +69,10 @@ static ROXYG_ALWAYS_INLINE Filter readFilter(c4::yml::NodeRef n) {
   return Filter{ n[key::kWhere] };
 }
 
-static ROXYG_ALWAYS_INLINE Actions readActions(c4::yml::NodeRef actions) {
-  if (actions.invalid()) {
-    return {};
-  }
-
-  Actions ret;
-  if (actions.is_seq()) {
-    size_t const actions_count = actions.num_children();
-    if (actions_count != 0) {
-      ret.reserve(actions_count);
-      for (c4::yml::NodeRef action : actions.children()) {
-        ret.emplace_back(action);
-      }
-    }
-  } else {
-    ret.emplace_back(actions);
-  }
-  return ret;
-}
-
 Rule::Rule(c4::yml::NodeRef node) noexcept
   : node_(std::move(node))
   , name_(ReadStringAsUtf16FromNode(node_[key::kName]))
   , filter_(readFilter(node_))
-  , actions_(readActions(node_[key::kThen]))
+  , action_(node_[key::kThen])
   , trigger_(readTriggers(node_[key::kWhen])) {
 }

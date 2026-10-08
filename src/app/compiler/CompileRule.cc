@@ -16,13 +16,13 @@ RuleSet compiler::CompileRule(CompilationContext& ctx, settings::UserSettingsDoc
 
   RuleSet rules;
   for (auto const& rule : root->rules()) {
-    OperationSet operations{CompileAction(ctx, rule.actions())};
-    if (operations.empty()) {
+    Operation operation{CompileAction(ctx, rule.action())};
+    if (!operation) {
       continue;
     }
 
     PredicateSet predicates{filter::CompileFilter(rule.filter())};
-    rules.emplace_back(std::move(operations), std::move(predicates));
+    rules.emplace_back(std::move(operation), std::move(predicates));
   }
   return std::move(rules);
 }

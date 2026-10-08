@@ -160,7 +160,6 @@
     <ClCompile Include="context\OperationContext.cc" />
     <ClCompile Include="debug\WindowEventLogAdapter.cc" />
     <ClCompile Include="engine\MoveAndResizeOperation.cc" />
-    <ClCompile Include="engine\Operation.cc" />
     <ClCompile Include="engine\RuleEngine.cc" />
     <ClCompile Include="logging\Logger.cc" />
     <ClCompile Include="logging\LogHelper.cc" />

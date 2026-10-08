@@ -22,14 +22,14 @@ public:
   [[nodiscard]] constexpr Filter& filter() noexcept { return filter_; }
   [[nodiscard]] constexpr Filter const& filter() const noexcept { return filter_; }
 
-  [[nodiscard]] constexpr Actions& actions() noexcept { return actions_; }
-  [[nodiscard]] constexpr Actions const& actions() const noexcept { return actions_; }
+  [[nodiscard]] constexpr Action& action() noexcept { return action_; }
+  [[nodiscard]] constexpr Action const& action() const noexcept { return action_; }
 
 private:
   c4::yml::NodeRef node_;
   std::wstring name_;
   Filter filter_;
-  Actions actions_;
+  Action action_;
   TriggerType trigger_;
 };
 

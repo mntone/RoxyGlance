@@ -8,12 +8,12 @@ struct State;
 
 namespace roxyg::engine {
 
-class Operation {
+class IOperation {
 public:
-  virtual ~Operation() noexcept = 0;
+  virtual ~IOperation() noexcept = default;
   [[nodiscard]] virtual winrt::hresult execute(OperationContext& ctx, window::State& windowState) noexcept = 0;
 };
 
-using OperationSet = boost::container::small_vector<std::shared_ptr<Operation>, 1>;
+using Operation = std::shared_ptr<IOperation>;
 
 }

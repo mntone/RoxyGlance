@@ -12,7 +12,7 @@ Currently, settings are loaded when Roxy Glance starts. Restart the app after ed
 
 ## Basic Structure
 
-Settings are defined as a list of rules. Each rule can specify a name, one or more triggers, window filters, and one or more actions.
+Settings are defined as a list of rules. Each rule can specify a name, one or more triggers, window filters, and one action.
 
 ```yaml
 rules:
@@ -21,11 +21,11 @@ rules:
     where:
       process: '^C:\Program Files\Example\example.exe$'
     then:
-      - type: absolute_move_and_resize
-        x: 0
-        y: 0
-        width: 1280
-        height: 720
+      type: absolute_move_and_resize
+      x: 0
+      y: 0
+      width: 1280
+      height: 720
 ```
 
 ## Rule Fields
@@ -37,7 +37,7 @@ Each item in `rules` is a rule. Its fields are:
 | `name` | Rule name | No name is set |
 | `when` | Trigger that causes the rule to run; specify one value or a list | No triggers are set, so the rule does not run |
 | `where` | Match Conditions that determine which windows the rule applies to | No conditions are specified |
-| `then` | Action to perform; specify one action or a list of actions | No actions are performed |
+| `then` | Action to perform | No action is performed |
 
 The order of fields within a rule does not affect how it is read. See [Triggers](#triggers), [Filters](#filters), and [Actions](#actions) for the supported values and details.
 
@@ -83,7 +83,7 @@ where:
 
 ## Actions
 
-Define a single action or a list of actions under `then`. Action type names are case-insensitive. The examples use a list.
+Define one action under `then`. Action type names are case-insensitive.
 
 ### Absolute Move and Resize
 
@@ -91,11 +91,11 @@ Use `absolute_move_and_resize` to set the window position and size in pixels. Th
 
 ```yaml
 then:
-  - type: absolute_move_and_resize
-    x: 0
-    y: 0
-    width: 1280
-    height: 720
+  type: absolute_move_and_resize
+  x: 0
+  y: 0
+  width: 1280
+  height: 720
 ```
 
 ### Relative Move and Resize
@@ -106,10 +106,10 @@ Use `relative_move_and_resize` to set the window position and size relative to a
 
 ```yaml
 then:
-  - type: relative_move_and_resize
-    id: 1
-    x: 0.0
-    y: 0.0
-    width: 1.0
-    height: 1.0
+  type: relative_move_and_resize
+  id: 1
+  x: 0.0
+  y: 0.0
+  width: 1.0
+  height: 1.0
 ```

@@ -44,4 +44,45 @@ TEST(StringConversion, RejectsTruncatedUtf8) {
   EXPECT_EQ(utf16, L"previous value");
 }
 
+TEST(StringConversion, ConvertsUtf16ToUtf8) {
+  std::wstring const utf16 = L"utf16to8\U0001F389";
+  std::string utf8;
+
+  EXPECT_EQ(ConvertUtf16ToUtf8(
+    utf16.data(), static_cast<int>(utf16.size()), utf8), S_OK);
+  EXPECT_EQ(utf8, "utf16to8\xF0\x9F\x8E\x89");
+}
+
+TEST(StringConversion, ConvertsEmptyUtf16ToEmptyUtf8) {
+  std::string utf8 = "previous value";
+
+  EXPECT_EQ(ConvertUtf16ToUtf8(L"", 0, utf8), S_OK);
+  EXPECT_TRUE(utf8.empty());
+}
+
+TEST(StringConversion, RejectsMalformedUtf16) {
+  std::wstring utf16;
+  utf16.push_back(static_cast<wchar_t>(0xD800));
+  utf16.push_back(L'x');
+  std::string utf8 = "previous value";
+
+  HRESULT const hr = ConvertUtf16ToUtf8(
+    utf16.data(), static_cast<int>(utf16.size()), utf8);
+
+  EXPECT_EQ(hr, HRESULT_FROM_WIN32(ERROR_NO_UNICODE_TRANSLATION));
+  EXPECT_EQ(utf8, "previous value");
+}
+
+TEST(StringConversion, RejectsTruncatedUtf16) {
+  std::wstring utf16;
+  utf16.push_back(static_cast<wchar_t>(0xD83C));
+  std::string utf8 = "previous value";
+
+  HRESULT const hr = ConvertUtf16ToUtf8(
+    utf16.data(), static_cast<int>(utf16.size()), utf8);
+
+  EXPECT_EQ(hr, HRESULT_FROM_WIN32(ERROR_NO_UNICODE_TRANSLATION));
+  EXPECT_EQ(utf8, "previous value");
+}
+
 }  // namespace test::roxyg::win32

@@ -51,3 +51,58 @@ winrt::hresult win32::ConvertUtf8ToUtf16(
   return S_OK;
 #endif
 }
+
+winrt::hresult win32::ConvertUtf16ToUtf8(
+  wchar_t const* utf16ptr,
+  int utf16len,
+  std::string& utf8
+) noexcept {
+  if (utf16len == 0) [[unlikely]] {
+    utf8.clear();
+    return S_OK;
+  }
+
+  size_t const utf8len = WideCharToMultiByte(
+    CP_UTF8, WC_ERR_INVALID_CHARS,
+    utf16ptr, utf16len,
+    nullptr, 0,
+    nullptr, nullptr
+  );
+  if (utf8len == 0) [[unlikely]] {
+    return hresult::LastErrorAsHResult();
+  }
+
+#if defined(__cpp_lib_string_resize_and_overwrite) && __cpp_lib_string_resize_and_overwrite >= 202110L
+  winrt::hresult hr = S_OK;
+  utf8.resize_and_overwrite(utf8len, [&hr, utf16ptr, utf16len](char* buf, size_t buf_size) noexcept {
+    int const written = WideCharToMultiByte(
+      CP_UTF8, WC_ERR_INVALID_CHARS,
+      utf16ptr, utf16len,
+      buf, static_cast<int>(buf_size),
+      nullptr, nullptr
+    );
+    if (written <= 0) {
+      hr = hresult::LastErrorAsHResult();
+      return 0;
+    }
+
+    return written;
+  });
+  return hr;
+#else
+  utf8.resize(utf8len);
+  int const written = WideCharToMultiByte(
+    CP_UTF8, WC_ERR_INVALID_CHARS,
+    utf16ptr, utf16len,
+    utf8.data(), utf8len,
+    nullptr, nullptr
+  );
+  if (written <= 0) {
+    utf8.resize(0);
+    return hresult::LastErrorAsHResult();
+  }
+
+  utf8.resize(written);
+  return S_OK;
+#endif
+}

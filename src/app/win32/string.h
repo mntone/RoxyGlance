@@ -8,4 +8,10 @@ winrt::hresult ConvertUtf8ToUtf16(
   std::wstring& utf16
 ) noexcept;
 
+winrt::hresult ConvertUtf16ToUtf8(
+  wchar_t const* utf16ptr,
+  int utf16len,
+  std::string& utf8
+) noexcept;
+
 }

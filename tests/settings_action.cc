@@ -51,12 +51,14 @@ height: 240
 
 TEST(RelativeMoveAndResize, LoadValidYaml) {
   constexpr std::string_view yaml = R"(
+id: 3
 x: 0
 y: 1
 width: 0.75
 height: 0.9
 )";
   auto const action = loadFromYaml<RelativeMoveAndResizeAction>(yaml);
+  EXPECT_EQ(action.id(), 3);
   EXPECT_EQ(action.windowBounds().x(), 0.f);
   EXPECT_EQ(action.windowBounds().y(), 1.0f);
   EXPECT_EQ(action.windowBounds().z(), 0.75f);
@@ -65,11 +67,13 @@ height: 0.9
 
 TEST(RelativeMoveAndResize, LoadValidYamlWithoutAll) {
   constexpr std::string_view yaml = R"(
+{}
 )";
   auto const action = loadFromYaml<RelativeMoveAndResizeAction>(yaml);
+  EXPECT_EQ(action.id(), 0);
   EXPECT_EQ(action.windowBounds().x(), 0.5f);
   EXPECT_EQ(action.windowBounds().y(), 0.5f);
-  EXPECT_EQ(action.windowBounds().z(), 0.75f);
+  EXPECT_EQ(action.windowBounds().z(), 1.f);
   EXPECT_EQ(action.windowBounds().w(), 1.f);
 }
 

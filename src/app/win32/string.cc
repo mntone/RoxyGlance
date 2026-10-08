@@ -16,8 +16,7 @@ winrt::hresult win32::ConvertUtf8ToUtf16(
 
   size_t const utf16len = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, utf8ptr, utf8len, nullptr, 0);
   if (utf16len == 0) [[unlikely]] {
-    utf16.clear();
-    return S_OK;
+    return hresult::LastErrorAsHResult();
   }
 
 #if defined(__cpp_lib_string_resize_and_overwrite) && __cpp_lib_string_resize_and_overwrite >= 202110L

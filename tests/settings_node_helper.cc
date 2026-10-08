@@ -33,6 +33,19 @@ TEST(NodeHelper, ReadBoundedLongOrDefault) {
   EXPECT_THROW(loadFromYaml("invalid", ReadBoundedLongFromNodeOrDefault, 0, 16, 4), winrt::hresult_invalid_argument);
 }
 
+TEST(NodeHelper, WriteLong) {
+  c4::yml::Tree tree;
+  c4::yml::parse_in_arena(c4::to_csubstr(std::string_view{"{}"}), &tree);
+  c4::yml::NodeRef root = tree.rootref();
+  c4::csubstr const key = c4::to_csubstr("value");
+
+  WriteLongToNode(root, key, 42);
+  EXPECT_EQ(ReadLongFromNode(root[key]), 42);
+
+  WriteLongToNode(root, key, -17);
+  EXPECT_EQ(ReadLongFromNode(root[key]), -17);
+}
+
 
 // ---[ Float ]--------------------------------------------
 
@@ -52,6 +65,19 @@ TEST(NodeHelper, ReadBoundedFloatOrDefault) {
   EXPECT_EQ(loadFromYaml("", ReadBoundedFloatFromNodeOrDefault, 0.f, 1.f, 0.5f), 0.5f);
   EXPECT_THROW(loadFromYaml("-0.001", ReadBoundedFloatFromNodeOrDefault, 0.f, 1.f, 0.5f), winrt::hresult_invalid_argument);
   EXPECT_THROW(loadFromYaml("-1.001", ReadBoundedFloatFromNodeOrDefault, 0.f, 1.f, 0.5f), winrt::hresult_invalid_argument);
+}
+
+TEST(NodeHelper, WriteFloat) {
+  c4::yml::Tree tree;
+  c4::yml::parse_in_arena(c4::to_csubstr(std::string_view{"{}"}), &tree);
+  c4::yml::NodeRef root = tree.rootref();
+  c4::csubstr const key = c4::to_csubstr("value");
+
+  WriteFloatToNode(root, key, 0.75f);
+  EXPECT_FLOAT_EQ(ReadFloatFromNode(root[key]), 0.75f);
+
+  WriteFloatToNode(root, key, -49.5f);
+  EXPECT_FLOAT_EQ(ReadFloatFromNode(root[key]), -49.5f);
 }
 
 
@@ -75,6 +101,28 @@ TEST(NodeHelper, ReadStringAndCompareType) {
   EXPECT_EQ(loadFromYaml("^startswith", ReadStringAndCompareTypeFromNode), std::make_pair(CT::kStartsWith, L"startswith"));
   EXPECT_EQ(loadFromYaml("endswith$", ReadStringAndCompareTypeFromNode), std::make_pair(CT::kEndsWith, L"endswith"));
   EXPECT_EQ(loadFromYaml("^equals$", ReadStringAndCompareTypeFromNode), std::make_pair(CT::kEquals, L"equals"));
+}
+
+TEST(NodeHelper, WriteStringAndCompareType) {
+  using CT = settings::StringCompareType;
+
+  c4::yml::Tree tree;
+  c4::yml::parse_in_arena(c4::to_csubstr(std::string_view{"{}"}), &tree);
+  c4::yml::NodeRef root = tree.rootref();
+  std::wstring const value = L"utf16to8\U0001F389";
+  c4::csubstr const key = c4::to_csubstr("filter");
+
+  WriteStringAndCompareTypeToNode(root, key, {CT::kContains, value});
+  EXPECT_EQ(ReadStringFromNode(root[key]), "utf16to8\xF0\x9F\x8E\x89");
+  WriteStringAndCompareTypeToNode(root, key, {CT::kStartsWith, value});
+  EXPECT_EQ(ReadStringFromNode(root[key]), "^utf16to8\xF0\x9F\x8E\x89");
+  WriteStringAndCompareTypeToNode(root, key, {CT::kEndsWith, value});
+  EXPECT_EQ(ReadStringFromNode(root[key]), "utf16to8\xF0\x9F\x8E\x89$");
+  WriteStringAndCompareTypeToNode(root, key, {CT::kEquals, value});
+  EXPECT_EQ(ReadStringFromNode(root[key]), "^utf16to8\xF0\x9F\x8E\x89$");
+
+  WriteStringAndCompareTypeToNode(root, key, {CT::kNone, value});
+  EXPECT_FALSE(root.has_child(key));
 }
 
 }  // namespace test::roxyg::settings

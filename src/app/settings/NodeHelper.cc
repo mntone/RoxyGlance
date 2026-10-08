@@ -53,6 +53,10 @@ long settings::ReadBoundedLongFromNodeOrDefault(c4::yml::ConstNodeRef node, long
   return val;
 }
 
+void settings::WriteLongToNode(c4::yml::NodeRef node, c4::csubstr key, long val) {
+  node[key] << val;
+}
+
 float settings::ReadFloatFromNode(c4::yml::ConstNodeRef node) {
   if (node.invalid() || !node.has_val()) {
     throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
@@ -86,6 +90,10 @@ float settings::ReadBoundedFloatFromNodeOrDefault(c4::yml::ConstNodeRef node, fl
     throw winrt::hresult_invalid_argument(winrt::format(message::kValueOutOfRangeMessage, val));
   }
   return val;
+}
+
+void settings::WriteFloatToNode(c4::yml::NodeRef node, c4::csubstr key, float val) {
+  node[key] << val;
 }
 
 std::string settings::ReadStringFromNode(c4::yml::ConstNodeRef node) {
@@ -139,7 +147,39 @@ settings::StringAndCompareType settings::ReadStringAndCompareTypeFromNode(c4::ym
   }
 
   std::wstring u16str;
-  winrt::hresult hr = win32::ConvertUtf8ToUtf16(utf8ptr, utf8len, u16str);
+  winrt::hresult const hr = win32::ConvertUtf8ToUtf16(utf8ptr, utf8len, u16str);
   winrt::check_hresult(hr);
   return {compare_type, u16str};
+}
+
+void settings::WriteStringAndCompareTypeToNode(c4::yml::NodeRef node, c4::csubstr key, settings::StringAndCompareType val) {
+  using CT = settings::StringCompareType;
+
+  if (val.first == CT::kNone) {
+    if (node.has_child(key)) {
+      node.remove_child(key);
+    }
+    return;
+  }
+
+  std::string u8str;
+  winrt::hresult const hr = win32::ConvertUtf16ToUtf8(val.second.data(), static_cast<int>(val.second.size()), u8str);
+  winrt::check_hresult(hr);
+
+  switch (val.first) {
+  case CT::kContains:
+    break;
+  case CT::kEquals:
+    u8str.insert(0, 1, '^');
+    [[fallthrough]];
+  case CT::kEndsWith:
+    u8str.push_back('$');
+    break;
+  case CT::kStartsWith:
+    u8str.insert(0, 1, '^');
+    break;
+  default:
+    throw winrt::hresult_invalid_argument();
+  }
+  node[key] << c4::to_csubstr(u8str);
 }

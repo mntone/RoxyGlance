@@ -15,6 +15,10 @@ std::string ReadStringFromNode(c4::yml::ConstNodeRef node);
 std::wstring ReadStringAsUtf16FromNode(c4::yml::ConstNodeRef node);
 StringAndCompareType ReadStringAndCompareTypeFromNode(c4::yml::ConstNodeRef node);
 
+void WriteLongToNode(c4::yml::NodeRef node, c4::csubstr key, long val);
+void WriteFloatToNode(c4::yml::NodeRef node, c4::csubstr key, float val);
+void WriteStringAndCompareTypeToNode(c4::yml::NodeRef node, c4::csubstr key, StringAndCompareType val);
+
 ROXYG_ALWAYS_INLINE int ReadIntFromNode(c4::yml::ConstNodeRef node) {
   return static_cast<int>(ReadLongFromNode(node));
 }
@@ -30,6 +34,10 @@ ROXYG_ALWAYS_INLINE int ReadBoundedIntFromNodeOrDefault(c4::yml::ConstNodeRef no
     static_cast<long>(min_val),
     static_cast<long>(max_val),
     static_cast<long>(def_val)));
+}
+
+ROXYG_ALWAYS_INLINE void WriteIntToNode(c4::yml::NodeRef node, c4::csubstr key, int val) {
+  WriteLongToNode(node, key, static_cast<long>(val));
 }
 
 }

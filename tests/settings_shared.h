@@ -15,13 +15,8 @@ static c4::yml::NodeRef load_yaml(c4::yml::Tree& tree, std::string_view yaml) {
 }
 
 template<typename T>
-T loadFromYaml(std::string_view yaml) {
-  c4::yml::Tree tree;
-  c4::yml::parse_in_arena(c4::to_csubstr(yaml), &tree);
-  c4::yml::NodeRef root = tree.rootref();
-  if (root.invalid()) {
-    throw std::bad_exception();
-  }
+T load_yaml_as(c4::yml::Tree& tree, std::string_view yaml) {
+  c4::yml::NodeRef root = load_yaml(tree, yaml);
   return T(root);
 }
 
@@ -65,4 +60,4 @@ static TestVec<Size> vals_to_vec(c4::yml::ConstNodeRef n) {
 
 #define TEST_YAML(node_name, yaml) \
   ::c4::yml::Tree __tree; \
-  ::c4::yml::NodeRef root{::test::roxyg::settings::load_yaml(__tree, yaml)};
+  ::c4::yml::NodeRef node_name{::test::roxyg::settings::load_yaml(__tree, yaml)};

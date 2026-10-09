@@ -16,35 +16,38 @@ using namespace ::roxyg::settings;
 // ---[ Action ]-------------------------------------------
 
 TEST(Action, LoadAction) {
-  EXPECT_EQ(loadFromYaml<Action>("type: invalid_action_type").type(), AT::kUnknown);
-  EXPECT_EQ(loadFromYaml<Action>("type: absolute_move_and_resize").type(), AT::kAbsoluteMoveAndResize);
-  EXPECT_EQ(loadFromYaml<Action>("type: relative_move_and_resize").type(), AT::kRelativeMoveAndResize);
+  c4::yml::Tree tree;
+  EXPECT_EQ(load_yaml_as<Action>(tree, "type: invalid_action_type").type(), AT::kInvalid);
+  tree.clear();
+  EXPECT_EQ(load_yaml_as<Action>(tree, "type: absolute_move_and_resize").type(), AT::kAbsoluteMoveAndResize);
+  tree.clear();
+  EXPECT_EQ(load_yaml_as<Action>(tree, "type: relative_move_and_resize").type(), AT::kRelativeMoveAndResize);
 }
 
 
 // ---[ Filter ]-------------------------------------------
 
 TEST(Filter, LoadValidFilter) {
-  constexpr std::string_view yaml = R"(
+  TEST_YAML(root, R"(
 process: msedge.exe$
 class: ^Intermediate D3D Window$
 title: ^Main Browser$
-)";
-  auto const filter = loadFromYaml<Filter>(yaml);
+)");
+  Filter const filter{root};
   EXPECT_EQ(filter.processImageName(), std::make_pair(CT::kEndsWith, L"msedge.exe"));
   EXPECT_EQ(filter.windowClass(), std::make_pair(CT::kEquals, L"Intermediate D3D Window"));
   EXPECT_EQ(filter.windowTitle(), std::make_pair(CT::kEquals, L"Main Browser"));
 }
 
 TEST(Filter, LoadInvalidFilter) {
-  constexpr std::string_view yaml = R"(
+  TEST_YAML(root, R"(
 process: ["array is not supported"]
 class:
   map: is
   not: supported
 title: null
-)";
-  auto const filter = loadFromYaml<Filter>(yaml);
+)");
+  Filter const filter{root};
   EXPECT_EQ(filter.processImageName(), std::make_pair(CT::kNone, L""));
   EXPECT_EQ(filter.windowClass(), std::make_pair(CT::kNone, L""));
   EXPECT_EQ(filter.windowTitle(), std::make_pair(CT::kContains, L"null"));
@@ -204,7 +207,7 @@ TEST(Triggers_Write, RejectsNonMapNode) {
 TEST(Rule, LoadValidRule) {
   using namespace magic_enum::bitwise_operators;
 
-  constexpr std::string_view yaml = R"(
+  TEST_YAML(root, R"(
 name: "Test Name"
 when: [sHoW, INit, invalid]
 where:
@@ -213,8 +216,8 @@ where:
 then:
   type: relative_move_and_resize
   width: 0.75
-)";
-  auto const rule = loadFromYaml<Rule>(yaml);
+)");
+  Rule const rule{root};
   EXPECT_EQ(rule.name(), L"Test Name"sv);
   EXPECT_EQ(rule.triggerFlags(), TF::kApplicationStart | TF::kWindowShow);
   EXPECT_EQ(rule.filter().processImageName(), std::make_pair(CT::kEndsWith, L"msedge.exe"));

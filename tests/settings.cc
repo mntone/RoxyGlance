@@ -85,14 +85,15 @@ TEST(Triggers_Read, ReadsSequenceAndIgnoresUnknownEntries) {
   EXPECT_EQ(value, TF::kApplicationStart | TF::kWindowShow);
 }
 
-TEST(Triggers_Read, TreatsMapWhenAsNone) {
+TEST(Triggers_Read, RejectsMapWhen) {
   TEST_YAML(root, "when: {nested: value}");
 
   TF value = TF::kWindowFocus;
   HRESULT const hr = ReadTriggerFlagsFromNode(root, &value);
 
-  EXPECT_EQ(hr, S_OK);
-  EXPECT_EQ(value, TF::kNone);
+  EXPECT_EQ(hr, E_INVALIDARG);
+  EXPECT_EQ(value, TF::kWindowFocus);
+  EXPECT_EQ(root["when"]["nested"].val(), c4::to_csubstr("value"));
 }
 
 TEST(Triggers_Read, RejectsNonMapNode) {

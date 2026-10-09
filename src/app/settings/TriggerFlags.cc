@@ -120,8 +120,7 @@ HRESULT ReadTriggerFlagsFromNode(ConstNodeRef n, TriggerFlags* value) {
     *value = to_trigger(when.val()).value_or(TriggerFlags::kNone);
     return S_OK;
   } else {
-    *value = TriggerFlags::kNone;
-    return S_OK;
+    return E_INVALIDARG;
   }
 }
 

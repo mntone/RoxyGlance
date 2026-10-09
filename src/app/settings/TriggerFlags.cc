@@ -3,7 +3,6 @@
 
 #include "constants.h"
 
-#include <boost/container/small_vector.hpp>
 #pragma warning(push)
 #pragma warning(disable:4244)
 #include <magic_enum/magic_enum_containers.hpp>  // requires containers::bitset
@@ -14,8 +13,6 @@ namespace {
 inline constexpr auto kAllTriggerEntries = magic_enum::enum_entries<roxyg::settings::TriggerFlags>();
 inline constexpr auto kAllTriggerFlags = magic_enum::enum_values<roxyg::settings::TriggerFlags>();
 }
-
-using NodeRefVec = boost::container::small_vector<c4::yml::NodeRef, 4>;
 
 using namespace c4::yml;
 using namespace roxyg::settings;
@@ -31,41 +28,32 @@ static ROXYG_ALWAYS_INLINE std::optional<TriggerFlags> to_trigger(c4::csubstr st
   );
 }
 
-static ROXYG_ALWAYS_INLINE bool has_keyseq(NodeRef seq, TriggerFlags value) noexcept {
+template<typename Visitor>
+static bool visitMatchingTriggers(NodeRef seq, TriggerFlags value, Visitor&& visitor) {
 #ifdef _DEBUG
   assert(seq.is_seq());
 #endif
 
-  for (ConstNodeRef child : seq.children()) {
-    if (!child.has_val()) {
-      continue;
+  for (NodeRef child = seq.first_child(); !child.invalid();) {
+    NodeRef const next = child.next_sibling();
+    if (child.has_val()) {
+      std::optional<TriggerFlags> const flag{to_trigger(child.val())};
+      if (flag && flag.value() == value && !visitor(child)) {
+        return false;
+      }
     }
-
-    std::optional<TriggerFlags> const type{to_trigger(child.val())};
-    if (type && type.value() == value) {
-      return true;
-    }
+    child = next;
   }
-  return false;
+  return true;
 }
 
-static ROXYG_ALWAYS_INLINE NodeRefVec seq_contains(NodeRef seq, TriggerFlags value) noexcept {
-#ifdef _DEBUG
-  assert(seq.is_seq());
-#endif
-
-  NodeRefVec ret;
-  for (NodeRef child : seq.children()) {
-    if (!child.has_val()) {
-      continue;
-    }
-
-    std::optional<TriggerFlags> const type{to_trigger(child.val())};
-    if (type && type.value() == value) {
-      ret.emplace_back(child);
-    }
-  }
-  return ret;
+static ROXYG_ALWAYS_INLINE bool containsTriggerFlag(NodeRef seq, TriggerFlags value) noexcept {
+  bool found = false;
+  visitMatchingTriggers(seq, value, [&found](NodeRef) {
+    found = true;
+    return false;
+  });
+  return found;
 }
 
 static ROXYG_ALWAYS_INLINE NodeRef getOrCreateWhenNode(NodeRef n) {
@@ -153,10 +141,10 @@ HRESULT WriteTriggerFlagsToNode(NodeRef n, TriggerFlags value) try {
       continue;
     }
 
-    NodeRefVec nodes{seq_contains(when, trigger)};
-    for (NodeRef n : nodes) {
+    visitMatchingTriggers(when, trigger, [&when](NodeRef n) {
       when.remove_child(n);
-    }
+      return true;
+    });
   }
 
   // Append newly enabled triggers.
@@ -165,7 +153,7 @@ HRESULT WriteTriggerFlagsToNode(NodeRef n, TriggerFlags value) try {
       continue;
     }
 
-    if (!has_keyseq(when, trigger)) {
+    if (!containsTriggerFlag(when, trigger)) {
       when.append_child() << c4::to_csubstr(name_view);
     }
   }

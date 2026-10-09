@@ -119,6 +119,7 @@
     <ClInclude Include="settings\Rule.h" />
     <ClInclude Include="settings\SettingsStore.h" />
     <ClInclude Include="settings\String.h" />
+    <ClInclude Include="settings\TriggerFlags.h" />
     <ClInclude Include="settings\UserSettings.h" />
     <ClInclude Include="utility\backoff\jitter.h" />
     <ClInclude Include="utility\backoff\exponential.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="settings\NodeHelper.cc" />
     <ClCompile Include="settings\Rule.cc" />
     <ClCompile Include="settings\SettingsStore.cc" />
+    <ClCompile Include="settings\TriggerFlags.cc" />
     <ClCompile Include="settings\UserSettings.cc" />
     <ClCompile Include="pch.cc">
       <PrecompiledHeader>Create</PrecompiledHeader>

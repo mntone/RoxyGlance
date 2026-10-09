@@ -1,54 +1,16 @@
 #include "pch.h"
 #include "Rule.h"
 
-namespace magic_enum::customize {
-
-template<>
-constexpr customize_t enum_name(roxyg::settings::TriggerType value) noexcept {
-  using TT = roxyg::settings::TriggerType;
-
-  switch (value) {
-  case TT::kApplicationInit:
-    return "init";
-  case TT::kWindowForeground:
-    return "foreground";
-  case TT::kWindowShow:
-    return "show";
-  default:
-    return invalid_tag;
-  }
-}
-
-}  // namespace magic_enum::customize
-
 #include "constants.h"
 #include "NodeHelper.h"
 
-using namespace magic_enum;
-using namespace magic_enum::bitwise_operators;
 using namespace roxyg::settings;
 
-static ROXYG_ALWAYS_INLINE TriggerType loadTrigger(c4::yml::ConstNodeRef n) noexcept {
-  std::string const trigger_type = ReadStringFromNode(n);
-  return enum_cast<TriggerType>(trigger_type, case_insensitive)
-    .value_or(TriggerType::kNone);
-}
-
-static ROXYG_ALWAYS_INLINE TriggerType readTriggers(c4::yml::ConstNodeRef triggers) noexcept {
-  if (triggers.invalid()) {
-    return {};
-  }
-
-  TriggerType ret = TriggerType::kApplicationInit | TriggerType::kWindowShow;
-  if (triggers.is_seq()) {
-    ret = TriggerType::kNone;
-    for (c4::yml::ConstNodeRef trigger : triggers.children()) {
-      ret |= loadTrigger(trigger);
-    }
-  } else {
-    ret = loadTrigger(triggers);
-  }
-  return ret;
+static ROXYG_ALWAYS_INLINE TriggerFlags readTriggers(c4::yml::ConstNodeRef n) {
+  TriggerFlags value;
+  HRESULT const hr = ReadTriggerFlagsFromNode(n, &value);
+  winrt::check_hresult(hr);
+  return value;
 }
 
 static ROXYG_ALWAYS_INLINE Filter readFilter(c4::yml::NodeRef n) {
@@ -69,10 +31,26 @@ static ROXYG_ALWAYS_INLINE Filter readFilter(c4::yml::NodeRef n) {
   return Filter{ n[key::kWhere] };
 }
 
-Rule::Rule(c4::yml::NodeRef node) noexcept
+Rule::Rule(c4::yml::NodeRef node)
   : node_(std::move(node))
   , name_(ReadStringAsUtf16FromNode(node_[key::kName]))
   , filter_(readFilter(node_))
   , action_(node_[key::kThen])
-  , trigger_(readTriggers(node_[key::kWhen])) {
+  , triggers_(readTriggers(node_)) {
+#ifdef _DEBUG
+  assert(node_.is_map());
+#endif
+}
+
+void Rule::setTriggerFlags(TriggerFlags value) {
+  if (triggers_ == value) {
+    return;
+  }
+
+  winrt::hresult const hr = WriteTriggerFlagsToNode(node_, value);
+  if (FAILED(hr)) {
+    winrt::throw_hresult(hr);
+  }
+
+  triggers_ = value;
 }

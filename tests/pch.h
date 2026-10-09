@@ -17,6 +17,7 @@
 #include <boost/container/small_vector.hpp>
 #include <magic_enum/magic_enum.hpp>
 
+#include <unknwn.h>
 #include <winrt/base.h>
 #include <gtest/gtest.h>
 #include "app/utility/macro.h"

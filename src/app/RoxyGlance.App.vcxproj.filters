@@ -165,6 +165,9 @@
     <ClInclude Include="settings\String.h">
       <Filter>settings</Filter>
     </ClInclude>
+    <ClInclude Include="settings\TriggerFlags.h">
+      <Filter>settings</Filter>
+    </ClInclude>
     <ClInclude Include="settings\UserSettings.h">
       <Filter>settings</Filter>
     </ClInclude>
@@ -317,6 +320,9 @@
       <Filter>settings</Filter>
     </ClCompile>
     <ClCompile Include="settings\SettingsStore.cc">
+      <Filter>settings</Filter>
+    </ClCompile>
+    <ClCompile Include="settings\TriggerFlags.cc">
       <Filter>settings</Filter>
     </ClCompile>
     <ClCompile Include="settings\UserSettings.cc">

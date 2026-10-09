@@ -11,7 +11,7 @@ inline constexpr c4::csubstr kRules = "rules";  // std::vector<Rule>
 
 // rules[].*
 inline constexpr c4::csubstr kName = "name";
-inline constexpr c4::csubstr kWhen = "when";    // TriggerType
+inline constexpr c4::csubstr kWhen = "when";    // TriggerFlags
 inline constexpr c4::csubstr kWhere = "where";  // Filter
 inline constexpr c4::csubstr kThen = "then";    // Action
 

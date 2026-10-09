@@ -42,11 +42,14 @@ ROXYG_ALWAYS_INLINE void WriteIntToNode(c4::yml::NodeRef node, c4::csubstr key, 
 
 }
 
+#include "Action.h"
 #include "TriggerFlags.h"
 
 extern "C" {
 
+  HRESULT ReadActionTypeFromNode(::c4::yml::ConstNodeRef n, ::roxyg::settings::ActionType* value);
   HRESULT ReadTriggerFlagsFromNode(::c4::yml::ConstNodeRef n, ::roxyg::settings::TriggerFlags* value);
+  HRESULT WriteActionTypeToNode(::c4::yml::NodeRef n, ::roxyg::settings::ActionType value);
   HRESULT WriteTriggerFlagsToNode(::c4::yml::NodeRef node, ::roxyg::settings::TriggerFlags value);
 
 }

@@ -6,6 +6,7 @@
 
 using namespace roxyg;
 using namespace roxyg::engine;
+using namespace roxyg::settings::action;
 
 engine::Operation compiler::CompileAction(CompilationContext& ctx, settings::Action const& action) {
   using AT = settings::ActionType;
@@ -14,13 +15,13 @@ engine::Operation compiler::CompileAction(CompilationContext& ctx, settings::Act
   switch (action.type()) {
   case AT::kAbsoluteMoveAndResize:
   {
-    auto const& detail = settings::action::AbsoluteMoveAndResizeAction(action.node());
+    auto const detail = action.as<AbsoluteMoveAndResizeAction>();
     operation = std::make_shared<AbsoluteMoveAndResizeOperation>(detail.windowBounds());
     break;
   }
   case AT::kRelativeMoveAndResize:
   {
-    auto const& detail = settings::action::RelativeMoveAndResizeAction(action.node());
+    auto const detail = action.as<RelativeMoveAndResizeAction>();
     HMONITOR const handle{ctx.resolveMonitorId(detail.id())};
     if (handle) {
       operation = std::make_shared<RelativeMoveAndResizeOperation>(

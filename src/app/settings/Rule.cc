@@ -35,8 +35,8 @@ Rule::Rule(c4::yml::NodeRef node)
   : node_(std::move(node))
   , name_(ReadStringAsUtf16FromNode(node_[key::kName]))
   , filter_(readFilter(node_))
-  , action_(node_[key::kThen])
-  , triggers_(readTriggers(node_)) {
+  , triggers_(readTriggers(node_))
+  , action_(node_[key::kThen]) {
 #ifdef _DEBUG
   assert(node_.is_map());
 #endif

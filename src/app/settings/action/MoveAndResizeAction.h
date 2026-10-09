@@ -1,4 +1,5 @@
 #pragma once
+#include "../Action.h"
 #include "../String.h"
 
 #include "../../numeric/numeric.h"
@@ -39,6 +40,20 @@ private:
   settings::StringAndCompareType name_;
   numeric::float4 window_bounds_;
   int id_;
+};
+
+}
+
+namespace roxyg::settings::detail {
+
+template<>
+struct ActionTypeTraits<action::AbsoluteMoveAndResizeAction> {
+  static constexpr ActionType value = ActionType::kAbsoluteMoveAndResize;
+};
+
+template<>
+struct ActionTypeTraits<action::RelativeMoveAndResizeAction> {
+  static constexpr ActionType value = ActionType::kRelativeMoveAndResize;
 };
 
 }

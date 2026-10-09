@@ -3,21 +3,33 @@
 namespace roxyg::settings {
 
 enum class ActionType {
-  kUnknown = 0,
+  kInvalid = 0,
   kAbsoluteMoveAndResize,
   kRelativeMoveAndResize,
 };
+
+namespace detail {
+
+template<typename T>
+struct ActionTypeTraits;
+
+}
 
 class Action final {
 public:
   explicit Action(c4::yml::NodeRef node);
 
-  [[nodiscard]] inline c4::yml::NodeRef node() const noexcept {
-    return node_;
-  }
-
   [[nodiscard]] constexpr ActionType type() const noexcept {
     return type_;
+  }
+  void setType(ActionType value);
+
+  template<typename T>
+  [[nodiscard]] T as() const {
+    if (type_ != detail::ActionTypeTraits<T>::value) {
+      throw ::winrt::hresult_invalid_argument();
+    }
+    return T{node_};
   }
 
 private:
@@ -26,3 +38,21 @@ private:
 };
 
 }
+
+namespace magic_enum::customize {
+
+template<>
+constexpr customize_t enum_name(roxyg::settings::ActionType value) noexcept {
+  using AT = roxyg::settings::ActionType;
+
+  switch (value) {
+  case AT::kAbsoluteMoveAndResize:
+    return "absolute_move_and_resize";
+  case AT::kRelativeMoveAndResize:
+    return "relative_move_and_resize";
+  default:
+    return invalid_tag;
+  }
+}
+
+}  // namespace magic_enum::customize

@@ -1,7 +1,10 @@
 #include "pch.h"
 #include "settings_shared.h"
 
+#include "app/settings/constants.h"
+#include "app/settings/NodeHelper.h"
 #include "app/settings/Rule.h"
+#include "app/settings/action/MoveAndResizeAction.h"
 
 using namespace std::literals::string_view_literals;
 
@@ -12,16 +15,124 @@ using TF = ::roxyg::settings::TriggerFlags;
 using CT = ::roxyg::settings::StringCompareType;
 
 using namespace ::roxyg::settings;
+using namespace ::roxyg::settings::action;
 
 // ---[ Action ]-------------------------------------------
 
-TEST(Action, LoadAction) {
-  c4::yml::Tree tree;
-  EXPECT_EQ(load_yaml_as<Action>(tree, "type: invalid_action_type").type(), AT::kInvalid);
-  tree.clear();
-  EXPECT_EQ(load_yaml_as<Action>(tree, "type: absolute_move_and_resize").type(), AT::kAbsoluteMoveAndResize);
-  tree.clear();
-  EXPECT_EQ(load_yaml_as<Action>(tree, "type: relative_move_and_resize").type(), AT::kRelativeMoveAndResize);
+TEST(Action_Read, MissingTypeReturnsInvalid) {
+  TEST_YAML(root, "x: 0");
+
+  AT value = AT::kRelativeMoveAndResize;
+  HRESULT const hr = ReadActionTypeFromNode(root, &value);
+
+  EXPECT_EQ(hr, S_OK);
+  EXPECT_EQ(value, AT::kInvalid);
+}
+
+TEST(Action_Read, ReadsTypeCaseInsensitively) {
+  TEST_YAML(root, "type: aBsolute_move_and_resize");
+
+  AT value = AT::kRelativeMoveAndResize;
+  HRESULT const hr = ReadActionTypeFromNode(root, &value);
+
+  EXPECT_EQ(hr, S_OK);
+  EXPECT_EQ(value, AT::kAbsoluteMoveAndResize);
+}
+
+TEST(Action_Read, UnknownTypeReturnsInvalid) {
+  TEST_YAML(root, "type: unsupported_action");
+
+  AT value = AT::kRelativeMoveAndResize;
+  HRESULT const hr = ReadActionTypeFromNode(root, &value);
+
+  EXPECT_EQ(hr, S_OK);
+  EXPECT_EQ(value, AT::kInvalid);
+}
+
+TEST(Action_Read, RejectsNonScalarType) {
+  TEST_YAML(root, "type: {nested: value}");
+
+  AT value = AT::kRelativeMoveAndResize;
+  HRESULT const hr = ReadActionTypeFromNode(root, &value);
+
+  EXPECT_EQ(hr, E_INVALIDARG);
+  EXPECT_EQ(value, AT::kRelativeMoveAndResize);
+  EXPECT_EQ(root["type"]["nested"].val(), c4::to_csubstr("value"));
+}
+
+TEST(Action_Read, RejectsNonMapNode) {
+  TEST_YAML(root, "not a map");
+
+  AT value = AT::kRelativeMoveAndResize;
+  HRESULT const hr = ReadActionTypeFromNode(root, &value);
+
+  EXPECT_EQ(hr, E_INVALIDARG);
+  EXPECT_EQ(value, AT::kRelativeMoveAndResize);
+  EXPECT_EQ(root.val(), c4::to_csubstr("not a map"));
+}
+
+TEST(Action_Write, CreatesType) {
+  TEST_YAML(root, "id: 2");
+
+  HRESULT const hr = WriteActionTypeToNode(root, AT::kAbsoluteMoveAndResize);
+
+  EXPECT_EQ(hr, S_OK);
+  ASSERT_TRUE(root["type"].is_keyval());
+  EXPECT_EQ(root["type"].val(), c4::to_csubstr("absolute_move_and_resize"));
+  EXPECT_EQ(root["id"].val(), c4::to_csubstr("2"));
+}
+
+TEST(Action_Write, UpdatesTypeAndPreservesOtherFields) {
+  TEST_YAML(root, "type: absolute_move_and_resize\nid: 2\nx: 0.25");
+
+  HRESULT const hr = WriteActionTypeToNode(root, AT::kRelativeMoveAndResize);
+
+  EXPECT_EQ(hr, S_OK);
+  EXPECT_EQ(root["type"].val(), c4::to_csubstr("relative_move_and_resize"));
+  EXPECT_EQ(root["id"].val(), c4::to_csubstr("2"));
+  EXPECT_EQ(root["x"].val(), c4::to_csubstr("0.25"));
+}
+
+TEST(Action_Write, NoneRemovesTypeAndPreservesOtherFields) {
+  TEST_YAML(root, "type: absolute_move_and_resize\nid: 2");
+
+  HRESULT const hr = WriteActionTypeToNode(root, AT::kInvalid);
+
+  EXPECT_EQ(hr, S_OK);
+  EXPECT_FALSE(root.has_child(key::kType));
+  EXPECT_EQ(root["id"].val(), c4::to_csubstr("2"));
+
+  AT value = AT::kRelativeMoveAndResize;
+  EXPECT_EQ(ReadActionTypeFromNode(root, &value), S_OK);
+  EXPECT_EQ(value, AT::kInvalid);
+}
+
+TEST(Action_Write, RejectsNonMapNode) {
+  TEST_YAML(root, "not a map");
+
+  HRESULT const hr = WriteActionTypeToNode(root, AT::kRelativeMoveAndResize);
+
+  EXPECT_EQ(hr, E_INVALIDARG);
+  EXPECT_EQ(root.val(), c4::to_csubstr("not a map"));
+}
+
+TEST(Action, AsLoadsMatchingTypeAndRejectsMismatch) {
+  TEST_YAML(root, R"(
+type: relative_move_and_resize
+id: 3
+x: 0.25
+)");
+
+  Action const action{root};
+  EXPECT_EQ(action.type(), AT::kRelativeMoveAndResize);
+
+  auto const detail = action.as<RelativeMoveAndResizeAction>();
+  EXPECT_EQ(detail.id(), 3);
+  EXPECT_EQ(detail.windowBounds().x(), 0.25f);
+  EXPECT_THROW(
+    action.as<AbsoluteMoveAndResizeAction>(),
+    winrt::hresult_invalid_argument
+  );
 }
 
 

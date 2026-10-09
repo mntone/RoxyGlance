@@ -24,8 +24,8 @@ private:
   c4::yml::NodeRef node_;
   std::wstring name_;
   Filter filter_;
-  Action action_;
   TriggerFlags triggers_;
+  Action action_;
 };
 
 }  // namespace roxyg::settings

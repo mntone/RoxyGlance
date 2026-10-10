@@ -141,7 +141,7 @@
     <ClInclude Include="settings\Action.h">
       <Filter>settings</Filter>
     </ClInclude>
-    <ClInclude Include="settings\action\MoveAndResizeAction.h">
+    <ClInclude Include="settings\action\MoveAndResize.h">
       <Filter>settings\action</Filter>
     </ClInclude>
     <ClInclude Include="settings\constants.h">
@@ -304,7 +304,7 @@
       <Filter>monitor</Filter>
     </ClCompile>
     <ClCompile Include="pch.cc" />
-    <ClCompile Include="settings\action\MoveAndResizeAction.cc">
+    <ClCompile Include="settings\action\MoveAndResize.cc">
       <Filter>settings\action</Filter>
     </ClCompile>
     <ClCompile Include="settings\Action.cc">

@@ -2,7 +2,7 @@
 #include "CompileAction.h"
 
 #include "../engine/MoveAndResizeOperation.h"
-#include "../settings/action/MoveAndResizeAction.h"
+#include "../settings/action/MoveAndResize.h"
 
 using namespace roxyg;
 using namespace roxyg::engine;
@@ -15,13 +15,13 @@ engine::Operation compiler::CompileAction(CompilationContext& ctx, settings::Act
   switch (action.type()) {
   case AT::kAbsoluteMoveAndResize:
   {
-    auto const detail = action.as<AbsoluteMoveAndResizeAction>();
+    auto const detail = action.as<AbsoluteMoveAndResize>();
     operation = std::make_shared<AbsoluteMoveAndResizeOperation>(detail.windowBounds());
     break;
   }
   case AT::kRelativeMoveAndResize:
   {
-    auto const detail = action.as<RelativeMoveAndResizeAction>();
+    auto const detail = action.as<RelativeMoveAndResize>();
     HMONITOR const handle{ctx.resolveMonitorId(detail.id())};
     if (handle) {
       operation = std::make_shared<RelativeMoveAndResizeOperation>(

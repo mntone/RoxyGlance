@@ -1,12 +1,12 @@
 #include "pch.h"
-#include "MoveAndResizeAction.h"
+#include "MoveAndResize.h"
 
 #include "../constants.h"
 #include "../NodeHelper.h"
 
 using namespace roxyg::settings::action;
 
-AbsoluteMoveAndResizeAction::AbsoluteMoveAndResizeAction(c4::yml::NodeRef node)
+AbsoluteMoveAndResize::AbsoluteMoveAndResize(c4::yml::NodeRef node)
   : node_(std::move(node))
   , window_bounds_(numeric::long4::make(
     ReadLongFromNodeOrDefault(
@@ -36,7 +36,7 @@ AbsoluteMoveAndResizeAction::AbsoluteMoveAndResizeAction(c4::yml::NodeRef node)
   )) {
 }
 
-void AbsoluteMoveAndResizeAction::setX(long val) {
+void AbsoluteMoveAndResize::setX(long val) {
   ROXYG_UNCHECKED_ASSERT(
     numeric_limit::kAbsoluteCoordinateMin <= val
     && val <= numeric_limit::kAbsoluteCoordinateMax
@@ -48,7 +48,7 @@ void AbsoluteMoveAndResizeAction::setX(long val) {
   }
 }
 
-void AbsoluteMoveAndResizeAction::setY(long val) {
+void AbsoluteMoveAndResize::setY(long val) {
   ROXYG_UNCHECKED_ASSERT(
     numeric_limit::kAbsoluteCoordinateMin <= val
     && val <= numeric_limit::kAbsoluteCoordinateMax
@@ -60,7 +60,7 @@ void AbsoluteMoveAndResizeAction::setY(long val) {
   }
 }
 
-void AbsoluteMoveAndResizeAction::setWidth(long val) {
+void AbsoluteMoveAndResize::setWidth(long val) {
   ROXYG_UNCHECKED_ASSERT(
     numeric_limit::kAbsoluteCoordinateMin <= val
     && val <= numeric_limit::kAbsoluteCoordinateMax
@@ -72,7 +72,7 @@ void AbsoluteMoveAndResizeAction::setWidth(long val) {
   }
 }
 
-void AbsoluteMoveAndResizeAction::setHeight(long val) {
+void AbsoluteMoveAndResize::setHeight(long val) {
   ROXYG_UNCHECKED_ASSERT(
     numeric_limit::kAbsoluteCoordinateMin <= val
     && val <= numeric_limit::kAbsoluteCoordinateMax
@@ -84,7 +84,7 @@ void AbsoluteMoveAndResizeAction::setHeight(long val) {
   }
 }
 
-RelativeMoveAndResizeAction::RelativeMoveAndResizeAction(c4::yml::NodeRef node)
+RelativeMoveAndResize::RelativeMoveAndResize(c4::yml::NodeRef node)
   : node_(std::move(node))
   , name_(ReadStringAndMatchTypeFromNode(node_[key::kMonitorName]))
   , window_bounds_(numeric::float4::make(
@@ -121,7 +121,7 @@ RelativeMoveAndResizeAction::RelativeMoveAndResizeAction(c4::yml::NodeRef node)
   )) {
 }
 
-void RelativeMoveAndResizeAction::setId(int val) {
+void RelativeMoveAndResize::setId(int val) {
   if (val == numeric_limit::kRelativeMonitorIdUnset) {
     if (node_.has_child(key::kMonitorId)) {
       c4::yml::NodeRef child{node_[key::kMonitorId]};
@@ -142,14 +142,14 @@ void RelativeMoveAndResizeAction::setId(int val) {
   }
 }
 
-void RelativeMoveAndResizeAction::setName(StringAndMatchType val) {
+void RelativeMoveAndResize::setName(StringAndMatchType val) {
   if (name_ != val) {
     WriteStringAndMatchTypeToNode(node_[key::kMonitorName], val);
     name_ = val;
   }
 }
 
-void RelativeMoveAndResizeAction::setX(float val) {
+void RelativeMoveAndResize::setX(float val) {
   ROXYG_UNCHECKED_ASSERT(
     numeric_limit::kRelativeCoordinateMin <= val
     && val <= numeric_limit::kRelativeCoordinateMax
@@ -161,7 +161,7 @@ void RelativeMoveAndResizeAction::setX(float val) {
   }
 }
 
-void RelativeMoveAndResizeAction::setY(float val) {
+void RelativeMoveAndResize::setY(float val) {
   ROXYG_UNCHECKED_ASSERT(
     numeric_limit::kRelativeCoordinateMin <= val
     && val <= numeric_limit::kRelativeCoordinateMax
@@ -173,7 +173,7 @@ void RelativeMoveAndResizeAction::setY(float val) {
   }
 }
 
-void RelativeMoveAndResizeAction::setWidth(float val) {
+void RelativeMoveAndResize::setWidth(float val) {
   ROXYG_UNCHECKED_ASSERT(
     numeric_limit::kRelativeCoordinateMin <= val
     && val <= numeric_limit::kRelativeCoordinateMax
@@ -185,7 +185,7 @@ void RelativeMoveAndResizeAction::setWidth(float val) {
   }
 }
 
-void RelativeMoveAndResizeAction::setHeight(float val) {
+void RelativeMoveAndResize::setHeight(float val) {
   ROXYG_UNCHECKED_ASSERT(
     numeric_limit::kRelativeCoordinateMin <= val
     && val <= numeric_limit::kRelativeCoordinateMax

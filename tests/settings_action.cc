@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "settings_shared.h"
 #include "app/settings/constants.h"
-#include "app/settings/action/MoveAndResizeAction.h"
+#include "app/settings/action/MoveAndResize.h"
 
 namespace test::roxyg::settings::action {
 
@@ -18,7 +18,7 @@ y: 40
 width: 320
 height: 240
 )");
-  AbsoluteMoveAndResizeAction const action{root};
+  AbsoluteMoveAndResize const action{root};
   EXPECT_EQ(action.windowBounds().x(), 0);
   EXPECT_EQ(action.windowBounds().y(), 40);
   EXPECT_EQ(action.windowBounds().z(), 320);
@@ -28,7 +28,7 @@ height: 240
 TEST(AbsoluteMoveAndResize, ReadDefaults) {
   TEST_YAML(root, "{}");
 
-  AbsoluteMoveAndResizeAction const action{root};
+  AbsoluteMoveAndResize const action{root};
   EXPECT_EQ(action.windowBounds().x(), 0);
   EXPECT_EQ(action.windowBounds().y(), 0);
   EXPECT_EQ(action.windowBounds().z(), 640);
@@ -43,7 +43,7 @@ width: 320
 height: 240
 )");
   EXPECT_THROW(
-    AbsoluteMoveAndResizeAction{root},
+    AbsoluteMoveAndResize{root},
     winrt::hresult_invalid_argument);
 }
 
@@ -55,14 +55,14 @@ width: 16385
 height: 240
 )");
   EXPECT_THROW(
-    AbsoluteMoveAndResizeAction{root},
+    AbsoluteMoveAndResize{root},
     winrt::hresult_invalid_argument);
 }
 
 TEST(AbsoluteMoveAndResize, WriteBounds) {
   TEST_YAML(root, "x: 1\ny: 2\nwidth: 3\nheight: 4\nother: preserved");
 
-  AbsoluteMoveAndResizeAction action{root};
+  AbsoluteMoveAndResize action{root};
   action.setX(30);
   action.setY(40);
   action.setWidth(800);
@@ -74,7 +74,7 @@ TEST(AbsoluteMoveAndResize, WriteBounds) {
   EXPECT_EQ(action.windowBounds().w(), 600);
   EXPECT_EQ(root["other"].val(), c4::to_csubstr("preserved"));
 
-  AbsoluteMoveAndResizeAction const reloaded{root};
+  AbsoluteMoveAndResize const reloaded{root};
   EXPECT_EQ(reloaded.windowBounds().x(), 30);
   EXPECT_EQ(reloaded.windowBounds().y(), 40);
   EXPECT_EQ(reloaded.windowBounds().z(), 800);
@@ -92,7 +92,7 @@ y: 1
 width: 0.75
 height: 0.9
 )");
-  RelativeMoveAndResizeAction const action{root};
+  RelativeMoveAndResize const action{root};
   EXPECT_EQ(action.id(), 3);
   EXPECT_EQ(action.windowBounds().x(), 0.f);
   EXPECT_EQ(action.windowBounds().y(), 1.0f);
@@ -104,7 +104,7 @@ TEST(RelativeMoveAndResize, ReadDefaults) {
   TEST_YAML(root, R"(
 {}
 )");
-  RelativeMoveAndResizeAction const action{root};
+  RelativeMoveAndResize const action{root};
   EXPECT_EQ(action.id(), 0);
   EXPECT_EQ(action.windowBounds().x(), 0.5f);
   EXPECT_EQ(action.windowBounds().y(), 0.5f);
@@ -120,7 +120,7 @@ width: 0.75
 height: 1
 )");
   EXPECT_THROW(
-    RelativeMoveAndResizeAction{root},
+    RelativeMoveAndResize{root},
     winrt::hresult_invalid_argument);
 }
 
@@ -132,7 +132,7 @@ width: 0.75
 height: 1.001
 )");
   EXPECT_THROW(
-    RelativeMoveAndResizeAction{root},
+    RelativeMoveAndResize{root},
     winrt::hresult_invalid_argument);
 }
 
@@ -147,7 +147,7 @@ height: 0.4
 other: preserved
 )");
 
-  RelativeMoveAndResizeAction action{root};
+  RelativeMoveAndResize action{root};
   action.setId(4);
   action.setName({StringMatchType::kStartsWith, L"Secondary"});
   action.setX(0.5f);
@@ -163,7 +163,7 @@ other: preserved
   EXPECT_FLOAT_EQ(action.windowBounds().w(), 0.8f);
   EXPECT_EQ(root["other"].val(), c4::to_csubstr("preserved"));
 
-  RelativeMoveAndResizeAction const reloaded{root};
+  RelativeMoveAndResize const reloaded{root};
   EXPECT_EQ(reloaded.id(), 4);
   EXPECT_EQ(reloaded.name(), (std::make_pair(StringMatchType::kStartsWith, L"Secondary")));
   EXPECT_FLOAT_EQ(reloaded.windowBounds().x(), 0.5f);
@@ -175,14 +175,14 @@ other: preserved
 TEST(RelativeMoveAndResize, WriteUnsetIdRemovesNode) {
   TEST_YAML(root, "id: 4\nother: preserved");
 
-  RelativeMoveAndResizeAction action{root};
+  RelativeMoveAndResize action{root};
   action.setId(kRelativeMonitorIdUnset);
 
   EXPECT_EQ(action.id(), kRelativeMonitorIdUnset);
   EXPECT_FALSE(root.has_child(key::kMonitorId));
   EXPECT_EQ(root["other"].val(), c4::to_csubstr("preserved"));
 
-  RelativeMoveAndResizeAction const reloaded{root};
+  RelativeMoveAndResize const reloaded{root};
   EXPECT_EQ(reloaded.id(), kRelativeMonitorIdUnset);
 }
 

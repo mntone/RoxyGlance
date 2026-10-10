@@ -4,7 +4,7 @@
 #include "app/settings/constants.h"
 #include "app/settings/NodeHelper.h"
 #include "app/settings/Rule.h"
-#include "app/settings/action/MoveAndResizeAction.h"
+#include "app/settings/action/MoveAndResize.h"
 
 using namespace std::literals::string_view_literals;
 
@@ -126,11 +126,11 @@ x: 0.25
   Action const action{root};
   EXPECT_EQ(action.type(), AT::kRelativeMoveAndResize);
 
-  auto const detail = action.as<RelativeMoveAndResizeAction>();
+  auto const detail = action.as<RelativeMoveAndResize>();
   EXPECT_EQ(detail.id(), 3);
   EXPECT_EQ(detail.windowBounds().x(), 0.25f);
   EXPECT_THROW(
-    action.as<AbsoluteMoveAndResizeAction>(),
+    action.as<AbsoluteMoveAndResize>(),
     winrt::hresult_invalid_argument
   );
 }

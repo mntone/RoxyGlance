@@ -6,9 +6,9 @@
 
 namespace roxyg::settings::action {
 
-class AbsoluteMoveAndResizeAction final {
+class AbsoluteMoveAndResize final {
 public:
-  explicit AbsoluteMoveAndResizeAction(c4::yml::NodeRef node);
+  explicit AbsoluteMoveAndResize(c4::yml::NodeRef node);
 
   [[nodiscard]] constexpr numeric::long4 windowBounds() const noexcept {
     return window_bounds_;
@@ -23,9 +23,9 @@ private:
   numeric::long4 window_bounds_;
 };
 
-class RelativeMoveAndResizeAction final {
+class RelativeMoveAndResize final {
 public:
-  explicit RelativeMoveAndResizeAction(c4::yml::NodeRef node);
+  explicit RelativeMoveAndResize(c4::yml::NodeRef node);
 
   [[nodiscard]] constexpr int id() const noexcept {
     return id_;
@@ -57,12 +57,12 @@ private:
 namespace roxyg::settings::detail {
 
 template<>
-struct ActionTypeTraits<action::AbsoluteMoveAndResizeAction> {
+struct ActionTypeTraits<action::AbsoluteMoveAndResize> {
   static constexpr ActionType value = ActionType::kAbsoluteMoveAndResize;
 };
 
 template<>
-struct ActionTypeTraits<action::RelativeMoveAndResizeAction> {
+struct ActionTypeTraits<action::RelativeMoveAndResize> {
   static constexpr ActionType value = ActionType::kRelativeMoveAndResize;
 };
 

@@ -111,7 +111,7 @@
     <ClInclude Include="numeric\x86\int32x4_x86.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="settings\Action.h" />
-    <ClInclude Include="settings\action\MoveAndResizeAction.h" />
+    <ClInclude Include="settings\action\MoveAndResize.h" />
     <ClInclude Include="settings\constants.h" />
     <ClInclude Include="settings\Filter.h" />
     <ClInclude Include="settings\ISettingsListener.h" />
@@ -167,7 +167,7 @@
     <ClCompile Include="message\MessageWindow.cc" />
     <ClCompile Include="monitor\MonitorState.cc" />
     <ClCompile Include="monitor\MonitorStateCache.cc" />
-    <ClCompile Include="settings\action\MoveAndResizeAction.cc" />
+    <ClCompile Include="settings\action\MoveAndResize.cc" />
     <ClCompile Include="settings\Action.cc" />
     <ClCompile Include="settings\Filter.cc" />
     <ClCompile Include="settings\NodeHelper.cc" />

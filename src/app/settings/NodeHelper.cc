@@ -197,9 +197,12 @@ void settings::WriteStringAndMatchTypeToNode(c4::yml::NodeRef node, settings::St
     throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
   }
 
+  size_t const u16len{val.second.size()};
   std::string u8str;
-  winrt::hresult const hr = win32::ConvertUtf16ToUtf8(val.second.data(), static_cast<int>(val.second.size()), u8str);
-  winrt::check_hresult(hr);
+  if (u16len > 0) [[likely]] {
+    winrt::hresult const hr = win32::ConvertUtf16ToUtf8(val.second.data(), static_cast<int>(u16len), u8str);
+    winrt::check_hresult(hr);
+  }
 
   switch (val.first) {
   case CT::kContains:

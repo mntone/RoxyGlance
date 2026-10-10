@@ -15,12 +15,13 @@ TEST(StringConversion, ConvertsUtf8ToUtf16) {
   EXPECT_EQ(utf16, L"utf8to16\U0001F389");
 }
 
-TEST(StringConversion, ConvertsEmptyUtf8ToEmptyUtf16) {
+#ifdef _DEBUG
+TEST(StringConversion, AssertsOnZeroLengthUtf8Input) {
   std::wstring utf16 = L"previous value";
 
-  EXPECT_EQ(ConvertUtf8ToUtf16("", 0, utf16), S_OK);
-  EXPECT_TRUE(utf16.empty());
+  EXPECT_DEATH(ConvertUtf8ToUtf16("", 0, utf16), "utf8len > 0 && utf8ptr");
 }
+#endif
 
 TEST(StringConversion, RejectsMalformedUtf8) {
   std::string const utf8{"\xC3(", 2};
@@ -53,12 +54,13 @@ TEST(StringConversion, ConvertsUtf16ToUtf8) {
   EXPECT_EQ(utf8, "utf16to8\xF0\x9F\x8E\x89");
 }
 
-TEST(StringConversion, ConvertsEmptyUtf16ToEmptyUtf8) {
+#ifdef _DEBUG
+TEST(StringConversion, AssertsOnZeroLengthUtf16Input) {
   std::string utf8 = "previous value";
 
-  EXPECT_EQ(ConvertUtf16ToUtf8(L"", 0, utf8), S_OK);
-  EXPECT_TRUE(utf8.empty());
+  EXPECT_DEATH(ConvertUtf16ToUtf8(L"", 0, utf8), "utf16len > 0 && utf16ptr");
 }
+#endif
 
 TEST(StringConversion, RejectsMalformedUtf16) {
   std::wstring utf16;

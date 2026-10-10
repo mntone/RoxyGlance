@@ -9,36 +9,50 @@ winrt::hresult win32::ConvertUtf8ToUtf16(
   int const utf8len,
   std::wstring& utf16
 ) noexcept {
-  if (utf8len == 0) [[unlikely]] {
-    utf16.clear();
-    return S_OK;
-  }
+  ROXYG_UNCHECKED_ASSERT(utf8len > 0 && utf8ptr);
 
-  size_t const utf16len = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, utf8ptr, utf8len, nullptr, 0);
+  int const utf16len = MultiByteToWideChar(
+    CP_UTF8, MB_ERR_INVALID_CHARS,
+    utf8ptr, utf8len,
+    nullptr, 0
+  );
   if (utf16len == 0) [[unlikely]] {
     return hresult::LastErrorAsHResult();
   }
 
 #if defined(__cpp_lib_string_resize_and_overwrite) && __cpp_lib_string_resize_and_overwrite >= 202110L
-  winrt::hresult hr = S_OK;
-  utf16.resize_and_overwrite(utf16len, [&hr, utf8ptr, utf8len](wchar_t* buf, size_t buf_size) noexcept {
-    int const written = MultiByteToWideChar(
-        CP_UTF8, MB_ERR_INVALID_CHARS,
-        utf8ptr, utf8len,
-        buf, static_cast<int>(buf_size)
-    );
-    if (written <= 0) {
-      hr = hresult::LastErrorAsHResult();
-      return 0;
-    }
+  try {
+    winrt::hresult hr = S_OK;
+    utf16.resize_and_overwrite(utf16len, [&hr, utf8ptr, utf8len](wchar_t* buf, size_t buf_size) noexcept {
+      int const written = MultiByteToWideChar(
+          CP_UTF8, MB_ERR_INVALID_CHARS,
+          utf8ptr, utf8len,
+          buf, static_cast<int>(buf_size)
+      );
+      if (written <= 0) {
+        hr = hresult::LastErrorAsHResult();
+        return 0;
+      }
 
-    return written;
-  });
-  return hr;
+      return written;
+    });
+    return hr;
+  } catch (std::bad_alloc const&) {
+    return E_OUTOFMEMORY;
+  } catch (std::length_error const&) {
+    return E_INVALIDARG;
+  }
 #else
-  utf16.resize(utf16len);
+  try {
+    utf16.resize(utf16len);
+  } catch (std::bad_alloc const&) {
+    return E_OUTOFMEMORY;
+  } catch (std::length_error const&) {
+    return E_INVALIDARG;
+  }
+
   int const written = MultiByteToWideChar(
-      CP_UTF8, 0,
+      CP_UTF8, MB_ERR_INVALID_CHARS,
       utf8ptr, utf8len,
       utf16.data(), utf16len
   );
@@ -57,12 +71,9 @@ winrt::hresult win32::ConvertUtf16ToUtf8(
   int utf16len,
   std::string& utf8
 ) noexcept {
-  if (utf16len == 0) [[unlikely]] {
-    utf8.clear();
-    return S_OK;
-  }
+  ROXYG_UNCHECKED_ASSERT(utf16len > 0 && utf16ptr);
 
-  size_t const utf8len = WideCharToMultiByte(
+  int const utf8len = WideCharToMultiByte(
     CP_UTF8, WC_ERR_INVALID_CHARS,
     utf16ptr, utf16len,
     nullptr, 0,
@@ -73,24 +84,37 @@ winrt::hresult win32::ConvertUtf16ToUtf8(
   }
 
 #if defined(__cpp_lib_string_resize_and_overwrite) && __cpp_lib_string_resize_and_overwrite >= 202110L
-  winrt::hresult hr = S_OK;
-  utf8.resize_and_overwrite(utf8len, [&hr, utf16ptr, utf16len](char* buf, size_t buf_size) noexcept {
-    int const written = WideCharToMultiByte(
-      CP_UTF8, WC_ERR_INVALID_CHARS,
-      utf16ptr, utf16len,
-      buf, static_cast<int>(buf_size),
-      nullptr, nullptr
-    );
-    if (written <= 0) {
-      hr = hresult::LastErrorAsHResult();
-      return 0;
-    }
+  try {
+    winrt::hresult hr = S_OK;
+    utf8.resize_and_overwrite(utf8len, [&hr, utf16ptr, utf16len](char* buf, size_t buf_size) noexcept {
+      int const written = WideCharToMultiByte(
+        CP_UTF8, WC_ERR_INVALID_CHARS,
+        utf16ptr, utf16len,
+        buf, static_cast<int>(buf_size),
+        nullptr, nullptr
+      );
+      if (written <= 0) {
+        hr = hresult::LastErrorAsHResult();
+        return 0;
+      }
 
-    return written;
-  });
-  return hr;
+      return written;
+    });
+    return hr;
+  } catch (std::bad_alloc const&) {
+    return E_OUTOFMEMORY;
+  } catch (std::length_error const&) {
+    return E_INVALIDARG;
+  }
 #else
-  utf8.resize(utf8len);
+  try {
+    utf8.resize(utf8len);
+  } catch (std::bad_alloc const&) {
+    return E_OUTOFMEMORY;
+  } catch (std::length_error const&) {
+    return E_INVALIDARG;
+  }
+
   int const written = WideCharToMultiByte(
     CP_UTF8, WC_ERR_INVALID_CHARS,
     utf16ptr, utf16len,

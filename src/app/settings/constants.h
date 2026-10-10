@@ -41,4 +41,16 @@ inline constexpr std::wstring_view kValueOutOfRangeMessage = L"value out of rang
 
 }  // namespace message
 
+namespace numeric_limit {
+
+inline constexpr long kAbsoluteCoordinateMin = 0;
+inline constexpr long kAbsoluteCoordinateMax = 0x4000;
+inline constexpr int kRelativeMonitorIdUnset = 0;
+inline constexpr int kRelativeMonitorIdMin = 1;
+inline constexpr int kRelativeMonitorIdMax = 16;
+inline constexpr float kRelativeCoordinateMin = 0.f;
+inline constexpr float kRelativeCoordinateMax = 1.f;
+
+}
+
 }

@@ -11,24 +11,28 @@ AbsoluteMoveAndResize::AbsoluteMoveAndResize(c4::yml::NodeRef node)
   , window_bounds_(numeric::long4::make(
     ReadLongFromNodeOrDefault(
       node_[key::kPosX],
+      KeyId::kPositionX,
       numeric_limit::kAbsoluteCoordinateMin,
       numeric_limit::kAbsoluteCoordinateMax,
       0
     ),
     ReadLongFromNodeOrDefault(
       node_[key::kPosY],
+      KeyId::kPositionY,
       numeric_limit::kAbsoluteCoordinateMin,
       numeric_limit::kAbsoluteCoordinateMax,
       0
     ),
     ReadLongFromNodeOrDefault(
       node_[key::kWidth],
+      KeyId::kWidth,
       numeric_limit::kAbsoluteCoordinateMin,
       numeric_limit::kAbsoluteCoordinateMax,
       640
     ),
     ReadLongFromNodeOrDefault(
       node_[key::kHeight],
+      KeyId::kHeight,
       numeric_limit::kAbsoluteCoordinateMin,
       numeric_limit::kAbsoluteCoordinateMax,
       400
@@ -90,24 +94,28 @@ RelativeMoveAndResize::RelativeMoveAndResize(c4::yml::NodeRef node)
   , window_bounds_(numeric::float4::make(
     ReadFloatFromNodeOrDefault(
       node_[key::kPosX],
+      KeyId::kPositionX,
       numeric_limit::kRelativeCoordinateMin,
       numeric_limit::kRelativeCoordinateMax,
       0.5f
     ),
     ReadFloatFromNodeOrDefault(
       node_[key::kPosY],
+      KeyId::kPositionY,
       numeric_limit::kRelativeCoordinateMin,
       numeric_limit::kRelativeCoordinateMax,
       0.5f
     ),
     ReadFloatFromNodeOrDefault(
       node_[key::kWidth],
+      KeyId::kWidth,
       numeric_limit::kRelativeCoordinateMin,
       numeric_limit::kRelativeCoordinateMax,
       1.f
     ),
     ReadFloatFromNodeOrDefault(
       node_[key::kHeight],
+      KeyId::kHeight,
       numeric_limit::kRelativeCoordinateMin,
       numeric_limit::kRelativeCoordinateMax,
       1.f
@@ -115,6 +123,7 @@ RelativeMoveAndResize::RelativeMoveAndResize(c4::yml::NodeRef node)
   ))
   , id_(ReadIntFromNodeOrDefault(
     node_[key::kMonitorId],
+    KeyId::kMonitorId,
     numeric_limit::kRelativeMonitorIdMin,
     numeric_limit::kRelativeMonitorIdMax,
     numeric_limit::kRelativeMonitorIdUnset

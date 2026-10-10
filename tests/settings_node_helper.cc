@@ -13,45 +13,45 @@ using namespace ::roxyg::settings;
 // ---[ Long ]---------------------------------------------
 
 TEST(NodeHelper, ReadLong) {
-  EXPECT_EQ(loadFromYaml("0", ReadLongFromNode, INT32_MIN, INT32_MAX), 0);
-  EXPECT_EQ(loadFromYaml("2147483647", ReadLongFromNode, INT32_MIN, INT32_MAX), 2147483647);
-  EXPECT_EQ(loadFromYaml("-2147483648", ReadLongFromNode, INT32_MIN, INT32_MAX), -2147483648);
-  EXPECT_THROW(loadFromYaml("", ReadLongFromNode, INT32_MIN, INT32_MAX), winrt::hresult_invalid_argument);
-  EXPECT_THROW(loadFromYaml("2147483648", ReadLongFromNode, INT32_MIN, INT32_MAX), winrt::hresult_invalid_argument);
-  EXPECT_THROW(loadFromYaml("-2147483649", ReadLongFromNode, INT32_MIN, INT32_MAX), winrt::hresult_invalid_argument);
+  EXPECT_EQ(loadFromYaml("0", ReadLongFromNode, KeyId::kNone, INT32_MIN, INT32_MAX), 0);
+  EXPECT_EQ(loadFromYaml("2147483647", ReadLongFromNode, KeyId::kNone, INT32_MIN, INT32_MAX), 2147483647);
+  EXPECT_EQ(loadFromYaml("-2147483648", ReadLongFromNode, KeyId::kNone, INT32_MIN, INT32_MAX), -2147483648);
+  EXPECT_THROW(loadFromYaml("", ReadLongFromNode, KeyId::kNone, INT32_MIN, INT32_MAX), ParseError);
+  EXPECT_THROW(loadFromYaml("2147483648", ReadLongFromNode, KeyId::kNone, INT32_MIN, INT32_MAX), ParseError);
+  EXPECT_THROW(loadFromYaml("-2147483649", ReadLongFromNode, KeyId::kNone, INT32_MIN, INT32_MAX), ParseError);
 
-  EXPECT_EQ(loadFromYaml("4", ReadLongFromNode, 0, 16), 4);
-  EXPECT_THROW(loadFromYaml("17", ReadLongFromNode, 0, 16), winrt::hresult_invalid_argument);
-  EXPECT_THROW(loadFromYaml("-1", ReadLongFromNode, 0, 16), winrt::hresult_invalid_argument);
+  EXPECT_EQ(loadFromYaml("4", ReadLongFromNode, KeyId::kNone, 0, 16), 4);
+  EXPECT_THROW(loadFromYaml("17", ReadLongFromNode, KeyId::kNone, 0, 16), ParseError);
+  EXPECT_THROW(loadFromYaml("-1", ReadLongFromNode, KeyId::kNone, 0, 16), ParseError);
 
   {
     TEST_YAML(nullval, "value: null");
-    EXPECT_THROW(ReadLongFromNode(nullval["value"], INT32_MIN, INT32_MAX), winrt::hresult_invalid_argument);
+    EXPECT_THROW(ReadLongFromNode(nullval["value"], KeyId::kNone, INT32_MIN, INT32_MAX), ParseError);
   }
 
   {
     TEST_YAML(missing, "{}");
-    EXPECT_THROW(ReadLongFromNode(missing["missing"], INT32_MIN, INT32_MAX), winrt::hresult_invalid_argument);
+    EXPECT_THROW(ReadLongFromNode(missing["missing"], KeyId::kNone, INT32_MIN, INT32_MAX), ParseError);
   }
 }
 
 TEST(NodeHelper, ReadLongOrDefault) {
-  EXPECT_EQ(loadFromYaml("0", ReadLongFromNodeOrDefault, 0, 16, 4), 0);
-  EXPECT_EQ(loadFromYaml("16", ReadLongFromNodeOrDefault, 0, 16, 4), 16);
-  EXPECT_THROW(loadFromYaml("17", ReadLongFromNodeOrDefault, 0, 16, 4), winrt::hresult_invalid_argument);
-  EXPECT_THROW(loadFromYaml("-1", ReadLongFromNodeOrDefault, 0, 16, 4), winrt::hresult_invalid_argument);
+  EXPECT_EQ(loadFromYaml("0", ReadLongFromNodeOrDefault, KeyId::kNone, 0, 16, 4), 0);
+  EXPECT_EQ(loadFromYaml("16", ReadLongFromNodeOrDefault, KeyId::kNone, 0, 16, 4), 16);
+  EXPECT_THROW(loadFromYaml("17", ReadLongFromNodeOrDefault, KeyId::kNone, 0, 16, 4), ParseError);
+  EXPECT_THROW(loadFromYaml("-1", ReadLongFromNodeOrDefault, KeyId::kNone, 0, 16, 4), ParseError);
 
-  EXPECT_EQ(loadFromYaml("null", ReadLongFromNodeOrDefault, 0, 16, 4), 4);  // nullval
-  EXPECT_EQ(loadFromYaml("", ReadLongFromNodeOrDefault, 0, 16, 4), 4);      // emptyval
+  EXPECT_EQ(loadFromYaml("null", ReadLongFromNodeOrDefault, KeyId::kNone, 0, 16, 4), 4);  // nullval
+  EXPECT_EQ(loadFromYaml("", ReadLongFromNodeOrDefault, KeyId::kNone, 0, 16, 4), 4);      // emptyval
 
-  EXPECT_THROW(loadFromYaml("{}", ReadLongFromNodeOrDefault, 0, 16, 4), winrt::hresult_invalid_argument);       // emptymap
-  EXPECT_THROW(loadFromYaml("[]", ReadLongFromNodeOrDefault, 0, 16, 4), winrt::hresult_invalid_argument);       // emptyseq
-  EXPECT_THROW(loadFromYaml("\"\"", ReadLongFromNodeOrDefault, 0, 16, 4), winrt::hresult_invalid_argument);     // emptystr
-  EXPECT_THROW(loadFromYaml("invalid", ReadLongFromNodeOrDefault, 0, 16, 4), winrt::hresult_invalid_argument);  // str
+  EXPECT_THROW(loadFromYaml("{}", ReadLongFromNodeOrDefault, KeyId::kNone, 0, 16, 4), ParseError);       // emptymap
+  EXPECT_THROW(loadFromYaml("[]", ReadLongFromNodeOrDefault, KeyId::kNone, 0, 16, 4), ParseError);       // emptyseq
+  EXPECT_THROW(loadFromYaml("\"\"", ReadLongFromNodeOrDefault, KeyId::kNone, 0, 16, 4), ParseError);     // emptystr
+  EXPECT_THROW(loadFromYaml("invalid", ReadLongFromNodeOrDefault, KeyId::kNone, 0, 16, 4), ParseError);  // str
 
   {
     TEST_YAML(missing, "{}");
-    EXPECT_EQ(ReadLongFromNodeOrDefault(missing["missing"], 0, 16, 4), 4);
+    EXPECT_EQ(ReadLongFromNodeOrDefault(missing["missing"], KeyId::kNone, 0, 16, 4), 4);
   }
 }
 
@@ -70,10 +70,10 @@ TEST(NodeHelper, WriteLong) {
     TEST_YAML(valueonly, "0");
 
     WriteLongToNode(valueonly, 42);
-    EXPECT_EQ(ReadLongFromNode(valueonly, -100, 100), 42);
+    EXPECT_EQ(ReadLongFromNode(valueonly, KeyId::kNone, -100, 100), 42);
 
     WriteLongToNode(valueonly, -17);
-    EXPECT_EQ(ReadLongFromNode(valueonly, -100, 100), -17);
+    EXPECT_EQ(ReadLongFromNode(valueonly, KeyId::kNone, -100, 100), -17);
   }
 
   {
@@ -82,7 +82,7 @@ TEST(NodeHelper, WriteLong) {
 
     c4::yml::NodeRef value{keyvalue[key]};
     WriteLongToNode(value, 442);
-    EXPECT_EQ(ReadLongFromNode(value, -1000, 1000), 442);
+    EXPECT_EQ(ReadLongFromNode(value, KeyId::kNone, -1000, 1000), 442);
   }
 
   {
@@ -90,7 +90,7 @@ TEST(NodeHelper, WriteLong) {
     TEST_YAML(root, "key: value");
 
     WriteLongToNode(root[key], 442);
-    EXPECT_EQ(ReadLongFromNode(root[key], -1000, 1000), 442);
+    EXPECT_EQ(ReadLongFromNode(root[key], KeyId::kNone, -1000, 1000), 442);
   }
 }
 
@@ -98,43 +98,43 @@ TEST(NodeHelper, WriteLong) {
 // ---[ Float ]--------------------------------------------
 
 TEST(NodeHelper, ReadFloat) {
-  EXPECT_EQ(loadFromYaml("0.5", ReadFloatFromNode, -FLT_MAX, FLT_MAX), 0.5f);
-  EXPECT_EQ(loadFromYaml("1.2", ReadFloatFromNode, -FLT_MAX, FLT_MAX), 1.2f);
-  EXPECT_EQ(loadFromYaml("-49.5", ReadFloatFromNode, -FLT_MAX, FLT_MAX), -49.5f);
-  EXPECT_THROW(loadFromYaml(".nan", ReadFloatFromNode, -FLT_MAX, FLT_MAX), winrt::hresult_invalid_argument);
+  EXPECT_EQ(loadFromYaml("0.5", ReadFloatFromNode, KeyId::kNone, -FLT_MAX, FLT_MAX), 0.5f);
+  EXPECT_EQ(loadFromYaml("1.2", ReadFloatFromNode, KeyId::kNone, -FLT_MAX, FLT_MAX), 1.2f);
+  EXPECT_EQ(loadFromYaml("-49.5", ReadFloatFromNode, KeyId::kNone, -FLT_MAX, FLT_MAX), -49.5f);
+  EXPECT_THROW(loadFromYaml(".nan", ReadFloatFromNode, KeyId::kNone, -FLT_MAX, FLT_MAX), ParseError);
 
-  EXPECT_EQ(loadFromYaml("0.25", ReadFloatFromNode, 0.f, 1.f), 0.25f);
-  EXPECT_THROW(loadFromYaml("-0.001", ReadFloatFromNode, 0.f, 1.f), winrt::hresult_invalid_argument);
-  EXPECT_THROW(loadFromYaml("-1.001", ReadFloatFromNode, 0.f, 1.f), winrt::hresult_invalid_argument);
+  EXPECT_EQ(loadFromYaml("0.25", ReadFloatFromNode, KeyId::kNone, 0.f, 1.f), 0.25f);
+  EXPECT_THROW(loadFromYaml("-0.001", ReadFloatFromNode, KeyId::kNone, 0.f, 1.f), ParseError);
+  EXPECT_THROW(loadFromYaml("-1.001", ReadFloatFromNode, KeyId::kNone, 0.f, 1.f), ParseError);
 
   {
     TEST_YAML(nullval, "value: null");
-    EXPECT_THROW(ReadFloatFromNode(nullval["value"], 0.f, 1.f), winrt::hresult_invalid_argument);
+    EXPECT_THROW(ReadFloatFromNode(nullval["value"], KeyId::kNone, 0.f, 1.f), ParseError);
   }
 
   {
     TEST_YAML(missing, "{}");
-    EXPECT_THROW(ReadFloatFromNode(missing["missing"], -1000.f, +1000.f), winrt::hresult_invalid_argument);
+    EXPECT_THROW(ReadFloatFromNode(missing["missing"], KeyId::kNone, -1000.f, +1000.f), ParseError);
   }
 }
 
 TEST(NodeHelper, ReadFloatOrDefault) {
-  EXPECT_EQ(loadFromYaml("0.5", ReadFloatFromNodeOrDefault, 0.f, 1.f, 0.5f), 0.5f);
-  EXPECT_THROW(loadFromYaml("-0.001", ReadFloatFromNodeOrDefault, 0.f, 1.f, 0.5f), winrt::hresult_invalid_argument);
-  EXPECT_THROW(loadFromYaml("-1.001", ReadFloatFromNodeOrDefault, 0.f, 1.f, 0.5f), winrt::hresult_invalid_argument);
-  EXPECT_THROW(loadFromYaml(".nan", ReadFloatFromNodeOrDefault, 0.f, 1.f, 0.5f), winrt::hresult_invalid_argument);
+  EXPECT_EQ(loadFromYaml("0.5", ReadFloatFromNodeOrDefault, KeyId::kNone, 0.f, 1.f, 0.5f), 0.5f);
+  EXPECT_THROW(loadFromYaml("-0.001", ReadFloatFromNodeOrDefault, KeyId::kNone, 0.f, 1.f, 0.5f), ParseError);
+  EXPECT_THROW(loadFromYaml("-1.001", ReadFloatFromNodeOrDefault, KeyId::kNone, 0.f, 1.f, 0.5f), ParseError);
+  EXPECT_THROW(loadFromYaml(".nan", ReadFloatFromNodeOrDefault, KeyId::kNone, 0.f, 1.f, 0.5f), ParseError);
 
-  EXPECT_EQ(loadFromYaml("null", ReadFloatFromNodeOrDefault, 0.f, 1.f, 0.5f), 0.5f);  // nullval
-  EXPECT_EQ(loadFromYaml("", ReadFloatFromNodeOrDefault, 0.f, 1.f, 0.5f), 0.5f);      // emptyval
+  EXPECT_EQ(loadFromYaml("null", ReadFloatFromNodeOrDefault, KeyId::kNone, 0.f, 1.f, 0.5f), 0.5f);  // nullval
+  EXPECT_EQ(loadFromYaml("", ReadFloatFromNodeOrDefault, KeyId::kNone, 0.f, 1.f, 0.5f), 0.5f);      // emptyval
 
-  EXPECT_THROW(loadFromYaml("{}", ReadFloatFromNodeOrDefault, 0.f, 1.f, 0.5f), winrt::hresult_invalid_argument);       // emptymap
-  EXPECT_THROW(loadFromYaml("[]", ReadFloatFromNodeOrDefault, 0.f, 1.f, 0.5f), winrt::hresult_invalid_argument);       // emptyseq
-  EXPECT_THROW(loadFromYaml("\"\"", ReadFloatFromNodeOrDefault, 0.f, 1.f, 0.5f), winrt::hresult_invalid_argument);     // emptystr
-  EXPECT_THROW(loadFromYaml("invalid", ReadFloatFromNodeOrDefault, 0.f, 1.f, 0.5f), winrt::hresult_invalid_argument);  // str
+  EXPECT_THROW(loadFromYaml("{}", ReadFloatFromNodeOrDefault, KeyId::kNone, 0.f, 1.f, 0.5f), ParseError);       // emptymap
+  EXPECT_THROW(loadFromYaml("[]", ReadFloatFromNodeOrDefault, KeyId::kNone, 0.f, 1.f, 0.5f), ParseError);       // emptyseq
+  EXPECT_THROW(loadFromYaml("\"\"", ReadFloatFromNodeOrDefault, KeyId::kNone, 0.f, 1.f, 0.5f), ParseError);     // emptystr
+  EXPECT_THROW(loadFromYaml("invalid", ReadFloatFromNodeOrDefault, KeyId::kNone, 0.f, 1.f, 0.5f), ParseError);  // str
 
   {
     TEST_YAML(missing, "{}");
-    EXPECT_EQ(ReadFloatFromNodeOrDefault(missing["missing"], 0.f, 1.f, 0.5f), 0.5f);
+    EXPECT_EQ(ReadFloatFromNodeOrDefault(missing["missing"], KeyId::kNone, 0.f, 1.f, 0.5f), 0.5f);
   }
 }
 
@@ -153,10 +153,10 @@ TEST(NodeHelper, WriteFloat) {
     TEST_YAML(valueonly, "0");
 
     WriteFloatToNode(valueonly, 0.75f);
-    EXPECT_FLOAT_EQ(ReadFloatFromNode(valueonly, -100.f, +100.f), 0.75f);
+    EXPECT_FLOAT_EQ(ReadFloatFromNode(valueonly, KeyId::kNone, -100.f, +100.f), 0.75f);
 
     WriteFloatToNode(valueonly, -49.5f);
-    EXPECT_FLOAT_EQ(ReadFloatFromNode(valueonly, -100.f, +100.f), -49.5f);
+    EXPECT_FLOAT_EQ(ReadFloatFromNode(valueonly, KeyId::kNone, -100.f, +100.f), -49.5f);
   }
 
   {
@@ -165,7 +165,7 @@ TEST(NodeHelper, WriteFloat) {
 
     c4::yml::NodeRef value{keyvalue[key]};
     WriteFloatToNode(value, 442.f);
-    EXPECT_EQ(ReadFloatFromNode(value, -1000.f, +1000.f), 442.f);
+    EXPECT_EQ(ReadFloatFromNode(value, KeyId::kNone, -1000.f, +1000.f), 442.f);
   }
 
   {
@@ -173,7 +173,7 @@ TEST(NodeHelper, WriteFloat) {
     TEST_YAML(root, "key: value");
 
     WriteFloatToNode(root[key], 442.f);
-    EXPECT_EQ(ReadFloatFromNode(root[key], -1000.f, +1000.f), 442.f);
+    EXPECT_EQ(ReadFloatFromNode(root[key], KeyId::kNone, -1000.f, +1000.f), 442.f);
   }
 }
 

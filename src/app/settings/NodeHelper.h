@@ -1,13 +1,14 @@
 #pragma once
+#include "ParseError.h"
 #include "String.h"
 
 namespace roxyg::settings {
 
-long ReadLongFromNode(c4::yml::ConstNodeRef node, long min_val, long max_val);
-long ReadLongFromNodeOrDefault(c4::yml::ConstNodeRef node, long min_val, long max_val, long def_val);
+long ReadLongFromNode(c4::yml::ConstNodeRef node, KeyId id, long min_val, long max_val);
+long ReadLongFromNodeOrDefault(c4::yml::ConstNodeRef node, KeyId id, long min_val, long max_val, long def_val);
 
-float ReadFloatFromNode(c4::yml::ConstNodeRef node, float min_val, float max_val);
-float ReadFloatFromNodeOrDefault(c4::yml::ConstNodeRef node, float min_val, float max_val, float def_val);
+float ReadFloatFromNode(c4::yml::ConstNodeRef node, KeyId id, float min_val, float max_val);
+float ReadFloatFromNodeOrDefault(c4::yml::ConstNodeRef node, KeyId id, float min_val, float max_val, float def_val);
 
 std::wstring ReadStringFromNode(c4::yml::ConstNodeRef node);
 StringAndMatchType ReadStringAndMatchTypeFromNode(c4::yml::ConstNodeRef node);
@@ -18,10 +19,10 @@ void WriteStringAndMatchTypeToNode(c4::yml::NodeRef node, StringAndMatchType val
 
 }
 
-#define ReadIntFromNode(node, min, max) \
-  static_cast<int>(ReadLongFromNode((node), static_cast<long>(min), static_cast<long>(max)))
-#define ReadIntFromNodeOrDefault(node, min, max, def) \
-  static_cast<int>(ReadLongFromNodeOrDefault((node), static_cast<long>(min), static_cast<long>(max), static_cast<long>(def)))
+#define ReadIntFromNode(node, id, min, max) \
+  static_cast<int>(ReadLongFromNode((node), id, static_cast<long>(min), static_cast<long>(max)))
+#define ReadIntFromNodeOrDefault(node, id, min, max, def) \
+  static_cast<int>(ReadLongFromNodeOrDefault((node), id, static_cast<long>(min), static_cast<long>(max), static_cast<long>(def)))
 #define WriteIntToNode(node, val) WriteLongToNode(node, static_cast<long>(val))
 
 #include "Action.h"

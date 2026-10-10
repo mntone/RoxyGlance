@@ -5,6 +5,7 @@
 #include <array>
 #include <bit>
 #include <cassert>
+#include <charconv>
 #include <concepts>
 #include <cmath>
 #include <cstdint>

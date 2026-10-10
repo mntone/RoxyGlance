@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "settings_shared.h"
 #include "app/settings/constants.h"
+#include "app/settings/ParseError.h"
 #include "app/settings/action/MoveAndResize.h"
 
 namespace test::roxyg::settings::action {
@@ -42,9 +43,7 @@ y: 40
 width: 320
 height: 240
 )");
-  EXPECT_THROW(
-    AbsoluteMoveAndResize{root},
-    winrt::hresult_invalid_argument);
+  EXPECT_THROW(AbsoluteMoveAndResize{root}, ParseError);
 }
 
 TEST(AbsoluteMoveAndResize, ReadInvalidLargeNumber) {
@@ -54,9 +53,7 @@ y: 40
 width: 16385
 height: 240
 )");
-  EXPECT_THROW(
-    AbsoluteMoveAndResize{root},
-    winrt::hresult_invalid_argument);
+  EXPECT_THROW(AbsoluteMoveAndResize{root}, ParseError);
 }
 
 TEST(AbsoluteMoveAndResize, WriteBounds) {
@@ -119,9 +116,7 @@ y: 0.5
 width: 0.75
 height: 1
 )");
-  EXPECT_THROW(
-    RelativeMoveAndResize{root},
-    winrt::hresult_invalid_argument);
+  EXPECT_THROW(RelativeMoveAndResize{root}, ParseError);
 }
 
 TEST(RelativeMoveAndResize, ReadInvalidLargeNumber) {
@@ -131,9 +126,7 @@ y: 0.5
 width: 0.75
 height: 1.001
 )");
-  EXPECT_THROW(
-    RelativeMoveAndResize{root},
-    winrt::hresult_invalid_argument);
+  EXPECT_THROW(RelativeMoveAndResize{root}, ParseError);
 }
 
 TEST(RelativeMoveAndResize, WriteProperties) {

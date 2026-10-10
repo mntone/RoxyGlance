@@ -15,28 +15,28 @@ struct enum_range<roxyg::settings::StringMatchType> {
 
 using namespace roxyg;
 
-long settings::ReadLongFromNode(c4::yml::ConstNodeRef node, long min_val, long max_val) {
+long settings::ReadLongFromNode(c4::yml::ConstNodeRef node, KeyId id, long min_val, long max_val) {
   if (node.invalid() || node.is_container() || !node.has_val()) {
-    throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
+    throw ParseError{ParseErrorReason::kExpectedNumber, id, 0};
   }
 
   long val;
   auto check_val = c4::fmt::overflow_checked(val);
   if (!c4::yml::read(node, &check_val)) {
-    throw winrt::hresult_invalid_argument(message::kInvalidNumberMessage);
+    throw ParseError{ParseErrorReason::kInvalidNumber, id, 0};
   }
   if (val < min_val || max_val < val) {
-    throw winrt::hresult_invalid_argument(winrt::format(message::kValueOutOfRangeMessage, val));
+    throw ParseError{ParseErrorReason::kNumberOutOfRange, id}.setContent(val);
   }
   return val;
 }
 
-long settings::ReadLongFromNodeOrDefault(c4::yml::ConstNodeRef node, long min_val, long max_val, long def_val) {
+long settings::ReadLongFromNodeOrDefault(c4::yml::ConstNodeRef node, KeyId id, long min_val, long max_val, long def_val) {
   if (node.invalid()) {
     return def_val;
   }
   if (node.is_container()) {
-    throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
+    throw ParseError{ParseErrorReason::kExpectedNumber, id, 0};
   }
   if (!node.has_val() || node.val_is_null()) {
     return def_val;
@@ -45,10 +45,10 @@ long settings::ReadLongFromNodeOrDefault(c4::yml::ConstNodeRef node, long min_va
   long val;
   auto check_val = c4::fmt::overflow_checked(val);
   if (!c4::yml::read(node, &check_val)) {
-    throw winrt::hresult_invalid_argument(message::kInvalidNumberMessage);
+    throw ParseError{ParseErrorReason::kInvalidNumber, id, 0};
   }
   if (val < min_val || max_val < val) {
-    throw winrt::hresult_invalid_argument(winrt::format(message::kValueOutOfRangeMessage, val));
+    throw ParseError{ParseErrorReason::kNumberOutOfRange, id}.setContent(val);
   }
   return val;
 }
@@ -65,32 +65,32 @@ void settings::WriteLongToNode(c4::yml::NodeRef node, long val) {
   node << val;
 }
 
-float settings::ReadFloatFromNode(c4::yml::ConstNodeRef node, float min_val, float max_val) {
+float settings::ReadFloatFromNode(c4::yml::ConstNodeRef node, KeyId id, float min_val, float max_val) {
   if (node.invalid() || node.is_container() || !node.has_val()) {
-    throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
+    throw ParseError{ParseErrorReason::kExpectedNumber, id, 0};
   }
 
   float val;
   if (!c4::yml::read(node, &val)) {
-    throw winrt::hresult_invalid_argument(message::kInvalidNumberMessage);
+    throw ParseError{ParseErrorReason::kInvalidNumber, id, 0};
   }
 #ifndef _M_FP_FAST
   if (!std::isfinite(val)) {
-    throw winrt::hresult_invalid_argument(winrt::format(message::kValueOutOfRangeMessage, val));
+    throw ParseError{ParseErrorReason::kNumberOutOfRange, id}.setContent(val);
   }
 #endif
   if (val < min_val || max_val < val) {
-    throw winrt::hresult_invalid_argument(winrt::format(message::kValueOutOfRangeMessage, val));
+    throw ParseError{ParseErrorReason::kNumberOutOfRange, id}.setContent(val);
   }
   return val;
 }
 
-float settings::ReadFloatFromNodeOrDefault(c4::yml::ConstNodeRef node, float min_val, float max_val, float def_val) {
+float settings::ReadFloatFromNodeOrDefault(c4::yml::ConstNodeRef node, KeyId id, float min_val, float max_val, float def_val) {
   if (node.invalid()) {
     return def_val;
   }
   if (node.is_container()) {
-    throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
+    throw ParseError{ParseErrorReason::kExpectedNumber, id, 0};
   }
   if (!node.has_val() || node.val_is_null()) {
     return def_val;
@@ -98,15 +98,15 @@ float settings::ReadFloatFromNodeOrDefault(c4::yml::ConstNodeRef node, float min
 
   float val;
   if (!c4::yml::read(node, &val)) {
-    throw winrt::hresult_invalid_argument(message::kInvalidNumberMessage);
+    throw ParseError{ParseErrorReason::kInvalidNumber, id, 0};
   }
 #ifndef _M_FP_FAST
   if (!std::isfinite(val)) {
-    throw winrt::hresult_invalid_argument(winrt::format(message::kValueOutOfRangeMessage, val));
+    throw ParseError{ParseErrorReason::kNumberOutOfRange, id}.setContent(val);
   }
 #endif
   if (val < min_val || max_val < val) {
-    throw winrt::hresult_invalid_argument(winrt::format(message::kValueOutOfRangeMessage, val));
+    throw ParseError{ParseErrorReason::kNumberOutOfRange, id}.setContent(val);
   }
   return val;
 }

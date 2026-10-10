@@ -3,44 +3,27 @@
 
 namespace roxyg::settings {
 
-long ReadLongFromNode(c4::yml::ConstNodeRef node);
-long ReadBoundedLongFromNode(c4::yml::ConstNodeRef node, long min_val, long max_val);
-long ReadBoundedLongFromNodeOrDefault(c4::yml::ConstNodeRef node, long min_val, long max_val, long def_val);
+long ReadLongFromNode(c4::yml::ConstNodeRef node, long min_val, long max_val);
+long ReadLongFromNodeOrDefault(c4::yml::ConstNodeRef node, long min_val, long max_val, long def_val);
 
-float ReadFloatFromNode(c4::yml::ConstNodeRef node);
-float ReadBoundedFloatFromNode(c4::yml::ConstNodeRef node, float min_val, float max_val);
-float ReadBoundedFloatFromNodeOrDefault(c4::yml::ConstNodeRef node, float min_val, float max_val, float def_val);
+float ReadFloatFromNode(c4::yml::ConstNodeRef node, float min_val, float max_val);
+float ReadFloatFromNodeOrDefault(c4::yml::ConstNodeRef node, float min_val, float max_val, float def_val);
 
 std::string ReadStringFromNode(c4::yml::ConstNodeRef node);
 std::wstring ReadStringAsUtf16FromNode(c4::yml::ConstNodeRef node);
 StringAndCompareType ReadStringAndCompareTypeFromNode(c4::yml::ConstNodeRef node);
 
-void WriteLongToNode(c4::yml::NodeRef node, c4::csubstr key, long val);
-void WriteFloatToNode(c4::yml::NodeRef node, c4::csubstr key, float val);
+void WriteLongToNode(c4::yml::NodeRef node, long val);
+void WriteFloatToNode(c4::yml::NodeRef node, float val);
 void WriteStringAndCompareTypeToNode(c4::yml::NodeRef node, c4::csubstr key, StringAndCompareType val);
 
-ROXYG_ALWAYS_INLINE int ReadIntFromNode(c4::yml::ConstNodeRef node) {
-  return static_cast<int>(ReadLongFromNode(node));
-}
-ROXYG_ALWAYS_INLINE int ReadBoundedIntFromNode(c4::yml::ConstNodeRef node, int min_val, int max_val) {
-  return static_cast<int>(ReadBoundedLongFromNode(
-    node,
-    static_cast<long>(min_val),
-    static_cast<long>(max_val)));
-}
-ROXYG_ALWAYS_INLINE int ReadBoundedIntFromNodeOrDefault(c4::yml::ConstNodeRef node, int min_val, int max_val, int def_val) {
-  return static_cast<int>(ReadBoundedLongFromNodeOrDefault(
-    node,
-    static_cast<long>(min_val),
-    static_cast<long>(max_val),
-    static_cast<long>(def_val)));
 }
 
-ROXYG_ALWAYS_INLINE void WriteIntToNode(c4::yml::NodeRef node, c4::csubstr key, int val) {
-  WriteLongToNode(node, key, static_cast<long>(val));
-}
-
-}
+#define ReadIntFromNode(node, min, max) \
+  static_cast<int>(ReadLongFromNode((node), static_cast<long>(min), static_cast<long>(max)))
+#define ReadIntFromNodeOrDefault(node, min, max, def) \
+  static_cast<int>(ReadLongFromNodeOrDefault((node), static_cast<long>(min), static_cast<long>(max), static_cast<long>(def)))
+#define WriteIntToNode(node, val) WriteLongToNode(node, static_cast<long>(val))
 
 #include "Action.h"
 #include "TriggerFlags.h"

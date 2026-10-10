@@ -16,8 +16,8 @@ struct enum_range<roxyg::settings::StringCompareType> {
 using namespace magic_enum::bitwise_operators;
 using namespace roxyg;
 
-long settings::ReadLongFromNode(c4::yml::ConstNodeRef node) {
-  if (node.invalid() || !node.has_val()) {
+long settings::ReadLongFromNode(c4::yml::ConstNodeRef node, long min_val, long max_val) {
+  if (node.invalid() || node.is_container() || !node.has_val()) {
     throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
   }
 
@@ -26,19 +26,20 @@ long settings::ReadLongFromNode(c4::yml::ConstNodeRef node) {
   if (!c4::yml::read(node, &check_val)) {
     throw winrt::hresult_invalid_argument(message::kInvalidNumberMessage);
   }
-  return val;
-}
-
-long settings::ReadBoundedLongFromNode(c4::yml::ConstNodeRef node, long min_val, long max_val) {
-  long val = ReadLongFromNode(node);
   if (val < min_val || max_val < val) {
     throw winrt::hresult_invalid_argument(winrt::format(message::kValueOutOfRangeMessage, val));
   }
   return val;
 }
 
-long settings::ReadBoundedLongFromNodeOrDefault(c4::yml::ConstNodeRef node, long min_val, long max_val, long def_val) {
-  if (node.invalid() || !node.has_val()) {
+long settings::ReadLongFromNodeOrDefault(c4::yml::ConstNodeRef node, long min_val, long max_val, long def_val) {
+  if (node.invalid()) {
+    return def_val;
+  }
+  if (node.is_container()) {
+    throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
+  }
+  if (!node.has_val() || node.val_is_null()) {
     return def_val;
   }
 
@@ -53,12 +54,20 @@ long settings::ReadBoundedLongFromNodeOrDefault(c4::yml::ConstNodeRef node, long
   return val;
 }
 
-void settings::WriteLongToNode(c4::yml::NodeRef node, c4::csubstr key, long val) {
-  node[key] << val;
+void settings::WriteLongToNode(c4::yml::NodeRef node, long val) {
+#ifdef _DEBUG
+  assert(!node.invalid());  // node.readable() || node.is_seed()
+#endif
+
+  if (!node.is_seed() && !node.has_val()) {
+    throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
+  }
+
+  node << val;
 }
 
-float settings::ReadFloatFromNode(c4::yml::ConstNodeRef node) {
-  if (node.invalid() || !node.has_val()) {
+float settings::ReadFloatFromNode(c4::yml::ConstNodeRef node, float min_val, float max_val) {
+  if (node.invalid() || node.is_container() || !node.has_val()) {
     throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
   }
 
@@ -66,19 +75,25 @@ float settings::ReadFloatFromNode(c4::yml::ConstNodeRef node) {
   if (!c4::yml::read(node, &val)) {
     throw winrt::hresult_invalid_argument(message::kInvalidNumberMessage);
   }
-  return val;
-}
-
-float settings::ReadBoundedFloatFromNode(c4::yml::ConstNodeRef node, float min_val, float max_val) {
-  float val = ReadFloatFromNode(node);
+#ifndef _M_FP_FAST
+  if (!std::isfinite(val)) {
+    throw winrt::hresult_invalid_argument(winrt::format(message::kValueOutOfRangeMessage, val));
+  }
+#endif
   if (val < min_val || max_val < val) {
     throw winrt::hresult_invalid_argument(winrt::format(message::kValueOutOfRangeMessage, val));
   }
   return val;
 }
 
-float settings::ReadBoundedFloatFromNodeOrDefault(c4::yml::ConstNodeRef node, float min_val, float max_val, float def_val) {
-  if (node.invalid() || !node.has_val()) {
+float settings::ReadFloatFromNodeOrDefault(c4::yml::ConstNodeRef node, float min_val, float max_val, float def_val) {
+  if (node.invalid()) {
+    return def_val;
+  }
+  if (node.is_container()) {
+    throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
+  }
+  if (!node.has_val() || node.val_is_null()) {
     return def_val;
   }
 
@@ -86,14 +101,27 @@ float settings::ReadBoundedFloatFromNodeOrDefault(c4::yml::ConstNodeRef node, fl
   if (!c4::yml::read(node, &val)) {
     throw winrt::hresult_invalid_argument(message::kInvalidNumberMessage);
   }
+#ifndef _M_FP_FAST
+  if (!std::isfinite(val)) {
+    throw winrt::hresult_invalid_argument(winrt::format(message::kValueOutOfRangeMessage, val));
+  }
+#endif
   if (val < min_val || max_val < val) {
     throw winrt::hresult_invalid_argument(winrt::format(message::kValueOutOfRangeMessage, val));
   }
   return val;
 }
 
-void settings::WriteFloatToNode(c4::yml::NodeRef node, c4::csubstr key, float val) {
-  node[key] << val;
+void settings::WriteFloatToNode(c4::yml::NodeRef node, float val) {
+#ifdef _DEBUG
+  assert(!node.invalid());  // node.readable() || node.is_seed()
+#endif
+
+  if (!node.is_seed() && !node.has_val()) {
+    throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
+  }
+
+  node << val;
 }
 
 std::string settings::ReadStringFromNode(c4::yml::ConstNodeRef node) {

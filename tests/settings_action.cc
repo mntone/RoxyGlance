@@ -11,7 +11,7 @@ using namespace ::roxyg::settings::numeric_limit;
 
 // ---[ AbsoluteMoveAndResize ]----------------------------
 
-TEST(AbsoluteMoveAndResize, LoadValidYaml) {
+TEST(AbsoluteMoveAndResize, ReadWithAllProps) {
   TEST_YAML(root, R"(
 x: 0
 y: 40
@@ -25,7 +25,17 @@ height: 240
   EXPECT_EQ(action.windowBounds().w(), 240);
 }
 
-TEST(AbsoluteMoveAndResize, LoadInvalidSmallNumber) {
+TEST(AbsoluteMoveAndResize, ReadDefaults) {
+  TEST_YAML(root, "{}");
+
+  AbsoluteMoveAndResizeAction const action{root};
+  EXPECT_EQ(action.windowBounds().x(), 0);
+  EXPECT_EQ(action.windowBounds().y(), 0);
+  EXPECT_EQ(action.windowBounds().z(), 640);
+  EXPECT_EQ(action.windowBounds().w(), 400);
+}
+
+TEST(AbsoluteMoveAndResize, ReadInvalidSmallNumber) {
   TEST_YAML(root, R"(
 x: -1
 y: 40
@@ -37,7 +47,7 @@ height: 240
     winrt::hresult_invalid_argument);
 }
 
-TEST(AbsoluteMoveAndResize, LoadInvalidLargeNumber) {
+TEST(AbsoluteMoveAndResize, ReadInvalidLargeNumber) {
   TEST_YAML(root, R"(
 x: 40
 y: 40
@@ -74,7 +84,7 @@ TEST(AbsoluteMoveAndResize, WriteBounds) {
 
 // ---[ RelativeMoveAndResize ]----------------------------
 
-TEST(RelativeMoveAndResize, LoadValidYaml) {
+TEST(RelativeMoveAndResize, ReadWithAllProps) {
   TEST_YAML(root, R"(
 id: 3
 x: 0
@@ -90,7 +100,7 @@ height: 0.9
   EXPECT_EQ(action.windowBounds().w(), 0.9f);
 }
 
-TEST(RelativeMoveAndResize, LoadValidYamlWithoutAll) {
+TEST(RelativeMoveAndResize, ReadDefaults) {
   TEST_YAML(root, R"(
 {}
 )");
@@ -102,7 +112,7 @@ TEST(RelativeMoveAndResize, LoadValidYamlWithoutAll) {
   EXPECT_EQ(action.windowBounds().w(), 1.f);
 }
 
-TEST(RelativeMoveAndResize, LoadInvalidSmallNumber) {
+TEST(RelativeMoveAndResize, ReadInvalidSmallNumber) {
   TEST_YAML(root, R"(
 x: -0.001
 y: 0.5
@@ -114,7 +124,7 @@ height: 1
     winrt::hresult_invalid_argument);
 }
 
-TEST(RelativeMoveAndResize, LoadInvalidLargeNumber) {
+TEST(RelativeMoveAndResize, ReadInvalidLargeNumber) {
   TEST_YAML(root, R"(
 x: 0
 y: 0.5

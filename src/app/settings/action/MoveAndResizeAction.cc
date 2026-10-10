@@ -9,10 +9,30 @@ using namespace roxyg::settings::action;
 AbsoluteMoveAndResizeAction::AbsoluteMoveAndResizeAction(c4::yml::NodeRef node)
   : node_(std::move(node))
   , window_bounds_(numeric::long4::make(
-    ReadLongFromNode(node_[key::kPosX], numeric_limit::kAbsoluteCoordinateMin, numeric_limit::kAbsoluteCoordinateMax),
-    ReadLongFromNode(node_[key::kPosY], numeric_limit::kAbsoluteCoordinateMin, numeric_limit::kAbsoluteCoordinateMax),
-    ReadLongFromNode(node_[key::kWidth], numeric_limit::kAbsoluteCoordinateMin, numeric_limit::kAbsoluteCoordinateMax),
-    ReadLongFromNode(node_[key::kHeight], numeric_limit::kAbsoluteCoordinateMin, numeric_limit::kAbsoluteCoordinateMax)
+    ReadLongFromNodeOrDefault(
+      node_[key::kPosX],
+      numeric_limit::kAbsoluteCoordinateMin,
+      numeric_limit::kAbsoluteCoordinateMax,
+      0
+    ),
+    ReadLongFromNodeOrDefault(
+      node_[key::kPosY],
+      numeric_limit::kAbsoluteCoordinateMin,
+      numeric_limit::kAbsoluteCoordinateMax,
+      0
+    ),
+    ReadLongFromNodeOrDefault(
+      node_[key::kWidth],
+      numeric_limit::kAbsoluteCoordinateMin,
+      numeric_limit::kAbsoluteCoordinateMax,
+      640
+    ),
+    ReadLongFromNodeOrDefault(
+      node_[key::kHeight],
+      numeric_limit::kAbsoluteCoordinateMin,
+      numeric_limit::kAbsoluteCoordinateMax,
+      400
+    )
   )) {
 }
 

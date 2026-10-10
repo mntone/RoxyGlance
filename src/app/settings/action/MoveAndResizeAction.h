@@ -27,7 +27,7 @@ public:
     return id_;
   }
 
-  [[nodiscard]] constexpr StringAndCompareType const& name() const noexcept {
+  [[nodiscard]] constexpr StringAndMatchType const& name() const noexcept {
     return name_;
   }
 
@@ -37,7 +37,7 @@ public:
 
 private:
   c4::yml::NodeRef node_;
-  settings::StringAndCompareType name_;
+  StringAndMatchType name_;
   numeric::float4 window_bounds_;
   int id_;
 };

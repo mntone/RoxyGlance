@@ -7,21 +7,21 @@ class Filter final {
 public:
   explicit Filter(c4::yml::NodeRef node);
 
-  [[nodiscard]] constexpr settings::StringAndCompareType const& processImageName() const noexcept {
+  [[nodiscard]] constexpr StringAndMatchType const& processImageName() const noexcept {
     return process_image_name_;
   }
-  [[nodiscard]] constexpr settings::StringAndCompareType const& windowClass() const noexcept {
+  [[nodiscard]] constexpr StringAndMatchType const& windowClass() const noexcept {
     return window_class_;
   }
-  [[nodiscard]] constexpr settings::StringAndCompareType const& windowTitle() const noexcept {
+  [[nodiscard]] constexpr StringAndMatchType const& windowTitle() const noexcept {
     return window_title_;
   }
 
 private:
   c4::yml::NodeRef node_;
-  settings::StringAndCompareType process_image_name_;
-  settings::StringAndCompareType window_class_;
-  settings::StringAndCompareType window_title_;
+  StringAndMatchType process_image_name_;
+  StringAndMatchType window_class_;
+  StringAndMatchType window_title_;
 };
 
 }

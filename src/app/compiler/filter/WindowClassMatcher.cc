@@ -27,21 +27,21 @@ static bool matchesWindowClassEndsWith(Predicate::DataType const& data, window::
   return windowState.windowClass().ends_with(std::get<std::wstring>(data));
 }
 
-Predicate filter::CompileWindowClass(settings::StringAndCompareType const& conf) {
-  using CT = settings::StringCompareType;
+Predicate filter::CompileWindowClass(settings::StringAndMatchType const& conf) {
+  using MT = settings::StringMatchType;
 
   Predicate::FunctionType fn;
   switch (conf.first) {
-  case CT::kEquals:
+  case MT::kEquals:
     fn = matchesWindowClassEquals;
     break;
-  case CT::kContains:
+  case MT::kContains:
     fn = matchesWindowClassContains;
     break;
-  case CT::kStartsWith:
+  case MT::kStartsWith:
     fn = matchesWindowClassStartsWith;
     break;
-  case CT::kEndsWith:
+  case MT::kEndsWith:
     fn = matchesWindowClassEndsWith;
     break;
   default:

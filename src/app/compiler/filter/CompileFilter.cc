@@ -9,18 +9,18 @@ using namespace roxyg::engine;
 PredicateSet filter::CompileFilter(settings::Filter const& filter) {
   PredicateSet condition;
 
-  settings::StringAndCompareType const& processImageName = filter.processImageName();
-  if (processImageName.first != settings::StringCompareType::kNone) {
+  settings::StringAndMatchType const& processImageName = filter.processImageName();
+  if (!processImageName.second.empty()) {
     condition.emplace_back(filter::CompileProcessImageName(processImageName));
   }
 
-  settings::StringAndCompareType const& windowClass = filter.windowClass();
-  if (windowClass.first != settings::StringCompareType::kNone) {
+  settings::StringAndMatchType const& windowClass = filter.windowClass();
+  if (!windowClass.second.empty() || windowClass.first == settings::StringMatchType::kEquals) {
     condition.emplace_back(filter::CompileWindowClass(windowClass));
   }
 
-  settings::StringAndCompareType const& windowTitle = filter.windowTitle();
-  if (windowTitle.first != settings::StringCompareType::kNone) {
+  settings::StringAndMatchType const& windowTitle = filter.windowTitle();
+  if (!windowTitle.second.empty() || windowTitle.first == settings::StringMatchType::kEquals) {
     condition.emplace_back(filter::CompileWindowTitle(windowTitle));
   }
 

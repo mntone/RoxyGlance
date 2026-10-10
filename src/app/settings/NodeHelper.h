@@ -9,13 +9,12 @@ long ReadLongFromNodeOrDefault(c4::yml::ConstNodeRef node, long min_val, long ma
 float ReadFloatFromNode(c4::yml::ConstNodeRef node, float min_val, float max_val);
 float ReadFloatFromNodeOrDefault(c4::yml::ConstNodeRef node, float min_val, float max_val, float def_val);
 
-std::string ReadStringFromNode(c4::yml::ConstNodeRef node);
-std::wstring ReadStringAsUtf16FromNode(c4::yml::ConstNodeRef node);
-StringAndCompareType ReadStringAndCompareTypeFromNode(c4::yml::ConstNodeRef node);
+std::wstring ReadStringFromNode(c4::yml::ConstNodeRef node);
+StringAndMatchType ReadStringAndMatchTypeFromNode(c4::yml::ConstNodeRef node);
 
 void WriteLongToNode(c4::yml::NodeRef node, long val);
 void WriteFloatToNode(c4::yml::NodeRef node, float val);
-void WriteStringAndCompareTypeToNode(c4::yml::NodeRef node, c4::csubstr key, StringAndCompareType val);
+void WriteStringAndMatchTypeToNode(c4::yml::NodeRef node, StringAndMatchType val);
 
 }
 

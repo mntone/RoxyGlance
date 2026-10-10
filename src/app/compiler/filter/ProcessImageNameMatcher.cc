@@ -27,21 +27,21 @@ static bool matchesProcessImageNameEndsWith(Predicate::DataType const& data, win
   return windowState.processImageName().ends_with(std::get<std::wstring>(data));
 }
 
-Predicate filter::CompileProcessImageName(settings::StringAndCompareType const& conf) {
-  using CT = settings::StringCompareType;
+Predicate filter::CompileProcessImageName(settings::StringAndMatchType const& conf) {
+  using MT = settings::StringMatchType;
 
   Predicate::FunctionType fn;
   switch (conf.first) {
-  case CT::kEquals:
+  case MT::kEquals:
     fn = matchesProcessImageNameEquals;
     break;
-  case CT::kContains:
+  case MT::kContains:
     fn = matchesProcessImageNameContains;
     break;
-  case CT::kStartsWith:
+  case MT::kStartsWith:
     fn = matchesProcessImageNameStartsWith;
     break;
-  case CT::kEndsWith:
+  case MT::kEndsWith:
     fn = matchesProcessImageNameEndsWith;
     break;
   default:

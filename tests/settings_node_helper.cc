@@ -6,6 +6,8 @@
 
 namespace test::roxyg::settings {
 
+using MT = ::roxyg::settings::StringMatchType;
+
 using namespace ::roxyg::settings;
 
 // ---[ Long ]---------------------------------------------
@@ -179,45 +181,57 @@ TEST(NodeHelper, WriteFloat) {
 // ---[ String ]--------------------------------------------
 
 TEST(NodeHelper, ReadString) {
-  EXPECT_EQ(loadFromYaml("utf8", ReadStringFromNode), "utf8");
-  EXPECT_THROW(loadFromYaml("", ReadStringFromNode), winrt::hresult_invalid_argument);
+  EXPECT_EQ(loadFromYaml("", ReadStringFromNode), L"");
+  EXPECT_EQ(loadFromYaml("utf8to16\xF0\x9F\x8E\x89", ReadStringFromNode), L"utf8to16\U0001F389");
+
+  EXPECT_EQ(loadFromYaml("null", ReadStringFromNode), L"");  // nullval
+  EXPECT_EQ(loadFromYaml("", ReadStringFromNode), L"");      // emptyval
+  EXPECT_THROW(loadFromYaml("{}", ReadStringFromNode), winrt::hresult_invalid_argument);  // emptymap
+  EXPECT_THROW(loadFromYaml("[]", ReadStringFromNode), winrt::hresult_invalid_argument);  // emptyseq
 }
 
-TEST(NodeHelper, ReadStringAsUtf16) {
-  EXPECT_EQ(loadFromYaml("", ReadStringAsUtf16FromNode), L"");
-  EXPECT_EQ(loadFromYaml("utf8to16\xF0\x9F\x8E\x89", ReadStringAsUtf16FromNode), L"utf8to16\U0001F389");
+TEST(NodeHelper, ReadStringAndMatchType) {
+  EXPECT_EQ(loadFromYaml("contains", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kContains, L"contains"));
+  EXPECT_EQ(loadFromYaml("^startswith", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kStartsWith, L"startswith"));
+  EXPECT_EQ(loadFromYaml("endswith$", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kEndsWith, L"endswith"));
+  EXPECT_EQ(loadFromYaml("^equals$", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kEquals, L"equals"));
+
+  EXPECT_EQ(loadFromYaml("", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kContains, L""));
+  EXPECT_EQ(loadFromYaml("^", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kStartsWith, L""));
+  EXPECT_EQ(loadFromYaml("$", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kEndsWith, L""));
+  EXPECT_EQ(loadFromYaml("^$", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kEquals, L""));
 }
 
-TEST(NodeHelper, ReadStringAndCompareType) {
-  using CT = settings::StringCompareType;
+TEST(NodeHelper, WriteStringAndMatchType) {
+  constexpr c4::csubstr key = "value";
+  TEST_YAML(root, "{}");
 
-  EXPECT_EQ(loadFromYaml("", ReadStringAndCompareTypeFromNode), std::make_pair(CT::kNone, L""));
-  EXPECT_EQ(loadFromYaml("contains", ReadStringAndCompareTypeFromNode), std::make_pair(CT::kContains, L"contains"));
-  EXPECT_EQ(loadFromYaml("^startswith", ReadStringAndCompareTypeFromNode), std::make_pair(CT::kStartsWith, L"startswith"));
-  EXPECT_EQ(loadFromYaml("endswith$", ReadStringAndCompareTypeFromNode), std::make_pair(CT::kEndsWith, L"endswith"));
-  EXPECT_EQ(loadFromYaml("^equals$", ReadStringAndCompareTypeFromNode), std::make_pair(CT::kEquals, L"equals"));
-}
-
-TEST(NodeHelper, WriteStringAndCompareType) {
-  using CT = settings::StringCompareType;
-
-  c4::yml::Tree tree;
-  c4::yml::parse_in_arena(c4::to_csubstr(std::string_view{"{}"}), &tree);
-  c4::yml::NodeRef root = tree.rootref();
   std::wstring const value = L"utf16to8\U0001F389";
-  c4::csubstr const key = c4::to_csubstr("filter");
 
-  WriteStringAndCompareTypeToNode(root, key, {CT::kContains, value});
-  EXPECT_EQ(ReadStringFromNode(root[key]), "utf16to8\xF0\x9F\x8E\x89");
-  WriteStringAndCompareTypeToNode(root, key, {CT::kStartsWith, value});
-  EXPECT_EQ(ReadStringFromNode(root[key]), "^utf16to8\xF0\x9F\x8E\x89");
-  WriteStringAndCompareTypeToNode(root, key, {CT::kEndsWith, value});
-  EXPECT_EQ(ReadStringFromNode(root[key]), "utf16to8\xF0\x9F\x8E\x89$");
-  WriteStringAndCompareTypeToNode(root, key, {CT::kEquals, value});
-  EXPECT_EQ(ReadStringFromNode(root[key]), "^utf16to8\xF0\x9F\x8E\x89$");
+  WriteStringAndMatchTypeToNode(root[key], {MT::kContains, value});
+  EXPECT_EQ(root[key].val(), "utf16to8\xF0\x9F\x8E\x89");
+  WriteStringAndMatchTypeToNode(root[key], {MT::kStartsWith, value});
+  EXPECT_EQ(root[key].val(), "^utf16to8\xF0\x9F\x8E\x89");
+  WriteStringAndMatchTypeToNode(root[key], {MT::kEndsWith, value});
+  EXPECT_EQ(root[key].val(), "utf16to8\xF0\x9F\x8E\x89$");
+  WriteStringAndMatchTypeToNode(root[key], {MT::kEquals, value});
+  EXPECT_EQ(root[key].val(), "^utf16to8\xF0\x9F\x8E\x89$");
 
-  WriteStringAndCompareTypeToNode(root, key, {CT::kNone, value});
-  EXPECT_FALSE(root.has_child(key));
+  WriteStringAndMatchTypeToNode(root[key], {MT::kContains, L""});
+  EXPECT_EQ(root[key].val(), "");
+  EXPECT_EQ(ReadStringAndMatchTypeFromNode(root[key]), std::make_pair(MT::kContains, L""));
+
+  WriteStringAndMatchTypeToNode(root[key], {MT::kStartsWith, L""});
+  EXPECT_EQ(root[key].val(), "^");
+  EXPECT_EQ(ReadStringAndMatchTypeFromNode(root[key]), std::make_pair(MT::kStartsWith, L""));
+
+  WriteStringAndMatchTypeToNode(root[key], {MT::kEndsWith, L""});
+  EXPECT_EQ(root[key].val(), "$");
+  EXPECT_EQ(ReadStringAndMatchTypeFromNode(root[key]), std::make_pair(MT::kEndsWith, L""));
+
+  WriteStringAndMatchTypeToNode(root[key], {MT::kEquals, L""});
+  EXPECT_EQ(root[key].val(), "^$");
+  EXPECT_EQ(ReadStringAndMatchTypeFromNode(root[key]), std::make_pair(MT::kEquals, L""));
 }
 
 }  // namespace test::roxyg::settings

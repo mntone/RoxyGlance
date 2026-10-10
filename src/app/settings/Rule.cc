@@ -33,7 +33,7 @@ static ROXYG_ALWAYS_INLINE Filter readFilter(c4::yml::NodeRef n) {
 
 Rule::Rule(c4::yml::NodeRef node)
   : node_(std::move(node))
-  , name_(ReadStringAsUtf16FromNode(node_[key::kName]))
+  , name_(ReadStringFromNode(node_[key::kName]))
   , filter_(readFilter(node_))
   , triggers_(readTriggers(node_))
   , action_(node_[key::kThen]) {

@@ -12,7 +12,7 @@ namespace test::roxyg::settings {
 
 using AT = ::roxyg::settings::ActionType;
 using TF = ::roxyg::settings::TriggerFlags;
-using CT = ::roxyg::settings::StringCompareType;
+using MT = ::roxyg::settings::StringMatchType;
 
 using namespace ::roxyg::settings;
 using namespace ::roxyg::settings::action;
@@ -142,26 +142,27 @@ TEST(Filter, LoadValidFilter) {
   TEST_YAML(root, R"(
 process: msedge.exe$
 class: ^Intermediate D3D Window$
-title: ^Main Browser$
-)");
-  Filter const filter{root};
-  EXPECT_EQ(filter.processImageName(), std::make_pair(CT::kEndsWith, L"msedge.exe"));
-  EXPECT_EQ(filter.windowClass(), std::make_pair(CT::kEquals, L"Intermediate D3D Window"));
-  EXPECT_EQ(filter.windowTitle(), std::make_pair(CT::kEquals, L"Main Browser"));
-}
-
-TEST(Filter, LoadInvalidFilter) {
-  TEST_YAML(root, R"(
-process: ["array is not supported"]
-class:
-  map: is
-  not: supported
 title: null
 )");
   Filter const filter{root};
-  EXPECT_EQ(filter.processImageName(), std::make_pair(CT::kNone, L""));
-  EXPECT_EQ(filter.windowClass(), std::make_pair(CT::kNone, L""));
-  EXPECT_EQ(filter.windowTitle(), std::make_pair(CT::kContains, L"null"));
+  EXPECT_EQ(filter.processImageName(), std::make_pair(MT::kEndsWith, L"msedge.exe"));
+  EXPECT_EQ(filter.windowClass(), std::make_pair(MT::kEquals, L"Intermediate D3D Window"));
+  EXPECT_EQ(filter.windowTitle(), std::make_pair(MT::kContains, L""));
+}
+
+TEST(Filter, LoadInvalidFilter) {
+  {
+    TEST_YAML(seqchild, "process: [\"seq is not supported\"]");
+    EXPECT_THROW(Filter{seqchild}, winrt::hresult_invalid_argument);
+  }
+  {
+    TEST_YAML(mapchild, R"(
+class:
+  map: is
+  not: supported
+)");
+    EXPECT_THROW(Filter{mapchild}, winrt::hresult_invalid_argument);
+  }
 }
 
 
@@ -331,8 +332,8 @@ then:
   Rule const rule{root};
   EXPECT_EQ(rule.name(), L"Test Name"sv);
   EXPECT_EQ(rule.triggerFlags(), TF::kApplicationStart | TF::kWindowShow);
-  EXPECT_EQ(rule.filter().processImageName(), std::make_pair(CT::kEndsWith, L"msedge.exe"));
-  EXPECT_EQ(rule.filter().windowTitle(), std::make_pair(CT::kEquals, L"Main Browser"));
+  EXPECT_EQ(rule.filter().processImageName(), std::make_pair(MT::kEndsWith, L"msedge.exe"));
+  EXPECT_EQ(rule.filter().windowTitle(), std::make_pair(MT::kEquals, L"Main Browser"));
   EXPECT_EQ(rule.action().type(), AT::kRelativeMoveAndResize);
 }
 

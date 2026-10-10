@@ -27,21 +27,21 @@ static bool matchesWindowTitleEndsWith(Predicate::DataType const& data, window::
   return windowState.windowTitle().ends_with(std::get<std::wstring>(data));
 }
 
-Predicate filter::CompileWindowTitle(settings::StringAndCompareType const& conf) {
-  using CT = settings::StringCompareType;
+Predicate filter::CompileWindowTitle(settings::StringAndMatchType const& conf) {
+  using MT = settings::StringMatchType;
 
   Predicate::FunctionType fn;
   switch (conf.first) {
-  case CT::kEquals:
+  case MT::kEquals:
     fn = matchesWindowTitleEquals;
     break;
-  case CT::kContains:
+  case MT::kContains:
     fn = matchesWindowTitleContains;
     break;
-  case CT::kStartsWith:
+  case MT::kStartsWith:
     fn = matchesWindowTitleStartsWith;
     break;
-  case CT::kEndsWith:
+  case MT::kEndsWith:
     fn = matchesWindowTitleEndsWith;
     break;
   default:

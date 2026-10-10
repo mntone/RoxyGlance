@@ -7,13 +7,12 @@
 namespace magic_enum::customize {
 
 template<>
-struct enum_range<roxyg::settings::StringCompareType> {
+struct enum_range<roxyg::settings::StringMatchType> {
   static constexpr bool is_flags = true;
 };
 
 }
 
-using namespace magic_enum::bitwise_operators;
 using namespace roxyg;
 
 long settings::ReadLongFromNode(c4::yml::ConstNodeRef node, long min_val, long max_val) {
@@ -124,22 +123,19 @@ void settings::WriteFloatToNode(c4::yml::NodeRef node, float val) {
   node << val;
 }
 
-std::string settings::ReadStringFromNode(c4::yml::ConstNodeRef node) {
-  if (node.invalid() || !node.has_val()) {
+std::wstring settings::ReadStringFromNode(c4::yml::ConstNodeRef node) {
+  if (node.invalid()) {
+    return L"";
+  }
+  if (node.is_container()) {
     throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
   }
-
-  c4::csubstr u8str = node.val();
-  return {u8str.str, u8str.len};
-}
-
-std::wstring settings::ReadStringAsUtf16FromNode(c4::yml::ConstNodeRef node) {
-  if (node.invalid() || !node.has_val()) {
+  if (!node.has_val() || node.val_is_null()) {
     return L"";
   }
 
   c4::csubstr u8str = node.val();
-  if (u8str.len == 0) {
+  if (u8str.empty()) {
     return L"";
   }
 
@@ -149,29 +145,39 @@ std::wstring settings::ReadStringAsUtf16FromNode(c4::yml::ConstNodeRef node) {
   return std::move(u16str);
 }
 
-settings::StringAndCompareType settings::ReadStringAndCompareTypeFromNode(c4::yml::ConstNodeRef node) {
-  using CT = settings::StringCompareType;
+settings::StringAndMatchType settings::ReadStringAndMatchTypeFromNode(c4::yml::ConstNodeRef node) {
+  using namespace magic_enum::bitwise_operators;
+  using MT = settings::StringMatchType;
 
-  if (node.invalid() || !node.has_val()) {
-    return {CT::kNone, L""};
+  if (node.invalid()) {
+    return {MT::kContains, L""};
+  }
+  if (node.is_container()) {
+    throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
+  }
+  if (!node.has_val() || node.val_is_null()) {
+    return {MT::kContains, L""};
   }
 
   c4::csubstr u8str = node.val();
-  if (u8str.len == 0) {
-    return {CT::kNone, L""};
+  if (u8str.empty()) {
+    return {MT::kContains, L""};
   }
 
-  CT compare_type = CT::kContains;
+  MT compare_type = MT::kContains;
   char const* utf8ptr = u8str.str;
   int utf8len = static_cast<int>(u8str.len);
   if (u8str.begins_with('^')) {
     ++utf8ptr;
     --utf8len;
-    compare_type |= CT::kStartsWith;
+    compare_type |= MT::kStartsWith;
   }
   if (u8str.ends_with('$')) {
     --utf8len;
-    compare_type |= CT::kEndsWith;
+    compare_type |= MT::kEndsWith;
+  }
+  if (utf8len == 0) {
+    return {compare_type, L""};
   }
 
   std::wstring u16str;
@@ -180,14 +186,15 @@ settings::StringAndCompareType settings::ReadStringAndCompareTypeFromNode(c4::ym
   return {compare_type, u16str};
 }
 
-void settings::WriteStringAndCompareTypeToNode(c4::yml::NodeRef node, c4::csubstr key, settings::StringAndCompareType val) {
-  using CT = settings::StringCompareType;
+void settings::WriteStringAndMatchTypeToNode(c4::yml::NodeRef node, settings::StringAndMatchType val) {
+  using CT = settings::StringMatchType;
 
-  if (val.first == CT::kNone) {
-    if (node.has_child(key)) {
-      node.remove_child(key);
-    }
-    return;
+#ifdef _DEBUG
+  assert(!node.invalid());  // node.readable() || node.is_seed()
+#endif
+
+  if (!node.is_seed() && !node.has_val()) {
+    throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
   }
 
   std::string u8str;
@@ -209,5 +216,5 @@ void settings::WriteStringAndCompareTypeToNode(c4::yml::NodeRef node, c4::csubst
   default:
     throw winrt::hresult_invalid_argument();
   }
-  node[key] << c4::to_csubstr(u8str);
+  node << c4::to_csubstr(u8str);
 }

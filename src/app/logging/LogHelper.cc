@@ -9,7 +9,7 @@ static SYSTEMTIME GetCurrentSystemTime() noexcept {
 
 using namespace roxyg::logging;
 
-void LogHelperBase::log(LogLevel level, LogGroup group, winrt::hstring content, winrt::hresult hresult) noexcept {
+void detail::LogHelperBase::log(LogLevel level, LogGroup group, winrt::hstring content, winrt::hresult hresult) noexcept {
   Logger* const logger{logger_};
   if (!logger) {
     return;

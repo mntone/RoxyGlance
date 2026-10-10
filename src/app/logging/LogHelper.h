@@ -3,11 +3,9 @@
 
 namespace roxyg::logging {
 
+namespace detail {
 class LogHelperBase {
 public:
-  constexpr LogHelperBase() noexcept
-    : logger_(nullptr) {
-  }
   explicit constexpr LogHelperBase(logging::Logger* logger) noexcept
     : logger_(logger) {
   }
@@ -29,10 +27,19 @@ protected:
 private:
   Logger* logger_;
 };
+}
 
 template<LogGroup Group>
-class LogHelper final: public LogHelperBase {
+class LogHelper final: public detail::LogHelperBase {
 public:
+  constexpr LogHelper() noexcept
+    : LogHelperBase(nullptr) {
+  }
+  LogHelper(std::nullptr_t) = delete;
+  explicit constexpr LogHelper(logging::Logger* logger) noexcept
+    : detail::LogHelperBase(logger) {
+  }
+
   ROXYG_ALWAYS_INLINE void trace(winrt::hstring content, winrt::hresult hresult = S_FALSE) noexcept {
     log(LogLevel::kTrace, Group, std::move(content), hresult);
   }

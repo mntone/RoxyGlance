@@ -156,6 +156,9 @@
     <ClInclude Include="settings\NodeHelper.h">
       <Filter>settings</Filter>
     </ClInclude>
+    <ClInclude Include="settings\ParseError.h">
+      <Filter>settings</Filter>
+    </ClInclude>
     <ClInclude Include="settings\Rule.h">
       <Filter>settings</Filter>
     </ClInclude>

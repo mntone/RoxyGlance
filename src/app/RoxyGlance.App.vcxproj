@@ -116,6 +116,7 @@
     <ClInclude Include="settings\Filter.h" />
     <ClInclude Include="settings\ISettingsListener.h" />
     <ClInclude Include="settings\NodeHelper.h" />
+    <ClInclude Include="settings\ParseError.h" />
     <ClInclude Include="settings\Rule.h" />
     <ClInclude Include="settings\SettingsStore.h" />
     <ClInclude Include="settings\String.h" />

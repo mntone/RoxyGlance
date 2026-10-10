@@ -165,6 +165,39 @@ class:
   }
 }
 
+TEST(Filter, WriteStringMatchType) {
+  TEST_YAML(root, "other: preserved");
+
+  Filter filter{root};
+  filter.setProcessImageName({MT::kEndsWith, L"msedge.exe"});
+  filter.setWindowClass({MT::kEquals, L"Main Window"});
+  filter.setWindowTitle({MT::kStartsWith, L"Settings"});
+
+  EXPECT_EQ(root[key::kProcessKey].val(), c4::to_csubstr("msedge.exe$"));
+  EXPECT_EQ(root[key::kWindowClassKey].val(), c4::to_csubstr("^Main Window$"));
+  EXPECT_EQ(root[key::kWindowTitleKey].val(), c4::to_csubstr("^Settings"));
+  EXPECT_EQ(root["other"].val(), c4::to_csubstr("preserved"));
+
+  Filter const reloaded{root};
+  EXPECT_EQ(reloaded.processImageName(), std::make_pair(MT::kEndsWith, L"msedge.exe"));
+  EXPECT_EQ(reloaded.windowClass(), std::make_pair(MT::kEquals, L"Main Window"));
+  EXPECT_EQ(reloaded.windowTitle(), std::make_pair(MT::kStartsWith, L"Settings"));
+}
+
+TEST(Filter, WriteEmptyStringMatchType) {
+  constexpr c4::csubstr key = "title";
+  TEST_YAML(root, "title: ^$");
+
+  Filter filter{root};
+  filter.setWindowTitle({MT::kContains, L""});
+  EXPECT_FALSE(root.has_child(key));
+
+  filter.setWindowTitle({MT::kEquals, L""});
+  ASSERT_TRUE(root.has_child(key));
+  EXPECT_EQ(root[key].val(), "^$");
+  EXPECT_EQ(Filter{root}.windowTitle(), std::make_pair(MT::kEquals, L""));
+}
+
 
 // ---[ Triggers ]-----------------------------------------
 

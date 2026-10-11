@@ -117,6 +117,7 @@
     <ClInclude Include="settings\ISettingsListener.h" />
     <ClInclude Include="settings\NodeHelper.h" />
     <ClInclude Include="settings\ParseError.h" />
+    <ClInclude Include="settings\ParseErrorPrivate.h" />
     <ClInclude Include="settings\Rule.h" />
     <ClInclude Include="settings\SettingsStore.h" />
     <ClInclude Include="settings\String.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="settings\Action.cc" />
     <ClCompile Include="settings\Filter.cc" />
     <ClCompile Include="settings\NodeHelper.cc" />
+    <ClCompile Include="settings\ParseError.cc" />
     <ClCompile Include="settings\Rule.cc" />
     <ClCompile Include="settings\SettingsStore.cc" />
     <ClCompile Include="settings\TriggerFlags.cc" />

@@ -31,6 +31,7 @@ AppContext::AppContext() noexcept {
 #endif
   engine_.setOperationContext(&operation_context_);
   engine_.setLogger(&logger_);
+  settings_store_.setLogger(&logger_);
   ROXYG_DEBUG_ASSERT_SUCCEEDED(settings_store_.addListener(&engine_));
   message_window_.setLogger(&logger_);
   context_logger_.setLogger(&logger_);

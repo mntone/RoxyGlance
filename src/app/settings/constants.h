@@ -33,11 +33,7 @@ inline constexpr c4::csubstr kHeight = "height";
 
 namespace message {
 
-inline constexpr std::wstring_view kInvalidFormatMessage = L"invalid yaml format";
 inline constexpr std::wstring_view kInvalidNodeMessage = L"invalid node";
-inline constexpr std::wstring_view kInvalidNumberMessage = L"invalid number";
-inline constexpr std::wstring_view kMissingRequiredKeyMessage = L"missing required key";
-inline constexpr std::wstring_view kValueOutOfRangeMessage = L"value out of range: {}";
 
 }  // namespace message
 

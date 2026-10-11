@@ -2,6 +2,7 @@
 #include "ISettingsListener.h"
 #include "UserSettings.h"
 
+#include "../logging/LogHelper.h"
 #include "../utility/ListenerHost.h"
 
 namespace roxyg::settings {
@@ -20,8 +21,13 @@ public:
     return user_settings_;
   }
 
+  constexpr void setLogger(logging::Logger* logger) noexcept {
+    logger_.setLogger(logger);
+  }
+
 private:
   settings::UserSettingsDocument user_settings_;
+  logging::LogHelper<logging::LogGroup::kSettings> logger_;
 };
 
 }

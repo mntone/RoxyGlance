@@ -1,11 +1,13 @@
 #pragma once
 #include "Rule.h"
 
+#include "../logging/Logger.h"
+
 namespace roxyg::settings {
 
 class UserSettings final {
 public:
-  explicit UserSettings(c4::yml::NodeRef node);
+  explicit UserSettings(c4::yml::NodeRef node, logging::Logger* logger);
 
   [[nodiscard]] constexpr std::vector<Rule>& rules() noexcept {
     return rules_;
@@ -21,9 +23,9 @@ private:
 
 class UserSettingsDocument final {
 public:
-  inline UserSettingsDocument() noexcept = default;
+  UserSettingsDocument() noexcept = default;
 
-  void load(std::string_view yaml);
+  void load(std::string_view yaml, logging::Logger* logger = nullptr);
 
   [[nodiscard]] constexpr UserSettings* root() noexcept {
     return root_.get();

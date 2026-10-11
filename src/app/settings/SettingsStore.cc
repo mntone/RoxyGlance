@@ -18,7 +18,7 @@ void SettingsStore::reloadUserSettings() {
   winrt::hresult hr = win32::ReadFile(filePath, content);
   switch (hr) {
   case S_OK:
-    user_settings_.load(content);
+    user_settings_.load(content, logger_.logger());
     notify(&ISettingsListener::onSettingsChanged, user_settings_);
     break;
   case win32::hresult::kErrorFileNotFound:

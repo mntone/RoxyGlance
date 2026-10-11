@@ -120,6 +120,7 @@
     <ClCompile Include="retrystate.cc" />
     <ClCompile Include="settings.cc" />
     <ClCompile Include="settings_action.cc" />
+    <ClCompile Include="settings_error.cc" />
     <ClCompile Include="settings_node_helper.cc" />
     <ClCompile Include="win32_string.cc" />
   </ItemGroup>

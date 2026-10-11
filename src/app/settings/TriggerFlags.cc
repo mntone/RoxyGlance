@@ -56,28 +56,6 @@ static ROXYG_ALWAYS_INLINE bool containsTriggerFlag(NodeRef seq, TriggerFlags va
   return found;
 }
 
-static ROXYG_ALWAYS_INLINE NodeRef getOrCreateWhenNode(NodeRef n) {
-  // When `when` is missing:
-  // 1. Insert it before `where`, if present.
-  // 2. Otherwise, insert it before `then`, if present.
-  // 3. Otherwise, append it.
-
-  NodeRef seq;
-  if (!n.has_child(key::kWhen)) {
-    NodeInit const init{KEYSEQ | FLOW_SL, key::kWhen};
-    if (n.has_child(key::kWhere)) {
-      seq = n.insert_child(init, n[key::kWhere].prev_sibling());
-    } else if (n.has_child(key::kThen)) {
-      seq = n.insert_child(init, n[key::kThen].prev_sibling());
-    } else {
-      seq = n.append_child(init);
-    }
-  } else {
-    seq = n[key::kWhen];
-  }
-  return seq;
-}
-
 TriggerFlags roxyg::settings::ReadTriggerFlagsFromNode(ConstNodeRef n) {
   using namespace magic_enum::bitwise_operators;
 
@@ -114,7 +92,18 @@ HRESULT WriteTriggerFlagsToNode(NodeRef n, TriggerFlags value) try {
 
   auto const bs = magic_enum::containers::bitset(value);
 
-  NodeRef when = getOrCreateWhenNode(n);
+  NodeRef when;
+  if (!n.has_child(key::kWhen)) {
+#ifdef _DEBUG
+    // The where key is required.
+    assert(n.has_child(key::kWhere));
+#endif
+
+    NodeInit const init{KEYSEQ | FLOW_SL, key::kWhen};
+    when = n.insert_child(init, n[key::kWhere].prev_sibling());
+  } else {
+    when = n[key::kWhen];
+  }
 #ifdef _DEBUG
   assert(when.is_seq() && when.has_key() || when.is_keyval());
 #endif

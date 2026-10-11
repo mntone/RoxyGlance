@@ -4,30 +4,28 @@
 #include "constants.h"
 #include "NodeHelper.h"
 
+using namespace c4::yml;
 using namespace roxyg::settings;
 
-static ROXYG_ALWAYS_INLINE Filter readFilter(c4::yml::NodeRef n) {
-  if (!n.has_child(key::kWhere)) {
-    c4::yml::NodeRef target;
-    if (n.has_child(key::kWhen)) {
-      target = n.insert_child(n[key::kWhen]);
-    } else if (n.has_child(key::kThen)) {
-      target = n.insert_child(n[key::kThen].prev_sibling());
-    } else {
-      target = n.append_child();
-    }
-
-    c4::yml::NodeRef where = target << c4::yml::key(key::kWhere) << c4::yml::MAP;
-    return Filter{ where };
+static ROXYG_ALWAYS_INLINE void checkRuleNode(ConstNodeRef n) {
+  if (!n.is_map()) {
+    throw ParseError{ParseErrorReason::kExpectedMap, KeyId::kRule, 0};
   }
 
-  return Filter{ n[key::kWhere] };
+  if (!n.has_child(key::kWhere)) {
+    throw ParseError{ParseErrorReason::kMissingRequiredKey, KeyId::kWhere, 0};
+  }
+
+  if (!n.has_child(key::kThen)) {
+    throw ParseError{ParseErrorReason::kMissingRequiredKey, KeyId::kThen, 0};
+  }
 }
 
-Rule::Rule(c4::yml::NodeRef node)
-  : node_(std::move(node))
+Rule::Rule(NodeRef node)
+  // Validate through a const view before taking ownership of the node.
+  : node_((checkRuleNode(node), std::move(node)))
   , name_(ReadStringFromNode(node_[key::kName], KeyId::kName))
-  , filter_(readFilter(node_))
+  , filter_(node_[key::kWhere])
   , triggers_(ReadTriggerFlagsFromNode(node_))
   , action_(node_[key::kThen]) {
 #ifdef _DEBUG

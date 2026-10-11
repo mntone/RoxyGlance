@@ -13,10 +13,6 @@ static ROXYG_ALWAYS_INLINE ActionType toActionType(c4::csubstr str) {
 }
 
 ActionType roxyg::settings::ReadActionTypeFromNode(ConstNodeRef n) {
-  if (!n.is_map()) {
-    throw ParseError{ParseErrorReason::kExpectedMap, KeyId::kThen, 0};
-  }
-
   if (!n.has_child(key::kType)) {
     return ActionType::kInvalid;
   }
@@ -30,9 +26,9 @@ ActionType roxyg::settings::ReadActionTypeFromNode(ConstNodeRef n) {
 }
 
 HRESULT WriteActionTypeToNode(NodeRef n, ActionType value) {
-  if (!n.is_map()) {
-    return E_INVALIDARG;
-  }
+#ifdef _DEBUG
+  assert(n.is_map());  // Callers pass a node already validated by Action.
+#endif
 
   if (value == ActionType::kInvalid) {
     if (n.has_child(key::kType)) {
@@ -59,8 +55,15 @@ HRESULT WriteActionTypeToNode(NodeRef n, ActionType value) {
   return S_OK;
 }
 
+static ROXYG_ALWAYS_INLINE void checkActionNode(ConstNodeRef n) {
+  if (!n.is_map()) {
+    throw ParseError{ParseErrorReason::kExpectedMap, KeyId::kThen, 0};
+  }
+}
+
 Action::Action(c4::yml::NodeRef node)
-  : node_(std::move(node))
+  // Validate through a const view before taking ownership of the node.
+  : node_((checkActionNode(node), std::move(node)))
   , type_(ReadActionTypeFromNode(node_)) {
 }
 

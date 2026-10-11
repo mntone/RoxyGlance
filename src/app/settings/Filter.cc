@@ -22,8 +22,15 @@ void writeFilterStringMatchType(NodeRef node, c4::csubstr key, StringAndMatchTyp
 
 }
 
+static ROXYG_ALWAYS_INLINE void checkFilterNode(ConstNodeRef n) {
+  if (!n.is_map()) {
+    throw ParseError{ParseErrorReason::kExpectedMap, KeyId::kWhere, 0};
+  }
+}
+
 Filter::Filter(NodeRef node)
-  : node_(std::move(node))
+  // Validate through a const view before taking ownership of the node.
+  : node_((checkFilterNode(node), std::move(node)))
   , process_image_name_(ReadStringAndMatchTypeFromNode(node_[key::kProcessKey], KeyId::kProcessImageName))
   , window_class_(ReadStringAndMatchTypeFromNode(node_[key::kWindowClassKey], KeyId::kWindowClass))
   , window_title_(ReadStringAndMatchTypeFromNode(node_[key::kWindowTitleKey], KeyId::kWindowTitle)) {

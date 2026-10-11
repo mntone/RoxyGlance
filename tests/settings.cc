@@ -17,6 +17,19 @@ using MT = ::roxyg::settings::StringMatchType;
 using namespace ::roxyg::settings;
 using namespace ::roxyg::settings::action;
 
+template<typename T>
+void ExpectParseError(std::string_view yaml, ParseErrorReason reason, KeyId key_id) {
+  TEST_YAML(root, yaml);
+
+  try {
+    T const klass{root};
+    FAIL() << "ParseError was not thrown.";
+  } catch (ParseError const& e) {
+    EXPECT_EQ(e.reason, reason);
+    EXPECT_EQ(e.key_id, key_id);
+  }
+}
+
 // ---[ Action ]-------------------------------------------
 
 TEST(Action_Read, MissingTypeReturnsInvalid) {
@@ -48,19 +61,6 @@ TEST(Action_Read, RejectsNonScalarType) {
     EXPECT_EQ(e.key_id, KeyId::kActionType);
   }
   EXPECT_EQ(root["type"]["nested"].val(), c4::to_csubstr("value"));
-}
-
-TEST(Action_Read, RejectsNonMapNode) {
-  TEST_YAML(root, "not a map");
-
-  try {
-    ReadActionTypeFromNode(root);
-    FAIL() << "ParseError was not thrown.";
-  } catch (ParseError const& e) {
-    EXPECT_EQ(e.reason, ParseErrorReason::kExpectedMap);
-    EXPECT_EQ(e.key_id, KeyId::kThen);
-  }
-  EXPECT_EQ(root.val(), c4::to_csubstr("not a map"));
 }
 
 TEST(Action_Write, CreatesType) {
@@ -96,14 +96,14 @@ TEST(Action_Write, NoneRemovesTypeAndPreservesOtherFields) {
   EXPECT_EQ(ReadActionTypeFromNode(root), AT::kInvalid);
 }
 
-TEST(Action_Write, RejectsNonMapNode) {
+#ifdef _DEBUG
+TEST(Action_Write, AssertsOnNonMapNode) {
   TEST_YAML(root, "not a map");
 
-  HRESULT const hr = WriteActionTypeToNode(root, AT::kRelativeMoveAndResize);
-
-  EXPECT_EQ(hr, E_INVALIDARG);
+  EXPECT_DEATH(WriteActionTypeToNode(root, AT::kRelativeMoveAndResize), "n.is_map");
   EXPECT_EQ(root.val(), c4::to_csubstr("not a map"));
 }
+#endif
 
 TEST(Action, AsLoadsMatchingTypeAndRejectsMismatch) {
   TEST_YAML(root, R"(
@@ -122,6 +122,10 @@ x: 0.25
     action.as<AbsoluteMoveAndResize>(),
     winrt::hresult_invalid_argument
   );
+}
+
+TEST(Action, RejectsNonMapNode) {
+  ExpectParseError<Action>("not a map", ParseErrorReason::kExpectedMap, KeyId::kThen);
 }
 
 
@@ -193,6 +197,10 @@ TEST(Filter, WriteEmptyStringMatchType) {
   ASSERT_TRUE(root.has_child(key));
   EXPECT_EQ(root[key].val(), "^$");
   EXPECT_EQ(Filter{root}.windowTitle(), std::make_pair(MT::kEquals, L""));
+}
+
+TEST(Filter, RejectsNonMapNode) {
+  ExpectParseError<Filter>("not a map", ParseErrorReason::kExpectedMap, KeyId::kWhere);
 }
 
 
@@ -309,24 +317,6 @@ TEST(Triggers_Write, InsertsWhenBeforeWhere) {
   EXPECT_EQ(keys_to_vec(root), (TestVec<4>{"name", "when", "where", "then"}));
 }
 
-TEST(Triggers_Write, InsertsWhenBeforeThenWhenWhereIsMissing) {
-  TEST_YAML(root, "name: test\nthen: {}");
-
-  HRESULT const hr = WriteTriggerFlagsToNode(root, TF::kApplicationStart);
-
-  EXPECT_EQ(hr, S_OK);
-  EXPECT_EQ(keys_to_vec(root), (TestVec<4>{"name", "when", "then"}));
-}
-
-TEST(Triggers_Write, AppendsWhenWhenWhereAndThenAreMissing) {
-  TEST_YAML(root, "name: test");
-
-  HRESULT const hr = WriteTriggerFlagsToNode(root, TF::kApplicationStart);
-
-  EXPECT_EQ(hr, S_OK);
-  EXPECT_EQ(keys_to_vec(root), (TestVec<4>{"name", "when"}));
-}
-
 TEST(Triggers_Write, RejectsNonMapNode) {
   TEST_YAML(root, "not a map");
 
@@ -376,6 +366,35 @@ then:
 
   EXPECT_EQ(rule.triggerFlags(), expected);
   EXPECT_EQ(vals_to_vec(root["when"]), (TestVec<4>{"show", "focus"}));
+}
+
+TEST(Rule, LoadsRuleWithOnlyRequiredKeys) {
+  TEST_YAML(root, "where: {}\nthen: {}");
+
+  Rule const rule{root};
+  EXPECT_EQ(rule.name(), L""sv);
+  EXPECT_EQ(rule.triggerFlags(), TF::kNone);
+  EXPECT_EQ(rule.action().type(), AT::kInvalid);
+}
+
+TEST(Rule, RejectsNonMapNode) {
+  ExpectParseError<Rule>("not a map", ParseErrorReason::kExpectedMap, KeyId::kRule);
+}
+
+TEST(Rule, RejectsMissingWhere) {
+  ExpectParseError<Rule>("then: {}", ParseErrorReason::kMissingRequiredKey, KeyId::kWhere);
+}
+
+TEST(Rule, RejectsMissingThen) {
+  ExpectParseError<Rule>("where: {}", ParseErrorReason::kMissingRequiredKey, KeyId::kThen);
+}
+
+TEST(Rule, RejectsNonMapWhere) {
+  ExpectParseError<Rule>("where: text\nthen: {}", ParseErrorReason::kExpectedMap, KeyId::kWhere);
+}
+
+TEST(Rule, RejectsNonMapThen) {
+  ExpectParseError<Rule>("where: {}\nthen: text", ParseErrorReason::kExpectedMap, KeyId::kThen);
 }
 
 }  // namespace test::roxyg::settings

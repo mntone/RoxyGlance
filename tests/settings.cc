@@ -201,21 +201,13 @@ TEST(Filter, WriteEmptyStringMatchType) {
 TEST(Triggers_Read, MissingWhenReturnsNone) {
   TEST_YAML(root, "name: test");
 
-  TF value = TF::kWindowFocus;
-  HRESULT const hr = ReadTriggerFlagsFromNode(root, &value);
-
-  EXPECT_EQ(hr, S_OK);
-  EXPECT_EQ(value, TF::kNone);
+  EXPECT_EQ(ReadTriggerFlagsFromNode(root), TF::kNone);
 }
 
 TEST(Triggers_Read, ReadsScalarWhen) {
   TEST_YAML(root, "when: FoCuS");
 
-  TF value = TF::kNone;
-  HRESULT const hr = ReadTriggerFlagsFromNode(root, &value);
-
-  EXPECT_EQ(hr, S_OK);
-  EXPECT_EQ(value, TF::kWindowFocus);
+  EXPECT_EQ(ReadTriggerFlagsFromNode(root), TF::kWindowFocus);
 }
 
 TEST(Triggers_Read, ReadsSequenceAndIgnoresUnknownEntries) {
@@ -223,32 +215,33 @@ TEST(Triggers_Read, ReadsSequenceAndIgnoresUnknownEntries) {
 
   TEST_YAML(root, "when: [init, sHoW, invalid, {custom: value}]");
 
-  TF value = TF::kNone;
-  HRESULT const hr = ReadTriggerFlagsFromNode(root, &value);
-
-  EXPECT_EQ(hr, S_OK);
-  EXPECT_EQ(value, TF::kApplicationStart | TF::kWindowShow);
+  EXPECT_EQ(ReadTriggerFlagsFromNode(root), TF::kApplicationStart | TF::kWindowShow);
 }
 
 TEST(Triggers_Read, RejectsMapWhen) {
   TEST_YAML(root, "when: {nested: value}");
 
-  TF value = TF::kWindowFocus;
-  HRESULT const hr = ReadTriggerFlagsFromNode(root, &value);
-
-  EXPECT_EQ(hr, E_INVALIDARG);
-  EXPECT_EQ(value, TF::kWindowFocus);
+  try {
+    ReadTriggerFlagsFromNode(root);
+    FAIL() << "ParseError was not thrown.";
+  } catch (ParseError const& e) {
+    EXPECT_EQ(e.reason, ParseErrorReason::kExpectedSequence);
+    EXPECT_EQ(e.key_id, KeyId::kWhen);
+  }
   EXPECT_EQ(root["when"]["nested"].val(), c4::to_csubstr("value"));
 }
 
 TEST(Triggers_Read, RejectsNonMapNode) {
   TEST_YAML(root, "not a map");
 
-  TF value = TF::kWindowFocus;
-  HRESULT const hr = ReadTriggerFlagsFromNode(root, &value);
-
-  EXPECT_EQ(hr, E_INVALIDARG);
-  EXPECT_EQ(value, TF::kWindowFocus);
+  try {
+    ReadTriggerFlagsFromNode(root);
+    FAIL() << "ParseError was not thrown.";
+  } catch (ParseError const& e) {
+    EXPECT_EQ(e.reason, ParseErrorReason::kExpectedMap);
+    EXPECT_EQ(e.key_id, KeyId::kRule);
+  }
+  EXPECT_EQ(root.val(), c4::to_csubstr("not a map"));
 }
 
 TEST(Triggers_Write, UpdatesSequence) {

@@ -6,13 +6,6 @@
 
 using namespace roxyg::settings;
 
-static ROXYG_ALWAYS_INLINE TriggerFlags readTriggers(c4::yml::ConstNodeRef n) {
-  TriggerFlags value;
-  HRESULT const hr = ReadTriggerFlagsFromNode(n, &value);
-  winrt::check_hresult(hr);
-  return value;
-}
-
 static ROXYG_ALWAYS_INLINE Filter readFilter(c4::yml::NodeRef n) {
   if (!n.has_child(key::kWhere)) {
     c4::yml::NodeRef target;
@@ -35,7 +28,7 @@ Rule::Rule(c4::yml::NodeRef node)
   : node_(std::move(node))
   , name_(ReadStringFromNode(node_[key::kName], KeyId::kName))
   , filter_(readFilter(node_))
-  , triggers_(readTriggers(node_))
+  , triggers_(ReadTriggerFlagsFromNode(node_))
   , action_(node_[key::kThen]) {
 #ifdef _DEBUG
   assert(node_.is_map());

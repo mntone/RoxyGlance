@@ -20,6 +20,7 @@ void WriteFloatToNode(c4::yml::NodeRef node, float val);
 void WriteStringAndMatchTypeToNode(c4::yml::NodeRef node, StringAndMatchType val);
 
 ActionType ReadActionTypeFromNode(::c4::yml::ConstNodeRef n);
+TriggerFlags ReadTriggerFlagsFromNode(::c4::yml::ConstNodeRef n);
 
 }
 
@@ -31,7 +32,6 @@ ActionType ReadActionTypeFromNode(::c4::yml::ConstNodeRef n);
 
 extern "C" {
 
-  HRESULT ReadTriggerFlagsFromNode(::c4::yml::ConstNodeRef n, ::roxyg::settings::TriggerFlags* value);
   HRESULT WriteActionTypeToNode(::c4::yml::NodeRef n, ::roxyg::settings::ActionType value);
   HRESULT WriteTriggerFlagsToNode(::c4::yml::NodeRef node, ::roxyg::settings::TriggerFlags value);
 

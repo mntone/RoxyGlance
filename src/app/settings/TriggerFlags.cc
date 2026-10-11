@@ -78,20 +78,15 @@ static ROXYG_ALWAYS_INLINE NodeRef getOrCreateWhenNode(NodeRef n) {
   return seq;
 }
 
-HRESULT ReadTriggerFlagsFromNode(ConstNodeRef n, TriggerFlags* value) {
+TriggerFlags roxyg::settings::ReadTriggerFlagsFromNode(ConstNodeRef n) {
   using namespace magic_enum::bitwise_operators;
 
-#ifdef _DEBUG
-  assert(value);
-#endif
-
   if (!n.is_map()) {
-    return E_INVALIDARG;
+    throw ParseError{ParseErrorReason::kExpectedMap, KeyId::kRule, 0};
   }
 
   if (!n.has_child(key::kWhen)) {
-    *value = TriggerFlags::kNone;
-    return S_OK;
+    return TriggerFlags::kNone;
   }
 
   ConstNodeRef const when{n[key::kWhen]};
@@ -102,13 +97,11 @@ HRESULT ReadTriggerFlagsFromNode(ConstNodeRef n, TriggerFlags* value) {
         ret |= to_trigger(v.val()).value_or(TriggerFlags::kNone);
       }
     }
-    *value = ret;
-    return S_OK;
+    return ret;
   } else if (when.is_keyval()) {
-    *value = to_trigger(when.val()).value_or(TriggerFlags::kNone);
-    return S_OK;
+    return to_trigger(when.val()).value_or(TriggerFlags::kNone);
   } else {
-    return E_INVALIDARG;
+    throw ParseError{ParseErrorReason::kExpectedSequence, KeyId::kWhen, 0};
   }
 }
 

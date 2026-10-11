@@ -7,13 +7,15 @@ enum class ParseErrorReason: uint8_t {
   kExpectedString,
   kExpectedNumber,
   kExpectedMap,
+  kExpectedSequence,
   kInvalidString,
   kInvalidNumber,
   kNumberOutOfRange,
 };
 
 enum class KeyId: uint8_t {
-  kNone = 0,
+  kNone,
+  kRule,
   kName,
   kWhen,
   kWhere,

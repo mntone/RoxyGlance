@@ -22,52 +22,44 @@ using namespace ::roxyg::settings::action;
 TEST(Action_Read, MissingTypeReturnsInvalid) {
   TEST_YAML(root, "x: 0");
 
-  AT value = AT::kRelativeMoveAndResize;
-  HRESULT const hr = ReadActionTypeFromNode(root, &value);
-
-  EXPECT_EQ(hr, S_OK);
-  EXPECT_EQ(value, AT::kInvalid);
+  EXPECT_EQ(ReadActionTypeFromNode(root), AT::kInvalid);
 }
 
 TEST(Action_Read, ReadsTypeCaseInsensitively) {
   TEST_YAML(root, "type: aBsolute_move_and_resize");
 
-  AT value = AT::kRelativeMoveAndResize;
-  HRESULT const hr = ReadActionTypeFromNode(root, &value);
-
-  EXPECT_EQ(hr, S_OK);
-  EXPECT_EQ(value, AT::kAbsoluteMoveAndResize);
+  EXPECT_EQ(ReadActionTypeFromNode(root), AT::kAbsoluteMoveAndResize);
 }
 
 TEST(Action_Read, UnknownTypeReturnsInvalid) {
   TEST_YAML(root, "type: unsupported_action");
 
-  AT value = AT::kRelativeMoveAndResize;
-  HRESULT const hr = ReadActionTypeFromNode(root, &value);
-
-  EXPECT_EQ(hr, S_OK);
-  EXPECT_EQ(value, AT::kInvalid);
+  EXPECT_EQ(ReadActionTypeFromNode(root), AT::kInvalid);
 }
 
 TEST(Action_Read, RejectsNonScalarType) {
   TEST_YAML(root, "type: {nested: value}");
 
-  AT value = AT::kRelativeMoveAndResize;
-  HRESULT const hr = ReadActionTypeFromNode(root, &value);
-
-  EXPECT_EQ(hr, E_INVALIDARG);
-  EXPECT_EQ(value, AT::kRelativeMoveAndResize);
+  try {
+    ReadActionTypeFromNode(root);
+    FAIL() << "ParseError was not thrown.";
+  } catch (ParseError const& e) {
+    EXPECT_EQ(e.reason, ParseErrorReason::kExpectedString);
+    EXPECT_EQ(e.key_id, KeyId::kActionType);
+  }
   EXPECT_EQ(root["type"]["nested"].val(), c4::to_csubstr("value"));
 }
 
 TEST(Action_Read, RejectsNonMapNode) {
   TEST_YAML(root, "not a map");
 
-  AT value = AT::kRelativeMoveAndResize;
-  HRESULT const hr = ReadActionTypeFromNode(root, &value);
-
-  EXPECT_EQ(hr, E_INVALIDARG);
-  EXPECT_EQ(value, AT::kRelativeMoveAndResize);
+  try {
+    ReadActionTypeFromNode(root);
+    FAIL() << "ParseError was not thrown.";
+  } catch (ParseError const& e) {
+    EXPECT_EQ(e.reason, ParseErrorReason::kExpectedMap);
+    EXPECT_EQ(e.key_id, KeyId::kThen);
+  }
   EXPECT_EQ(root.val(), c4::to_csubstr("not a map"));
 }
 
@@ -101,10 +93,7 @@ TEST(Action_Write, NoneRemovesTypeAndPreservesOtherFields) {
   EXPECT_EQ(hr, S_OK);
   EXPECT_FALSE(root.has_child(key::kType));
   EXPECT_EQ(root["id"].val(), c4::to_csubstr("2"));
-
-  AT value = AT::kRelativeMoveAndResize;
-  EXPECT_EQ(ReadActionTypeFromNode(root, &value), S_OK);
-  EXPECT_EQ(value, AT::kInvalid);
+  EXPECT_EQ(ReadActionTypeFromNode(root), AT::kInvalid);
 }
 
 TEST(Action_Write, RejectsNonMapNode) {

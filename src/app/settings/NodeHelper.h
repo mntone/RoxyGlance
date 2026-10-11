@@ -1,6 +1,8 @@
 #pragma once
 #include "ParseError.h"
+#include "Action.h"
 #include "String.h"
+#include "TriggerFlags.h"
 
 namespace roxyg::settings {
 
@@ -17,6 +19,8 @@ void WriteLongToNode(c4::yml::NodeRef node, long val);
 void WriteFloatToNode(c4::yml::NodeRef node, float val);
 void WriteStringAndMatchTypeToNode(c4::yml::NodeRef node, StringAndMatchType val);
 
+ActionType ReadActionTypeFromNode(::c4::yml::ConstNodeRef n);
+
 }
 
 #define ReadIntFromNode(node, id, min, max) \
@@ -25,12 +29,8 @@ void WriteStringAndMatchTypeToNode(c4::yml::NodeRef node, StringAndMatchType val
   static_cast<int>(ReadLongFromNodeOrDefault((node), id, static_cast<long>(min), static_cast<long>(max), static_cast<long>(def)))
 #define WriteIntToNode(node, val) WriteLongToNode(node, static_cast<long>(val))
 
-#include "Action.h"
-#include "TriggerFlags.h"
-
 extern "C" {
 
-  HRESULT ReadActionTypeFromNode(::c4::yml::ConstNodeRef n, ::roxyg::settings::ActionType* value);
   HRESULT ReadTriggerFlagsFromNode(::c4::yml::ConstNodeRef n, ::roxyg::settings::TriggerFlags* value);
   HRESULT WriteActionTypeToNode(::c4::yml::NodeRef n, ::roxyg::settings::ActionType value);
   HRESULT WriteTriggerFlagsToNode(::c4::yml::NodeRef node, ::roxyg::settings::TriggerFlags value);

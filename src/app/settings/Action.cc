@@ -12,27 +12,21 @@ static ROXYG_ALWAYS_INLINE ActionType toActionType(c4::csubstr str) {
   ).value_or(ActionType::kInvalid);
 }
 
-HRESULT ReadActionTypeFromNode(ConstNodeRef n, ActionType* value) {
-#ifdef _DEBUG
-  assert(value);
-#endif
-
+ActionType roxyg::settings::ReadActionTypeFromNode(ConstNodeRef n) {
   if (!n.is_map()) {
-    return E_INVALIDARG;
+    throw ParseError{ParseErrorReason::kExpectedMap, KeyId::kThen, 0};
   }
 
   if (!n.has_child(key::kType)) {
-    *value = ActionType::kInvalid;
-    return S_OK;
+    return ActionType::kInvalid;
   }
 
   ConstNodeRef const type{n[key::kType]};
   if (!type.is_keyval()) {
-    return E_INVALIDARG;
+    throw ParseError{ParseErrorReason::kExpectedString, KeyId::kActionType, 0};
   }
 
-  *value = toActionType(type.val());
-  return S_OK;
+  return toActionType(type.val());
 }
 
 HRESULT WriteActionTypeToNode(NodeRef n, ActionType value) {
@@ -65,16 +59,9 @@ HRESULT WriteActionTypeToNode(NodeRef n, ActionType value) {
   return S_OK;
 }
 
-static ROXYG_ALWAYS_INLINE ActionType readActionType(c4::yml::ConstNodeRef n) {
-  ActionType value;
-  HRESULT const hr = ReadActionTypeFromNode(n, &value);
-  winrt::check_hresult(hr);
-  return value;
-}
-
 Action::Action(c4::yml::NodeRef node)
   : node_(std::move(node))
-  , type_(readActionType(node_)) {
+  , type_(ReadActionTypeFromNode(node_)) {
 }
 
 void Action::setType(ActionType value) {

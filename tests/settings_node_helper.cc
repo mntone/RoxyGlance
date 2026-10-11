@@ -181,25 +181,43 @@ TEST(NodeHelper, WriteFloat) {
 // ---[ String ]--------------------------------------------
 
 TEST(NodeHelper, ReadString) {
-  EXPECT_EQ(loadFromYaml("", ReadStringFromNode), L"");
-  EXPECT_EQ(loadFromYaml("utf8to16\xF0\x9F\x8E\x89", ReadStringFromNode), L"utf8to16\U0001F389");
+  EXPECT_EQ(loadFromYaml("", ReadStringFromNode, KeyId::kNone), L"");
+  EXPECT_EQ(loadFromYaml("utf8to16\xF0\x9F\x8E\x89", ReadStringFromNode, KeyId::kNone), L"utf8to16\U0001F389");
 
-  EXPECT_EQ(loadFromYaml("null", ReadStringFromNode), L"");  // nullval
-  EXPECT_EQ(loadFromYaml("", ReadStringFromNode), L"");      // emptyval
-  EXPECT_THROW(loadFromYaml("{}", ReadStringFromNode), winrt::hresult_invalid_argument);  // emptymap
-  EXPECT_THROW(loadFromYaml("[]", ReadStringFromNode), winrt::hresult_invalid_argument);  // emptyseq
+  EXPECT_EQ(loadFromYaml("null", ReadStringFromNode, KeyId::kNone), L"");  // nullval
+  EXPECT_EQ(loadFromYaml("", ReadStringFromNode, KeyId::kNone), L"");      // emptyval
+  EXPECT_THROW(loadFromYaml("{}", ReadStringFromNode, KeyId::kNone), ParseError);  // emptymap
+  EXPECT_THROW(loadFromYaml("[]", ReadStringFromNode, KeyId::kNone), ParseError);  // emptyseq
 }
 
 TEST(NodeHelper, ReadStringAndMatchType) {
-  EXPECT_EQ(loadFromYaml("contains", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kContains, L"contains"));
-  EXPECT_EQ(loadFromYaml("^startswith", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kStartsWith, L"startswith"));
-  EXPECT_EQ(loadFromYaml("endswith$", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kEndsWith, L"endswith"));
-  EXPECT_EQ(loadFromYaml("^equals$", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kEquals, L"equals"));
+  EXPECT_EQ(loadFromYaml("contains", ReadStringAndMatchTypeFromNode, KeyId::kNone), std::make_pair(MT::kContains, L"contains"));
+  EXPECT_EQ(loadFromYaml("^startswith", ReadStringAndMatchTypeFromNode, KeyId::kNone), std::make_pair(MT::kStartsWith, L"startswith"));
+  EXPECT_EQ(loadFromYaml("endswith$", ReadStringAndMatchTypeFromNode, KeyId::kNone), std::make_pair(MT::kEndsWith, L"endswith"));
+  EXPECT_EQ(loadFromYaml("^equals$", ReadStringAndMatchTypeFromNode, KeyId::kNone), std::make_pair(MT::kEquals, L"equals"));
 
-  EXPECT_EQ(loadFromYaml("", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kContains, L""));
-  EXPECT_EQ(loadFromYaml("^", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kStartsWith, L""));
-  EXPECT_EQ(loadFromYaml("$", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kEndsWith, L""));
-  EXPECT_EQ(loadFromYaml("^$", ReadStringAndMatchTypeFromNode), std::make_pair(MT::kEquals, L""));
+  EXPECT_EQ(loadFromYaml("", ReadStringAndMatchTypeFromNode, KeyId::kNone), std::make_pair(MT::kContains, L""));
+  EXPECT_EQ(loadFromYaml("^", ReadStringAndMatchTypeFromNode, KeyId::kNone), std::make_pair(MT::kStartsWith, L""));
+  EXPECT_EQ(loadFromYaml("$", ReadStringAndMatchTypeFromNode, KeyId::kNone), std::make_pair(MT::kEndsWith, L""));
+  EXPECT_EQ(loadFromYaml("^$", ReadStringAndMatchTypeFromNode, KeyId::kNone), std::make_pair(MT::kEquals, L""));
+}
+
+TEST(NodeHelper, ReadStringInvalidUtf8) {
+  try {
+    loadFromYaml("invalid\xFF", ReadStringFromNode, KeyId::kName);
+    FAIL() << "ParseError was not thrown.";
+  } catch (ParseError const& e) {
+    EXPECT_EQ(e.reason, ParseErrorReason::kInvalidString);
+    EXPECT_EQ(e.key_id, KeyId::kName);
+  }
+
+  try {
+    loadFromYaml("^invalid\xFF$", ReadStringAndMatchTypeFromNode, KeyId::kWindowTitle);
+    FAIL() << "ParseError was not thrown.";
+  } catch (ParseError const& e) {
+    EXPECT_EQ(e.reason, ParseErrorReason::kInvalidString);
+    EXPECT_EQ(e.key_id, KeyId::kWindowTitle);
+  }
 }
 
 TEST(NodeHelper, WriteStringAndMatchType) {
@@ -219,19 +237,19 @@ TEST(NodeHelper, WriteStringAndMatchType) {
 
   WriteStringAndMatchTypeToNode(root[key], {MT::kContains, L""});
   EXPECT_EQ(root[key].val(), "");
-  EXPECT_EQ(ReadStringAndMatchTypeFromNode(root[key]), std::make_pair(MT::kContains, L""));
+  EXPECT_EQ(ReadStringAndMatchTypeFromNode(root[key], KeyId::kNone), std::make_pair(MT::kContains, L""));
 
   WriteStringAndMatchTypeToNode(root[key], {MT::kStartsWith, L""});
   EXPECT_EQ(root[key].val(), "^");
-  EXPECT_EQ(ReadStringAndMatchTypeFromNode(root[key]), std::make_pair(MT::kStartsWith, L""));
+  EXPECT_EQ(ReadStringAndMatchTypeFromNode(root[key], KeyId::kNone), std::make_pair(MT::kStartsWith, L""));
 
   WriteStringAndMatchTypeToNode(root[key], {MT::kEndsWith, L""});
   EXPECT_EQ(root[key].val(), "$");
-  EXPECT_EQ(ReadStringAndMatchTypeFromNode(root[key]), std::make_pair(MT::kEndsWith, L""));
+  EXPECT_EQ(ReadStringAndMatchTypeFromNode(root[key], KeyId::kNone), std::make_pair(MT::kEndsWith, L""));
 
   WriteStringAndMatchTypeToNode(root[key], {MT::kEquals, L""});
   EXPECT_EQ(root[key].val(), "^$");
-  EXPECT_EQ(ReadStringAndMatchTypeFromNode(root[key]), std::make_pair(MT::kEquals, L""));
+  EXPECT_EQ(ReadStringAndMatchTypeFromNode(root[key], KeyId::kNone), std::make_pair(MT::kEquals, L""));
 }
 
 }  // namespace test::roxyg::settings

@@ -10,8 +10,8 @@ long ReadLongFromNodeOrDefault(c4::yml::ConstNodeRef node, KeyId id, long min_va
 float ReadFloatFromNode(c4::yml::ConstNodeRef node, KeyId id, float min_val, float max_val);
 float ReadFloatFromNodeOrDefault(c4::yml::ConstNodeRef node, KeyId id, float min_val, float max_val, float def_val);
 
-std::wstring ReadStringFromNode(c4::yml::ConstNodeRef node);
-StringAndMatchType ReadStringAndMatchTypeFromNode(c4::yml::ConstNodeRef node);
+std::wstring ReadStringFromNode(c4::yml::ConstNodeRef node, KeyId id);
+StringAndMatchType ReadStringAndMatchTypeFromNode(c4::yml::ConstNodeRef node, KeyId id);
 
 void WriteLongToNode(c4::yml::NodeRef node, long val);
 void WriteFloatToNode(c4::yml::NodeRef node, float val);

@@ -152,16 +152,24 @@ title: null
 
 TEST(Filter, LoadInvalidFilter) {
   {
-    TEST_YAML(seqchild, "process: [\"seq is not supported\"]");
-    EXPECT_THROW(Filter{seqchild}, winrt::hresult_invalid_argument);
+    TEST_YAML(seqsl, "process: [\"seq is not supported\"]");
+    EXPECT_THROW(Filter{seqsl}, ParseError);
+  }
+  {
+    TEST_YAML(seqml, R"(
+class:
+  - seq: is
+  - not: supported
+)");
+    EXPECT_THROW(Filter{seqml}, ParseError);
   }
   {
     TEST_YAML(mapchild, R"(
-class:
+title:
   map: is
   not: supported
 )");
-    EXPECT_THROW(Filter{mapchild}, winrt::hresult_invalid_argument);
+    EXPECT_THROW(Filter{mapchild}, ParseError);
   }
 }
 

@@ -90,7 +90,7 @@ void AbsoluteMoveAndResize::setHeight(long val) {
 
 RelativeMoveAndResize::RelativeMoveAndResize(c4::yml::NodeRef node)
   : node_(std::move(node))
-  , name_(ReadStringAndMatchTypeFromNode(node_[key::kMonitorName]))
+  , name_(ReadStringAndMatchTypeFromNode(node_[key::kMonitorName], KeyId::kMonitorName))
   , window_bounds_(numeric::float4::make(
     ReadFloatFromNodeOrDefault(
       node_[key::kPosX],

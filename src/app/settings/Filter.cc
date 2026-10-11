@@ -24,9 +24,9 @@ void writeFilterStringMatchType(NodeRef node, c4::csubstr key, StringAndMatchTyp
 
 Filter::Filter(NodeRef node)
   : node_(std::move(node))
-  , process_image_name_(ReadStringAndMatchTypeFromNode(node_[key::kProcessKey]))
-  , window_class_(ReadStringAndMatchTypeFromNode(node_[key::kWindowClassKey]))
-  , window_title_(ReadStringAndMatchTypeFromNode(node_[key::kWindowTitleKey])) {
+  , process_image_name_(ReadStringAndMatchTypeFromNode(node_[key::kProcessKey], KeyId::kProcessImageName))
+  , window_class_(ReadStringAndMatchTypeFromNode(node_[key::kWindowClassKey], KeyId::kWindowClass))
+  , window_title_(ReadStringAndMatchTypeFromNode(node_[key::kWindowTitleKey], KeyId::kWindowTitle)) {
 }
 
 void Filter::setProcessImageName(StringAndMatchType val) {

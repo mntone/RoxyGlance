@@ -8,6 +8,7 @@ inline constexpr ::winrt::hresult kErrorNotEnoughMemory = ::winrt::impl::hresult
 inline constexpr ::winrt::hresult kErrorSharingViolation = ::winrt::impl::hresult_from_win32(ERROR_SHARING_VIOLATION);
 inline constexpr ::winrt::hresult kErrorAlreadyExists = ::winrt::impl::hresult_from_win32(ERROR_ALREADY_EXISTS);
 inline constexpr ::winrt::hresult kErrorOperationAborted = ::winrt::impl::hresult_from_win32(ERROR_OPERATION_ABORTED);
+inline constexpr ::winrt::hresult kErrorNoUnicodeTranslation = ::winrt::impl::hresult_from_win32(ERROR_NO_UNICODE_TRANSLATION);
 inline constexpr ::winrt::hresult kErrorTimeout = ::winrt::impl::hresult_from_win32(ERROR_TIMEOUT);
 inline constexpr ::winrt::hresult kErrorInvalidMonitorHandle = ::winrt::impl::hresult_from_win32(ERROR_INVALID_MONITOR_HANDLE);
 inline constexpr ::winrt::hresult kErrorInvalidUserBuffer = ::winrt::impl::hresult_from_win32(ERROR_INVALID_USER_BUFFER);

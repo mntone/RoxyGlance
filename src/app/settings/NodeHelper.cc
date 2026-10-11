@@ -2,6 +2,7 @@
 #include "NodeHelper.h"
 
 #include "constants.h"
+#include "../win32/hresult.h"
 #include "../win32/string.h"
 
 namespace magic_enum::customize {
@@ -123,12 +124,26 @@ void settings::WriteFloatToNode(c4::yml::NodeRef node, float val) {
   node << val;
 }
 
-std::wstring settings::ReadStringFromNode(c4::yml::ConstNodeRef node) {
+static ROXYG_ALWAYS_INLINE std::wstring ConvertUtf8Value(settings::KeyId id, char const* u8ptr, int u8len) {
+  std::wstring u16str;
+  winrt::hresult hr = win32::ConvertUtf8ToUtf16(u8ptr, u8len, u16str);
+  if (FAILED(hr)) {
+    if (hr == win32::hresult::kErrorNoUnicodeTranslation) {
+      throw settings::ParseError{settings::ParseErrorReason::kInvalidString, id, 0};
+    } else {
+      winrt::throw_hresult(hr);
+    }
+  }
+
+  return u16str;
+}
+
+std::wstring settings::ReadStringFromNode(c4::yml::ConstNodeRef node, KeyId id) {
   if (node.invalid()) {
     return L"";
   }
   if (node.is_container()) {
-    throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
+    throw ParseError{ParseErrorReason::kExpectedString, id, 0};
   }
   if (!node.has_val() || node.val_is_null()) {
     return L"";
@@ -139,13 +154,10 @@ std::wstring settings::ReadStringFromNode(c4::yml::ConstNodeRef node) {
     return L"";
   }
 
-  std::wstring u16str;
-  winrt::hresult hr = win32::ConvertUtf8ToUtf16(u8str.str, static_cast<int>(u8str.len), u16str);
-  winrt::check_hresult(hr);
-  return std::move(u16str);
+  return ConvertUtf8Value(id, u8str.str, static_cast<int>(u8str.len));
 }
 
-settings::StringAndMatchType settings::ReadStringAndMatchTypeFromNode(c4::yml::ConstNodeRef node) {
+settings::StringAndMatchType settings::ReadStringAndMatchTypeFromNode(c4::yml::ConstNodeRef node, KeyId id) {
   using namespace magic_enum::bitwise_operators;
   using MT = settings::StringMatchType;
 
@@ -153,7 +165,7 @@ settings::StringAndMatchType settings::ReadStringAndMatchTypeFromNode(c4::yml::C
     return {MT::kContains, L""};
   }
   if (node.is_container()) {
-    throw winrt::hresult_invalid_argument(message::kInvalidNodeMessage);
+    throw ParseError{ParseErrorReason::kExpectedString, id, 0};
   }
   if (!node.has_val() || node.val_is_null()) {
     return {MT::kContains, L""};
@@ -180,10 +192,7 @@ settings::StringAndMatchType settings::ReadStringAndMatchTypeFromNode(c4::yml::C
     return {compare_type, L""};
   }
 
-  std::wstring u16str;
-  winrt::hresult const hr = win32::ConvertUtf8ToUtf16(utf8ptr, utf8len, u16str);
-  winrt::check_hresult(hr);
-  return {compare_type, u16str};
+  return {compare_type, ConvertUtf8Value(id, utf8ptr, utf8len)};
 }
 
 void settings::WriteStringAndMatchTypeToNode(c4::yml::NodeRef node, settings::StringAndMatchType val) {

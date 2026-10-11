@@ -4,7 +4,9 @@ namespace roxyg::settings {
 
 enum class ParseErrorReason: uint8_t {
   kUnknown = 0,
+  kExpectedString,
   kExpectedNumber,
+  kInvalidString,
   kInvalidNumber,
   kNumberOutOfRange,
 };

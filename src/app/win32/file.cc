@@ -32,6 +32,11 @@ winrt::hresult win32::ReadFile(std::filesystem::path filepath, std::string& cont
     }
   }
 
+  if (file_size == 0) {
+    content.clear();
+    return S_OK;
+  }
+
 #if defined(__cpp_lib_string_resize_and_overwrite) && __cpp_lib_string_resize_and_overwrite >= 202110L
   try {
     winrt::hresult hr = S_OK;

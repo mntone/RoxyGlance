@@ -122,6 +122,7 @@
     <ClCompile Include="settings_action.cc" />
     <ClCompile Include="settings_error.cc" />
     <ClCompile Include="settings_node_helper.cc" />
+    <ClCompile Include="win32_file.cc" />
     <ClCompile Include="win32_string.cc" />
   </ItemGroup>
   <ItemGroup>

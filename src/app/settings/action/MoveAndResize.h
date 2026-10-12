@@ -59,11 +59,13 @@ namespace roxyg::settings::detail {
 template<>
 struct ActionTypeTraits<action::AbsoluteMoveAndResize> {
   static constexpr ActionType value = ActionType::kAbsoluteMoveAndResize;
+  static void removeFields(c4::yml::NodeRef node);
 };
 
 template<>
 struct ActionTypeTraits<action::RelativeMoveAndResize> {
   static constexpr ActionType value = ActionType::kRelativeMoveAndResize;
+  static void removeFields(c4::yml::NodeRef node);
 };
 
 }

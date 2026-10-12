@@ -5,6 +5,21 @@
 #include "../NodeHelper.h"
 
 using namespace roxyg::settings::action;
+using namespace roxyg::settings::detail;
+
+static inline void removeField(c4::yml::NodeRef node, c4::csubstr key) {
+  if (node.has_child(key)) {
+    c4::yml::NodeRef child{node[key]};
+    node.remove_child(child);
+  }
+}
+
+void ActionTypeTraits<AbsoluteMoveAndResize>::removeFields(c4::yml::NodeRef n) {
+  removeField(n, key::kPosX);
+  removeField(n, key::kPosY);
+  removeField(n, key::kWidth);
+  removeField(n, key::kHeight);
+}
 
 AbsoluteMoveAndResize::AbsoluteMoveAndResize(c4::yml::NodeRef node)
   : node_(std::move(node))
@@ -86,6 +101,15 @@ void AbsoluteMoveAndResize::setHeight(long val) {
     WriteLongToNode(node_[key::kHeight], val);
     window_bounds_.setW(val);
   }
+}
+
+void ActionTypeTraits<RelativeMoveAndResize>::removeFields(c4::yml::NodeRef n) {
+  removeField(n, key::kMonitorId);
+  removeField(n, key::kMonitorName);
+  removeField(n, key::kPosX);
+  removeField(n, key::kPosY);
+  removeField(n, key::kWidth);
+  removeField(n, key::kHeight);
 }
 
 RelativeMoveAndResize::RelativeMoveAndResize(c4::yml::NodeRef node)

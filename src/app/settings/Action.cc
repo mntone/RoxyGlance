@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "constants.h"
 #include "NodeHelper.h"
+#include "action/MoveAndResize.h"
 
 using namespace c4::yml;
 using namespace roxyg::settings;
@@ -63,6 +64,17 @@ void Action::setType(ActionType value) {
     std::string_view const value_name{magic_enum::enum_name(value)};
     ROXYG_UNCHECKED_ASSERT(!value_name.empty());
     type << c4::to_csubstr(value_name);
+  }
+
+  switch (type_) {
+  case ActionType::kInvalid:
+    break;
+  case ActionType::kAbsoluteMoveAndResize:
+    detail::ActionTypeTraits<action::AbsoluteMoveAndResize>::removeFields(node_);
+    break;
+  case ActionType::kRelativeMoveAndResize:
+    detail::ActionTypeTraits<action::RelativeMoveAndResize>::removeFields(node_);
+    break;
   }
 
   type_ = value;

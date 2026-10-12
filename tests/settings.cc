@@ -98,20 +98,32 @@ TEST(Action, SetType_CreatesType) {
   EXPECT_EQ(root["id"].val(), c4::to_csubstr("2"));
 }
 
-TEST(Action, SetType_UpdatesTypeAndPreservesOtherFields) {
-  TEST_YAML(root, "type: absolute_move_and_resize\nid: 2\nx: 0.25");
+TEST(Action, SetType_RemovesOldFieldsAndPreservesUnknownFields) {
+  TEST_YAML(root, "type: absolute_move_and_resize\nx: 0.25\ncustom: keep");
 
   Action action{root};
   action.setType(AT::kRelativeMoveAndResize);
 
   EXPECT_EQ(action.type(), AT::kRelativeMoveAndResize);
   EXPECT_EQ(root["type"].val(), c4::to_csubstr("relative_move_and_resize"));
-  EXPECT_EQ(root["id"].val(), c4::to_csubstr("2"));
-  EXPECT_EQ(root["x"].val(), c4::to_csubstr("0.25"));
+  EXPECT_FALSE(root.has_child(key::kPosX));
+  EXPECT_EQ(root["custom"].val(), c4::to_csubstr("keep"));
 }
 
-TEST(Action, SetType_InvalidRemovesTypeAndPreservesOtherFields) {
-  TEST_YAML(root, "type: absolute_move_and_resize\nid: 2");
+TEST(Action, SetType_RemovesRelativeFields) {
+  TEST_YAML(root, "type: relative_move_and_resize\nid: 2\nname: Display\nx: 0.25\ncustom: keep");
+
+  Action action{root};
+  action.setType(AT::kAbsoluteMoveAndResize);
+
+  EXPECT_FALSE(root.has_child(key::kMonitorId));
+  EXPECT_FALSE(root.has_child(key::kMonitorName));
+  EXPECT_FALSE(root.has_child(key::kPosX));
+  EXPECT_EQ(root["custom"].val(), c4::to_csubstr("keep"));
+}
+
+TEST(Action, SetType_InvalidRemovesTypeAndOldFields) {
+  TEST_YAML(root, "type: absolute_move_and_resize\nid: 2\nx: 0.25\ncustom: keep");
 
   Action action{root};
   action.setType(AT::kInvalid);
@@ -119,6 +131,8 @@ TEST(Action, SetType_InvalidRemovesTypeAndPreservesOtherFields) {
   EXPECT_EQ(action.type(), AT::kInvalid);
   EXPECT_FALSE(root.has_child(key::kType));
   EXPECT_EQ(root["id"].val(), c4::to_csubstr("2"));
+  EXPECT_FALSE(root.has_child(key::kPosX));
+  EXPECT_EQ(root["custom"].val(), c4::to_csubstr("keep"));
   EXPECT_EQ(ReadActionTypeFromNode(root), AT::kInvalid);
 }
 

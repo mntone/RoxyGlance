@@ -21,15 +21,20 @@ static ROXYG_ALWAYS_INLINE std::string to_string(c4::csubstr str) {
   return {str.data(), str.size()};
 }
 
-static ROXYG_ALWAYS_INLINE std::optional<TriggerFlags> to_trigger(c4::csubstr str) {
+static ROXYG_ALWAYS_INLINE std::optional<TriggerFlags> toOptionalTriggerFlags(c4::csubstr str) noexcept {
   return magic_enum::enum_cast<TriggerFlags>(
     std::string_view{str.data(), str.size()},
     magic_enum::case_insensitive
   );
 }
 
+static ROXYG_ALWAYS_INLINE TriggerFlags toTriggerFlags(c4::csubstr str) noexcept {
+  return toOptionalTriggerFlags(str).value_or(TriggerFlags::kNone);
+}
+
 template<typename Visitor>
-static bool visitMatchingTriggers(NodeRef seq, TriggerFlags value, Visitor&& visitor) {
+static bool visitMatchingTriggers(NodeRef seq, TriggerFlags value, Visitor&& visitor)
+  noexcept(noexcept(std::declval<Visitor&>()(std::declval<NodeRef&>()))) {
 #ifdef _DEBUG
   assert(seq.is_seq());
 #endif
@@ -37,7 +42,7 @@ static bool visitMatchingTriggers(NodeRef seq, TriggerFlags value, Visitor&& vis
   for (NodeRef child = seq.first_child(); !child.invalid();) {
     NodeRef const next = child.next_sibling();
     if (child.has_val()) {
-      std::optional<TriggerFlags> const flag{to_trigger(child.val())};
+      std::optional<TriggerFlags> const flag{toOptionalTriggerFlags(child.val())};
       if (flag && flag.value() == value && !visitor(child)) {
         return false;
       }
@@ -49,7 +54,7 @@ static bool visitMatchingTriggers(NodeRef seq, TriggerFlags value, Visitor&& vis
 
 static ROXYG_ALWAYS_INLINE bool containsTriggerFlag(NodeRef seq, TriggerFlags value) noexcept {
   bool found = false;
-  visitMatchingTriggers(seq, value, [&found](NodeRef) {
+  visitMatchingTriggers(seq, value, [&found](NodeRef) noexcept {
     found = true;
     return false;
   });
@@ -72,12 +77,12 @@ TriggerFlags roxyg::settings::ReadTriggerFlagsFromNode(ConstNodeRef n) {
     TriggerFlags ret = TriggerFlags::kNone;
     for (ConstNodeRef v : when.children()) {
       if (v.has_val()) {
-        ret |= to_trigger(v.val()).value_or(TriggerFlags::kNone);
+        ret |= toTriggerFlags(v.val());
       }
     }
     return ret;
   } else if (when.is_keyval()) {
-    return to_trigger(when.val()).value_or(TriggerFlags::kNone);
+    return toTriggerFlags(when.val());
   } else {
     throw ParseError{ParseErrorReason::kExpectedSequence, KeyId::kWhen, 0};
   }
@@ -86,9 +91,9 @@ TriggerFlags roxyg::settings::ReadTriggerFlagsFromNode(ConstNodeRef n) {
 HRESULT WriteTriggerFlagsToNode(NodeRef n, TriggerFlags value) try {
   ROXYG_UNCHECKED_ASSERT(value == TriggerFlags::kNone || magic_enum::enum_flags_contains(value));
 
-  if (!n.is_map()) {
-    return E_INVALIDARG;
-  }
+#ifdef _DEBUG
+  assert(n.is_map());  // Callers pass a node already validated by Rule.
+#endif
 
   auto const bs = magic_enum::containers::bitset(value);
 
@@ -123,7 +128,7 @@ HRESULT WriteTriggerFlagsToNode(NodeRef n, TriggerFlags value) try {
       continue;
     }
 
-    visitMatchingTriggers(when, trigger, [&when](NodeRef n) {
+    visitMatchingTriggers(when, trigger, [&when](NodeRef n) noexcept {
       when.remove_child(n);
       return true;
     });

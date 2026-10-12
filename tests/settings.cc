@@ -317,14 +317,14 @@ TEST(Triggers_Write, InsertsWhenBeforeWhere) {
   EXPECT_EQ(keys_to_vec(root), (TestVec<4>{"name", "when", "where", "then"}));
 }
 
-TEST(Triggers_Write, RejectsNonMapNode) {
+#ifdef _DEBUG
+TEST(Triggers_Write, AssertsOnNonMapNode) {
   TEST_YAML(root, "not a map");
 
-  HRESULT const hr = WriteTriggerFlagsToNode(root, TF::kApplicationStart);
-
-  EXPECT_EQ(hr, E_INVALIDARG);
+  EXPECT_DEATH(WriteTriggerFlagsToNode(root, TF::kApplicationStart), "n.is_map");
   EXPECT_EQ(root.val(), c4::to_csubstr("not a map"));
 }
+#endif
 
 
 // ---[ Rule ]---------------------------------------------

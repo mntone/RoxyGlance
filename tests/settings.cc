@@ -63,48 +63,6 @@ TEST(Action_Read, RejectsNonScalarType) {
   EXPECT_EQ(root["type"]["nested"].val(), c4::to_csubstr("value"));
 }
 
-TEST(Action_Write, CreatesType) {
-  TEST_YAML(root, "id: 2");
-
-  HRESULT const hr = WriteActionTypeToNode(root, AT::kAbsoluteMoveAndResize);
-
-  EXPECT_EQ(hr, S_OK);
-  ASSERT_TRUE(root["type"].is_keyval());
-  EXPECT_EQ(root["type"].val(), c4::to_csubstr("absolute_move_and_resize"));
-  EXPECT_EQ(root["id"].val(), c4::to_csubstr("2"));
-}
-
-TEST(Action_Write, UpdatesTypeAndPreservesOtherFields) {
-  TEST_YAML(root, "type: absolute_move_and_resize\nid: 2\nx: 0.25");
-
-  HRESULT const hr = WriteActionTypeToNode(root, AT::kRelativeMoveAndResize);
-
-  EXPECT_EQ(hr, S_OK);
-  EXPECT_EQ(root["type"].val(), c4::to_csubstr("relative_move_and_resize"));
-  EXPECT_EQ(root["id"].val(), c4::to_csubstr("2"));
-  EXPECT_EQ(root["x"].val(), c4::to_csubstr("0.25"));
-}
-
-TEST(Action_Write, NoneRemovesTypeAndPreservesOtherFields) {
-  TEST_YAML(root, "type: absolute_move_and_resize\nid: 2");
-
-  HRESULT const hr = WriteActionTypeToNode(root, AT::kInvalid);
-
-  EXPECT_EQ(hr, S_OK);
-  EXPECT_FALSE(root.has_child(key::kType));
-  EXPECT_EQ(root["id"].val(), c4::to_csubstr("2"));
-  EXPECT_EQ(ReadActionTypeFromNode(root), AT::kInvalid);
-}
-
-#ifdef _DEBUG
-TEST(Action_Write, AssertsOnNonMapNode) {
-  TEST_YAML(root, "not a map");
-
-  EXPECT_DEATH(WriteActionTypeToNode(root, AT::kRelativeMoveAndResize), "n.is_map");
-  EXPECT_EQ(root.val(), c4::to_csubstr("not a map"));
-}
-#endif
-
 TEST(Action, AsLoadsMatchingTypeAndRejectsMismatch) {
   TEST_YAML(root, R"(
 type: relative_move_and_resize
@@ -126,6 +84,42 @@ x: 0.25
 
 TEST(Action, RejectsNonMapNode) {
   ExpectParseError<Action>("not a map", ParseErrorReason::kExpectedMap, KeyId::kThen);
+}
+
+TEST(Action, SetType_CreatesType) {
+  TEST_YAML(root, "id: 2");
+
+  Action action{root};
+  action.setType(AT::kAbsoluteMoveAndResize);
+
+  EXPECT_EQ(action.type(), AT::kAbsoluteMoveAndResize);
+  ASSERT_TRUE(root["type"].is_keyval());
+  EXPECT_EQ(root["type"].val(), c4::to_csubstr("absolute_move_and_resize"));
+  EXPECT_EQ(root["id"].val(), c4::to_csubstr("2"));
+}
+
+TEST(Action, SetType_UpdatesTypeAndPreservesOtherFields) {
+  TEST_YAML(root, "type: absolute_move_and_resize\nid: 2\nx: 0.25");
+
+  Action action{root};
+  action.setType(AT::kRelativeMoveAndResize);
+
+  EXPECT_EQ(action.type(), AT::kRelativeMoveAndResize);
+  EXPECT_EQ(root["type"].val(), c4::to_csubstr("relative_move_and_resize"));
+  EXPECT_EQ(root["id"].val(), c4::to_csubstr("2"));
+  EXPECT_EQ(root["x"].val(), c4::to_csubstr("0.25"));
+}
+
+TEST(Action, SetType_InvalidRemovesTypeAndPreservesOtherFields) {
+  TEST_YAML(root, "type: absolute_move_and_resize\nid: 2");
+
+  Action action{root};
+  action.setType(AT::kInvalid);
+
+  EXPECT_EQ(action.type(), AT::kInvalid);
+  EXPECT_FALSE(root.has_child(key::kType));
+  EXPECT_EQ(root["id"].val(), c4::to_csubstr("2"));
+  EXPECT_EQ(ReadActionTypeFromNode(root), AT::kInvalid);
 }
 
 

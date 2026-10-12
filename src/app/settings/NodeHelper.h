@@ -32,7 +32,6 @@ TriggerFlags ReadTriggerFlagsFromNode(::c4::yml::ConstNodeRef n);
 
 extern "C" {
 
-  HRESULT WriteActionTypeToNode(::c4::yml::NodeRef n, ::roxyg::settings::ActionType value);
   HRESULT WriteTriggerFlagsToNode(::c4::yml::NodeRef node, ::roxyg::settings::TriggerFlags value);
 
 }

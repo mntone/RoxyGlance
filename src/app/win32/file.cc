@@ -35,7 +35,7 @@ winrt::hresult win32::ReadFile(std::filesystem::path filepath, std::string& cont
 #if defined(__cpp_lib_string_resize_and_overwrite) && __cpp_lib_string_resize_and_overwrite >= 202110L
   try {
     winrt::hresult hr = S_OK;
-    content.resize_and_overwrite(file_size, [&hr, hfile](char* buf, size_t bufSize) -> size_t {
+    content.resize_and_overwrite(file_size, [&hr, hfile](char* buf, size_t bufSize) noexcept -> size_t {
       DWORD bytes_read;
       BOOL const rc = ::ReadFile(hfile, buf, static_cast<DWORD>(bufSize), &bytes_read, nullptr);
       if (rc == FALSE) {
@@ -54,20 +54,20 @@ winrt::hresult win32::ReadFile(std::filesystem::path filepath, std::string& cont
 #else
   try {
     content.resize(file_size);
-
-    DWORD bytes_read;
-    BOOL const rc = ::ReadFile(hfile, content.data(), file_size, &bytes_read, nullptr);
-    if (rc == FALSE) {
-      content.resize(0);
-      return hresult::LastErrorAsHResult();
-    }
-
-    content.resize(bytes_read);
-    return S_OK;
   } catch (std::bad_alloc const&) {
     return E_OUTOFMEMORY;
   } catch (std::length_error const&) {
     return E_INVALIDARG;
   }
+
+  DWORD bytes_read;
+  BOOL const rc = ::ReadFile(hfile, content.data(), file_size, &bytes_read, nullptr);
+  if (rc == FALSE) {
+    content.resize(0);
+    return hresult::LastErrorAsHResult();
+  }
+
+  content.resize(bytes_read);
+  return S_OK;
 #endif
 }

@@ -65,4 +65,38 @@ TEST_F(FileTest, ReadFileReturnsErrorForMissingFile) {
   EXPECT_NE(ReadFile(filepath_, content), S_OK);
 }
 
+TEST_F(FileTest, WriteFileReplacesExistingContentExactly) {
+  {
+    std::ofstream output{filepath_, std::ios::binary | std::ios::trunc};
+    ASSERT_TRUE(output.is_open());
+    output << "long previous content";
+    ASSERT_TRUE(output.good());
+  }
+
+  std::string const expected{"new\0content", 11};
+  EXPECT_EQ(WriteFileAtomic(filepath_, expected), S_OK);
+
+  std::ifstream input{filepath_, std::ios::binary};
+  ASSERT_TRUE(input.is_open());
+  std::string const actual{
+    std::istreambuf_iterator<char>{input}, std::istreambuf_iterator<char>{}
+  };
+  EXPECT_EQ(actual, expected);
+}
+
+TEST_F(FileTest, WriteFileWritesEmptyContent) {
+  {
+    std::ofstream output{filepath_, std::ios::binary | std::ios::trunc};
+    ASSERT_TRUE(output.is_open());
+    output << "previous content";
+    ASSERT_TRUE(output.good());
+  }
+
+  EXPECT_EQ(WriteFileAtomic(filepath_, {}), S_OK);
+
+  std::ifstream input{filepath_, std::ios::binary};
+  ASSERT_TRUE(input.is_open());
+  EXPECT_EQ(input.peek(), std::char_traits<char>::eof());
+}
+
 }  // namespace test::roxyg::win32

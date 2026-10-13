@@ -52,6 +52,9 @@
     <Filter Include="window">
       <UniqueIdentifier>{5ca526c3-9edf-4367-a29c-09d15f3909e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="winrt">
+      <UniqueIdentifier>{fb79368e-9adc-491d-af0a-1dbecd1dac1a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppDelegate.h" />
@@ -254,6 +257,9 @@
     </ClInclude>
     <ClInclude Include="window\WindowStateWatcher.h">
       <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="winrt\weak_delegate.h">
+      <Filter>winrt</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

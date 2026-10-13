@@ -1,0 +1,14 @@
+namespace Mntone.RoxyGlance.Helpers
+{
+  static runtimeclass MenuFlyoutHelper
+  {
+    static IInspectable GetItemsSource(Microsoft.UI.Xaml.Controls.MenuFlyout target);
+    static void SetItemsSource(Microsoft.UI.Xaml.Controls.MenuFlyout target, IInspectable value);
+
+    static Microsoft.UI.Xaml.DataTemplate GetItemTemplate(Microsoft.UI.Xaml.Controls.MenuFlyout target);
+    static void SetItemTemplate(Microsoft.UI.Xaml.Controls.MenuFlyout target, Microsoft.UI.Xaml.DataTemplate value);
+
+    [noexcept] static Microsoft.UI.Xaml.DependencyProperty ItemsSourceProperty { get; };
+    [noexcept] static Microsoft.UI.Xaml.DependencyProperty ItemTemplateProperty { get; };
+  }
+}

@@ -5,6 +5,9 @@
       <UniqueIdentifier>{0a1c29b2-b1f8-4998-873f-803664116d26}</UniqueIdentifier>
       <Extensions>png</Extensions>
     </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{b5b9f12f-0083-467f-b379-3f3ca131462a}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{71b3686a-fe8d-4529-a8fe-be6642819ac9}</UniqueIdentifier>
     </Filter>
@@ -24,6 +27,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="Helpers\MenuFlyoutHelper.idl">
+      <Filter>Helpers</Filter>
+    </Midl>
     <Midl Include="ViewModels\LogViewModel.idl">
       <Filter>ViewModels</Filter>
     </Midl>

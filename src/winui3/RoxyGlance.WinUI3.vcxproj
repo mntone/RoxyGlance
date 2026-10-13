@@ -137,6 +137,9 @@
     <Manifest Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Helpers\MenuFlyoutHelper.h">
+      <DependentUpon>Helpers\MenuFlyoutHelper.idl</DependentUpon>
+    </ClInclude>
     <ClInclude Include="pch.h" />
     <ClInclude Include="App.xaml.h">
       <DependentUpon>App.xaml</DependentUpon>
@@ -154,6 +157,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="Helpers\MenuFlyoutHelper.cc">
+      <DependentUpon>Helpers\MenuFlyoutHelper.idl</DependentUpon>
+    </ClCompile>
     <ClCompile Include="main.cc" />
     <ClCompile Include="pch.cc">
       <PrecompiledHeader>Create</PrecompiledHeader>
@@ -168,6 +174,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="Helpers\MenuFlyoutHelper.idl" />
     <Midl Include="ViewModels\LogViewModel.idl" />
     <Midl Include="ViewModels\LogViewModels.idl" />
     <Midl Include="Views\MainWindow.idl">

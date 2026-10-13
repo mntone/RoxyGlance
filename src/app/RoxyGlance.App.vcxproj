@@ -149,6 +149,7 @@
     <ClInclude Include="window\WindowState.h" />
     <ClInclude Include="window\WindowStateCache.h" />
     <ClInclude Include="window\WindowStateWatcher.h" />
+    <ClInclude Include="winrt\weak_delegate.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppDelegate.cc" />

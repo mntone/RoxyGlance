@@ -158,6 +158,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
     <ClInclude Include="Resources\resource.h" />
+    <ClInclude Include="ViewModels\Holders\CallbackHolder.h" />
+    <ClInclude Include="ViewModels\Holders\NotifyPropertyChangedHolder.h" />
+    <ClInclude Include="ViewModels\Holders\StaticCommandHolder.h" />
     <ClInclude Include="ViewModels\LogViewModel.h" />
     <ClInclude Include="ViewModels\LogViewModels.h" />
     <ClInclude Include="Views\MainWindow.xaml.h">
@@ -192,6 +195,8 @@
     <ClCompile Include="App.xaml.cc">
       <DependentUpon>App.xaml</DependentUpon>
     </ClCompile>
+    <ClCompile Include="ViewModels\Holders\NotifyPropertyChangedHolder.cc" />
+    <ClCompile Include="ViewModels\Holders\StaticCommandHolder.cc" />
     <ClCompile Include="ViewModels\LogViewModel.cc" />
     <ClCompile Include="ViewModels\LogViewModels.cc" />
     <ClCompile Include="Views\MainWindow.xaml.cc">

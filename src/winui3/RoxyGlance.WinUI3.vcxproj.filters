@@ -17,6 +17,9 @@
     <Filter Include="ViewModels">
       <UniqueIdentifier>{432dbbe7-1129-44d3-95bb-77361d8acee6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ViewModels\Holders">
+      <UniqueIdentifier>{94b44aed-f354-46ff-afdf-dcbc1f049ebc}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Views">
       <UniqueIdentifier>{c0c6c20f-8639-4b19-bddb-2e2fc82836e5}</UniqueIdentifier>
     </Filter>
@@ -56,6 +59,12 @@
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="main.cc" />
     <ClCompile Include="pch.cc" />
+    <ClCompile Include="ViewModels\Holders\StaticCommandHolder.cc">
+      <Filter>ViewModels\Holders</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewModels\Holders\NotifyPropertyChangedHolder.cc">
+      <Filter>ViewModels\Holders</Filter>
+    </ClCompile>
     <ClCompile Include="ViewModels\LogViewModel.cc">
       <Filter>ViewModels</Filter>
     </ClCompile>
@@ -67,6 +76,15 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Converters\bundle.h">
       <Filter>Converters</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewModels\Holders\CallbackHolder.h">
+      <Filter>ViewModels\Holders</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewModels\Holders\NotifyPropertyChangedHolder.h">
+      <Filter>ViewModels\Holders</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewModels\Holders\StaticCommandHolder.h">
+      <Filter>ViewModels\Holders</Filter>
     </ClInclude>
     <ClInclude Include="ViewModels\LogViewModel.h">
       <Filter>ViewModels</Filter>

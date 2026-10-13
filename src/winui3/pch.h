@@ -36,3 +36,4 @@
 
 #include <wil/cppwinrt_helpers.h>
 #include "../app/utility/macro.h"
+#include "Converters/bundle.h"

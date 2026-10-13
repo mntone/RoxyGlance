@@ -1,0 +1,8 @@
+namespace Mntone.RoxyGlance.Converters
+{
+  [default_interface]
+  runtimeclass ZeroToCollapsedConverter : Microsoft.UI.Xaml.Data.IValueConverter
+  {
+    ZeroToCollapsedConverter();
+  }
+}

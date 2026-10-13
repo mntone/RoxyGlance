@@ -5,6 +5,9 @@
       <UniqueIdentifier>{0a1c29b2-b1f8-4998-873f-803664116d26}</UniqueIdentifier>
       <Extensions>png</Extensions>
     </Filter>
+    <Filter Include="Converters">
+      <UniqueIdentifier>{851cd40a-4596-473c-bf4c-e101615423f0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Helpers">
       <UniqueIdentifier>{b5b9f12f-0083-467f-b379-3f3ca131462a}</UniqueIdentifier>
     </Filter>
@@ -27,6 +30,18 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="Converters\EnumToInt32Converter.idl">
+      <Filter>Converters</Filter>
+    </Midl>
+    <Midl Include="Converters\EnumToSelectedIndexConverter.idl">
+      <Filter>Converters</Filter>
+    </Midl>
+    <Midl Include="Converters\TypeNameTemplateSelector.idl">
+      <Filter>Converters</Filter>
+    </Midl>
+    <Midl Include="Converters\ZeroToCollapsedConverter.idl">
+      <Filter>Converters</Filter>
+    </Midl>
     <Midl Include="Helpers\MenuFlyoutHelper.idl">
       <Filter>Helpers</Filter>
     </Midl>
@@ -50,6 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Converters\bundle.h">
+      <Filter>Converters</Filter>
+    </ClInclude>
     <ClInclude Include="ViewModels\LogViewModel.h">
       <Filter>ViewModels</Filter>
     </ClInclude>

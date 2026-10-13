@@ -137,6 +137,19 @@
     <Manifest Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Converters\bundle.h" />
+    <ClInclude Include="Converters\EnumToInt32Converter.h">
+      <DependentUpon>Converters\EnumToInt32Converter.idl</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="Converters\EnumToSelectedIndexConverter.h">
+      <DependentUpon>Converters\EnumToSelectedIndexConverter.idl</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="Converters\TypeNameTemplateSelector.h">
+      <DependentUpon>Converters\TypeNameTemplateSelector.idl</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="Converters\ZeroToCollapsedConverter.h">
+      <DependentUpon>Converters\ZeroToCollapsedConverter.idl</DependentUpon>
+    </ClInclude>
     <ClInclude Include="Helpers\MenuFlyoutHelper.h">
       <DependentUpon>Helpers\MenuFlyoutHelper.idl</DependentUpon>
     </ClInclude>
@@ -157,6 +170,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="Converters\EnumToInt32Converter.cc">
+      <DependentUpon>Converters\EnumToInt32Converter.idl</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="Converters\EnumToSelectedIndexConverter.cpp">
+      <DependentUpon>Converters\EnumToSelectedIndexConverter.idl</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="Converters\TypeNameTemplateSelector.cc">
+      <DependentUpon>Converters\TypeNameTemplateSelector.idl</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="Converters\ZeroToCollapsedConverter.cc">
+      <DependentUpon>Converters\ZeroToCollapsedConverter.idl</DependentUpon>
+    </ClCompile>
     <ClCompile Include="Helpers\MenuFlyoutHelper.cc">
       <DependentUpon>Helpers\MenuFlyoutHelper.idl</DependentUpon>
     </ClCompile>
@@ -174,6 +199,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="Converters\EnumToInt32Converter.idl" />
+    <Midl Include="Converters\EnumToSelectedIndexConverter.idl" />
+    <Midl Include="Converters\TypeNameTemplateSelector.idl" />
+    <Midl Include="Converters\ZeroToCollapsedConverter.idl" />
     <Midl Include="Helpers\MenuFlyoutHelper.idl" />
     <Midl Include="ViewModels\LogViewModel.idl" />
     <Midl Include="ViewModels\LogViewModels.idl" />

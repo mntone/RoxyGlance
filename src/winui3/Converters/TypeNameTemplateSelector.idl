@@ -1,0 +1,12 @@
+namespace Mntone.RoxyGlance.Converters
+{
+  [contentproperty("Resources")]
+  [default_interface]
+  runtimeclass TypeNameTemplateSelector : Microsoft.UI.Xaml.Controls.DataTemplateSelector
+  {
+    TypeNameTemplateSelector();
+
+    Microsoft.UI.Xaml.DataTemplate EmptyItemTemplate;
+    Microsoft.UI.Xaml.ResourceDictionary Resources;
+  }
+}

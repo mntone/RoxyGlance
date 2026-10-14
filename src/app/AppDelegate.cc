@@ -19,18 +19,18 @@ winrt::hresult AppDelegate::exit() noexcept {
   return context_->exit();
 }
 
-winrt::hresult AppDelegate::addMessageListener(message::IMessageListener* listener) noexcept {
-  return context_->messageWindow().addListener(listener);
-}
-
-winrt::hresult AppDelegate::removeMessageListener(message::IMessageListener* listener) noexcept {
-  return context_->messageWindow().removeListener(listener);
-}
-
 logging::Logger& AppDelegate::logger() noexcept {
-  return context_->logger();
+  return context_->logger_;
 }
 
 logging::Logger const& AppDelegate::logger() const noexcept {
-  return context_->logger();
+  return context_->logger_;
+}
+
+message::Window& AppDelegate::messageWindow() noexcept {
+  return context_->message_window_;
+}
+
+message::Window const& AppDelegate::messageWindow() const noexcept {
+  return context_->message_window_;
 }

@@ -4,6 +4,7 @@
 #include <winrt/Mntone.RoxyGlance.Views.h>
 
 #include "../app/AppDelegate.h"
+#include "../app/message/IMessageListener.h"
 
 namespace winrt::Mntone::RoxyGlance::implementation {
 

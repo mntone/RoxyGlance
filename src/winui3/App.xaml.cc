@@ -3,6 +3,8 @@
 
 #include "Views/MainWindow.xaml.h"
 
+#include "../app/message/MessageWindow.h"
+
 namespace winrt {
 using namespace ::winrt::Windows::Foundation;
 
@@ -22,7 +24,7 @@ App::App()
   : dispatcher_(DispatcherQueue::GetForCurrentThread())
   , main_window_(nullptr) {
   DispatcherShutdownMode(DispatcherShutdownMode::OnExplicitShutdown);
-  ROXYG_DEBUG_ASSERT_SUCCEEDED(AppDelegate_.addMessageListener(this));
+  ROXYG_DEBUG_ASSERT_SUCCEEDED(AppDelegate_.messageWindow().addListener(this));
   check_hresult(AppDelegate_.initialize());
 
 #if defined _DEBUG && !defined DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION
@@ -52,6 +54,8 @@ void App::exitApp() {
   assert(dispatcher_.HasThreadAccess());
 #endif
 
+  [[maybe_unused]] winrt::hresult const remove_hr = AppDelegate_.messageWindow().removeListener(this);
+
   winrt::MainWindow window{main_window_};
   if (window) {
     event_token closed_token{main_window_closed_token_};
@@ -64,7 +68,7 @@ void App::exitApp() {
     window.Close();
   }
 
-  [[maybe_unused]] winrt::hresult const hr = AppDelegate_.exit();
+  [[maybe_unused]] winrt::hresult const exit_hr = AppDelegate_.exit();
   Exit();
 }
 

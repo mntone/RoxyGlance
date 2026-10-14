@@ -26,6 +26,7 @@ inline constexpr std::wstring_view kMessageWindowStopFailed
 using namespace roxyg;
 
 AppContext::AppContext() noexcept {
+  operation_context_.monitor().setLogger(&logger_);
 #if _DEBUG
   log_adapter_.setLogger(&logger_);
 #endif

@@ -185,6 +185,7 @@
     <ClCompile Include="utility\ListenerHost.cc" />
     <ClCompile Include="win32\file.cc" />
     <ClCompile Include="win32\MessageLoopThreadController.cc" />
+    <ClCompile Include="win32\monitor.cc" />
     <ClCompile Include="win32\process.cc" />
     <ClCompile Include="win32\string.cc" />
     <ClCompile Include="win32\TrayIcon.cc" />

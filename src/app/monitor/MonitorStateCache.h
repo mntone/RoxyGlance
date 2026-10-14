@@ -1,6 +1,7 @@
 #pragma once
 #include "MonitorState.h"
 
+#include "../logging/LogHelper.h"
 #include "../utility/ValueCache.h"
 
 namespace roxyg::monitor {
@@ -19,8 +20,15 @@ public:
 
   [[nodiscard]] State const* findById(int id) const noexcept;
 
+  constexpr void setLogger(logging::Logger* logger) noexcept {
+    log_.setLogger(logger);
+  }
+
 private:
   static BOOL CALLBACK EnumDisplayMonitorsCallback(HMONITOR hmonitor, HDC, LPRECT lprcMonitor, LPARAM data) noexcept;
+
+private:
+  logging::LogHelper<logging::LogGroup::kMonitor> log_;
 };
 
 }

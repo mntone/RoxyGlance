@@ -352,6 +352,9 @@
     <ClCompile Include="win32\MessageLoopThreadController.cc">
       <Filter>win32</Filter>
     </ClCompile>
+    <ClCompile Include="win32\monitor.cc">
+      <Filter>win32</Filter>
+    </ClCompile>
     <ClCompile Include="win32\process.cc">
       <Filter>win32</Filter>
     </ClCompile>

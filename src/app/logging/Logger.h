@@ -8,12 +8,12 @@ namespace roxyg::logging {
 
 class Logger final
   : public utility::ListenerHost<utility::ICollectionChangeListener<Log>> {
-  using ContainerType = boost::circular_buffer<Log>;
-
   Logger(Logger const&) = delete;
   Logger& operator=(Logger const&) = delete;
 
 public:
+  using ContainerType = boost::circular_buffer<Log>;
+
   Logger() noexcept;
 
   void addLog(Log log) noexcept;

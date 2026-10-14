@@ -1,27 +1,27 @@
 #pragma once
 #include "Views/MainWindow.g.h"
 
-#include "ViewModels/LogViewModels.h"
+#include <winrt/Mntone.RoxyGlance.ViewModels.h>
+
+namespace roxyg::logging { class Logger; }
 
 namespace winrt::Mntone::RoxyGlance::Views::implementation {
 
 struct MainWindow: MainWindowT<MainWindow> {
-  MainWindow() noexcept;
+  MainWindow();
+  MainWindow(roxyg::logging::Logger& logger);
 
   void MainWindow_Closed(
     winrt::Windows::Foundation::IInspectable const& sender,
     winrt::Microsoft::UI::Xaml::WindowEventArgs const& args
   ) noexcept;
 
-  inline Mntone::RoxyGlance::ViewModels::LogsViewModel Logs() const noexcept {
+  inline ViewModels::LogsViewModel Logs() const noexcept {
     return Logs_;
-  }
-  inline void setLogs(Mntone::RoxyGlance::ViewModels::LogsViewModel value) noexcept {
-    Logs_ = value;
   }
 
 private:
-  Mntone::RoxyGlance::ViewModels::LogsViewModel Logs_;
+  ViewModels::LogsViewModel Logs_;
 };
 
 }

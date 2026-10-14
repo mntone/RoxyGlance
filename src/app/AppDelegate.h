@@ -1,8 +1,9 @@
 #pragma once
-#include "logging/Logger.h"
 #include "message/IMessageListener.h"
 
 namespace roxyg {
+
+namespace logging { class Logger; }
 
 class AppContext;
 class AppDelegate final {

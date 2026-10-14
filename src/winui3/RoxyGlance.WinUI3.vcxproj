@@ -137,6 +137,7 @@
     <Manifest Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AppLocator.h" />
     <ClInclude Include="Converters\bundle.h" />
     <ClInclude Include="Converters\EnumToInt32Converter.h">
       <DependentUpon>Converters\EnumToInt32Converter.idl</DependentUpon>
@@ -161,8 +162,12 @@
     <ClInclude Include="ViewModels\Holders\CallbackHolder.h" />
     <ClInclude Include="ViewModels\Holders\NotifyPropertyChangedHolder.h" />
     <ClInclude Include="ViewModels\Holders\StaticCommandHolder.h" />
-    <ClInclude Include="ViewModels\LogViewModel.h" />
-    <ClInclude Include="ViewModels\LogViewModels.h" />
+    <ClInclude Include="ViewModels\LogsViewModel.h">
+      <DependentUpon>ViewModels\LogsViewModel.idl</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="ViewModels\LogViewModel.h">
+      <DependentUpon>ViewModels\LogViewModel.idl</DependentUpon>
+    </ClInclude>
     <ClInclude Include="Views\MainWindow.xaml.h">
       <DependentUpon>Views\MainWindow.xaml</DependentUpon>
     </ClInclude>
@@ -197,8 +202,12 @@
     </ClCompile>
     <ClCompile Include="ViewModels\Holders\NotifyPropertyChangedHolder.cc" />
     <ClCompile Include="ViewModels\Holders\StaticCommandHolder.cc" />
-    <ClCompile Include="ViewModels\LogViewModel.cc" />
-    <ClCompile Include="ViewModels\LogViewModels.cc" />
+    <ClCompile Include="ViewModels\LogsViewModel.cc">
+      <DependentUpon>ViewModels\LogsViewModel.idl</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="ViewModels\LogViewModel.cc">
+      <DependentUpon>ViewModels\LogViewModel.idl</DependentUpon>
+    </ClCompile>
     <ClCompile Include="Views\MainWindow.xaml.cc">
       <DependentUpon>Views\MainWindow.xaml</DependentUpon>
     </ClCompile>
@@ -209,8 +218,8 @@
     <Midl Include="Converters\TypeNameTemplateSelector.idl" />
     <Midl Include="Converters\ZeroToCollapsedConverter.idl" />
     <Midl Include="Helpers\MenuFlyoutHelper.idl" />
+    <Midl Include="ViewModels\LogsViewModel.idl" />
     <Midl Include="ViewModels\LogViewModel.idl" />
-    <Midl Include="ViewModels\LogViewModels.idl" />
     <Midl Include="Views\MainWindow.idl">
       <SubType>Code</SubType>
       <DependentUpon>Views\MainWindow.xaml</DependentUpon>

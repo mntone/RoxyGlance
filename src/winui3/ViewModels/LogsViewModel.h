@@ -1,31 +1,33 @@
 #pragma once
+#include "LogViewModel.h"
 #include "ViewModels/LogsViewModel.g.h"
 
-#include "../../app/logging/Logger.h"
-#include "LogViewModel.h"
+#include "../../app/utility/ICollectionChangeListener.h"
+
+namespace roxyg::logging {
+struct Log;
+class Logger;
+}
 
 namespace winrt::Mntone::RoxyGlance::ViewModels::implementation {
 
 struct LogsViewModel
   : LogsViewModelT<LogsViewModel>
-  , public roxyg::utility::ICollectionChangeListener<roxyg::logging::Log> {
+  , roxyg::utility::ICollectionChangeListener<roxyg::logging::Log> {
 public:
-  LogsViewModel() noexcept;
+  LogsViewModel(roxyg::logging::Logger& logger);
   ~LogsViewModel();
 
   Windows::Foundation::Collections::IObservableVector<ViewModels::LogViewModel> Logs() noexcept {
     return Logs_;
   }
 
-  void unsetLogger();
-  void setLogger(roxyg::logging::Logger& logger);
-
 private:
   void onCollectionChanged(roxyg::utility::CollectionChange<roxyg::logging::Log> const& change) noexcept override;
 
 private:
-  roxyg::logging::Logger* logger_;
   Microsoft::UI::Dispatching::DispatcherQueue dispatcher_;
+  roxyg::logging::Logger& logger_;
   Windows::Foundation::Collections::IObservableVector<ViewModels::LogViewModel> Logs_;
 };
 

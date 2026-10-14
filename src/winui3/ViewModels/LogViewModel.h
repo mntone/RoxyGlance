@@ -13,12 +13,12 @@ public:
     : Content_(log.content) {
   }
 
-  hstring Content() const noexcept {
+  inline hstring Content() const noexcept {
     return Content_;
   }
 
 private:
-  winrt::hstring Content_;
+  winrt::hstring const Content_;
 };
 
 }

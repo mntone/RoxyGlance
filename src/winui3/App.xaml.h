@@ -1,8 +1,9 @@
 #pragma once
 #include "App.xaml.g.h"
 
+#include <winrt/Mntone.RoxyGlance.Views.h>
+
 #include "../app/AppDelegate.h"
-#include "Views/MainWindow.xaml.h"
 
 namespace winrt::Mntone::RoxyGlance::implementation {
 
@@ -25,8 +26,9 @@ private:
 private:
   roxyg::AppDelegate AppDelegate_;
   Microsoft::UI::Dispatching::DispatcherQueue dispatcher_;
-  winrt::com_ptr<winrt::Mntone::RoxyGlance::Views::implementation::MainWindow> MainWindow_;
-  winrt::event_token main_window_closed_token_;
+
+  Views::MainWindow main_window_;
+  event_token main_window_closed_token_;
 };
 
 }

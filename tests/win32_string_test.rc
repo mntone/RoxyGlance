@@ -1,0 +1,8 @@
+#include "win32_string_test.h"
+
+STRINGTABLE
+BEGIN
+  IDS_TEST_RESOURCE_STRING "Test resource string"
+  IDS_TEST_FORMAT_STRING "Display {}: {}"
+  IDS_TEST_INVALID_FORMAT "Invalid {"
+END

@@ -1,6 +1,8 @@
 #include "pch.h"
 #include <combaseapi.h>
+#include <format>
 #include "app/win32/string.h"
+#include "win32_string_test.h"
 
 namespace test::roxyg::win32 {
 
@@ -85,6 +87,30 @@ TEST(StringConversion, RejectsTruncatedUtf16) {
 
   EXPECT_EQ(hr, HRESULT_FROM_WIN32(ERROR_NO_UNICODE_TRANSLATION));
   EXPECT_EQ(utf8, "previous value");
+}
+
+TEST(ResourceString, LoadsString) {
+  winrt::hstring const value = LoadResourceString(IDS_TEST_RESOURCE_STRING);
+
+  EXPECT_EQ((std::wstring_view{value.c_str(), value.size()}), L"Test resource string");
+}
+
+TEST(ResourceString, ThrowsWhenStringIsMissing) {
+  EXPECT_THROW(LoadResourceString(IDS_TEST_MISSING_STRING), winrt::hresult_error);
+}
+
+TEST(ResourceString, FormatsString) {
+  std::wstring_view const name = L"Primary";
+  winrt::hstring const value = FormatResourceString(IDS_TEST_FORMAT_STRING, 7, name);
+
+  EXPECT_EQ((std::wstring_view{value.c_str(), value.size()}), L"Display 7: Primary");
+}
+
+TEST(ResourceString, ThrowsWhenFormatStringIsInvalid) {
+  EXPECT_THROW(
+    FormatResourceString(IDS_TEST_INVALID_FORMAT),
+    winrt::hresult_invalid_argument
+  );
 }
 
 }  // namespace test::roxyg::win32

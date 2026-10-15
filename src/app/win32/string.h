@@ -14,4 +14,23 @@ winrt::hresult ConvertUtf16ToUtf8(
   std::string& utf8
 ) noexcept;
 
+namespace detail {
+winrt::hstring FormatResourceStringImpl(UINT fmt_id, std::wformat_args const args);
+}
+
+template<typename... Args>
+winrt::hstring FormatResourceString(UINT fmt_id, Args&&... args) {
+  return detail::FormatResourceStringImpl(fmt_id, std::make_wformat_args(args...));
+}
+
+ROXYG_ALWAYS_INLINE winrt::hstring LoadResourceString(UINT resource_id) {
+  wchar_t const* ptr;
+  int const len = LoadStringW(nullptr, resource_id, reinterpret_cast<LPWSTR>(&ptr), 0);
+  if (len <= 0) {
+    winrt::throw_last_error();
+  }
+
+  return winrt::hstring{ptr, static_cast<winrt::hstring::size_type>(len)};
+}
+
 }

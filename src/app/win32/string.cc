@@ -130,3 +130,31 @@ winrt::hresult win32::ConvertUtf16ToUtf8(
   return S_OK;
 #endif
 }
+
+static ROXYG_ALWAYS_INLINE std::wstring_view load_resource_string(UINT resource_id) {
+  wchar_t const* ptr;
+  int const len = LoadStringW(nullptr, resource_id, reinterpret_cast<LPWSTR>(&ptr), 0);
+  if (len <= 0) {
+    winrt::throw_last_error();
+  }
+
+  return std::wstring_view{ptr, static_cast<std::wstring_view::size_type>(len)};
+}
+
+static ROXYG_ALWAYS_INLINE std::size_t vformatted_size(std::wstring_view fmt, std::wformat_args const args) {
+  std::_Fmt_counting_buffer<wchar_t> buf;
+  std::vformat_to(std::_Fmt_wit{buf}, fmt, args);
+  return buf._Count();
+}
+
+winrt::hstring win32::detail::FormatResourceStringImpl(UINT fmt_id, std::wformat_args const args) try {
+  std::wstring_view const fmt = load_resource_string(fmt_id);
+  std::size_t const size = vformatted_size(fmt, args);
+  WINRT_ASSERT(size < static_cast<std::size_t>((std::numeric_limits<std::int32_t>::max)()));
+  std::uint32_t const size32 = static_cast<std::uint32_t>(size);
+  winrt::impl::hstring_builder builder(size32);
+  WINRT_VERIFY_(builder.data() + size32, std::vformat_to(builder.data(), fmt, args));
+  return builder.to_hstring();
+} catch (std::format_error const&) {
+  throw winrt::hresult_invalid_argument();
+}

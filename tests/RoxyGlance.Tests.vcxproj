@@ -105,6 +105,7 @@
     <ClInclude Include="numeric_shared.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="settings_shared.h" />
+    <ClInclude Include="win32_string_test.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="backoff.cc" />
@@ -124,6 +125,9 @@
     <ClCompile Include="settings_node_helper.cc" />
     <ClCompile Include="win32_file.cc" />
     <ClCompile Include="win32_string.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="win32_string_test.rc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\app\RoxyGlance.App.vcxproj">

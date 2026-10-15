@@ -13,5 +13,10 @@ END
 
 STRINGTABLE
 BEGIN
+  IDS_SHELL_MAIN         "Tampilan Utama"
+  IDS_SHELL_MAINFMT      "Tampilan Utama ({})"
+  IDS_SHELL_DISPFMT      "Tampilan {}"
+  IDS_SHELL_DISPNAMEFMT  "Tampilan {}: {}"
+
   IDS_MENU_DEBUG "&Debug"
 END

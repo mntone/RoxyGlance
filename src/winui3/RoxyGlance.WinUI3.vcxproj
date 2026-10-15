@@ -168,6 +168,13 @@
     <ClInclude Include="ViewModels\LogViewModel.h">
       <DependentUpon>ViewModels\LogViewModel.idl</DependentUpon>
     </ClInclude>
+    <ClInclude Include="ViewModels\Shell\MonitorsViewModel.h">
+      <DependentUpon>ViewModels\Shell\MonitorsViewModel.idl</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="ViewModels\Shell\MonitorViewModel.h">
+      <DependentUpon>ViewModels\Shell\MonitorViewModel.idl</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="ViewModels\Shell\ShellResource.h" />
     <ClInclude Include="Views\MainWindow.xaml.h">
       <DependentUpon>Views\MainWindow.xaml</DependentUpon>
     </ClInclude>
@@ -208,6 +215,12 @@
     <ClCompile Include="ViewModels\LogViewModel.cc">
       <DependentUpon>ViewModels\LogViewModel.idl</DependentUpon>
     </ClCompile>
+    <ClCompile Include="ViewModels\Shell\MonitorsViewModel.cc">
+      <DependentUpon>ViewModels\Shell\MonitorsViewModel.idl</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="ViewModels\Shell\MonitorViewModel.cc">
+      <DependentUpon>ViewModels\Shell\MonitorViewModel.idl</DependentUpon>
+    </ClCompile>
     <ClCompile Include="Views\MainWindow.xaml.cc">
       <DependentUpon>Views\MainWindow.xaml</DependentUpon>
     </ClCompile>
@@ -220,6 +233,8 @@
     <Midl Include="Helpers\MenuFlyoutHelper.idl" />
     <Midl Include="ViewModels\LogsViewModel.idl" />
     <Midl Include="ViewModels\LogViewModel.idl" />
+    <Midl Include="ViewModels\Shell\MonitorsViewModel.idl" />
+    <Midl Include="ViewModels\Shell\MonitorViewModel.idl" />
     <Midl Include="Views\MainWindow.idl">
       <SubType>Code</SubType>
       <DependentUpon>Views\MainWindow.xaml</DependentUpon>

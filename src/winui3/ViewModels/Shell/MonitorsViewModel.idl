@@ -1,0 +1,11 @@
+import "ViewModels/Shell/MonitorViewModel.idl";
+
+namespace Mntone.RoxyGlance.ViewModels.Shell
+{
+  [bindable]
+  [default_interface]
+  runtimeclass MonitorsViewModel
+  {
+    [noexcept] IVectorView<IInspectable> Items { get; };
+  }
+}

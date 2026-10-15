@@ -20,6 +20,9 @@
     <Filter Include="ViewModels\Holders">
       <UniqueIdentifier>{94b44aed-f354-46ff-afdf-dcbc1f049ebc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ViewModels\Shell">
+      <UniqueIdentifier>{4e373d3d-c454-4692-bc39-43a8b35857b1}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Views">
       <UniqueIdentifier>{c0c6c20f-8639-4b19-bddb-2e2fc82836e5}</UniqueIdentifier>
     </Filter>
@@ -53,6 +56,12 @@
     </Midl>
     <Midl Include="ViewModels\LogViewModel.idl">
       <Filter>ViewModels</Filter>
+    </Midl>
+    <Midl Include="ViewModels\Shell\MonitorsViewModel.idl">
+      <Filter>ViewModels\Shell</Filter>
+    </Midl>
+    <Midl Include="ViewModels\Shell\MonitorViewModel.idl">
+      <Filter>ViewModels\Shell</Filter>
     </Midl>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="ViewModels\LogViewModels.h">
       <Filter>ViewModels</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewModels\Shell\ShellResource.h">
+      <Filter>ViewModels\Shell</Filter>
     </ClInclude>
     <ClInclude Include="Resources\resource.h">
       <Filter>Resources</Filter>

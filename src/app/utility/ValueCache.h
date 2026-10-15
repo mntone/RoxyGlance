@@ -1,4 +1,5 @@
 #pragma once
+#include <boost/unordered/unordered_flat_map.hpp>
 
 namespace roxyg::utility {
 
@@ -30,6 +31,17 @@ public:
   /// Initializes an empty value cache.
   /// </summary>
   constexpr ValueCache() noexcept {
+  }
+
+  /// <summary>
+  /// Gets the underlying storage container.
+  /// </summary>
+  /// <returns>
+  /// A const reference to the container holding the cached values. The
+  /// reference remains valid while this cache exists.
+  /// </returns>
+  inline ContainerType const& storage() const noexcept {
+    return storage_;
   }
 
   /// <summary>

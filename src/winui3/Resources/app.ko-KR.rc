@@ -13,5 +13,10 @@ END
 
 STRINGTABLE
 BEGIN
+  IDS_SHELL_MAIN         "주 디스플레이"
+  IDS_SHELL_MAINFMT      "주 디스플레이 ({})"
+  IDS_SHELL_DISPFMT      "디스플레이 {}"
+  IDS_SHELL_DISPNAMEFMT  "디스플레이 {}: {}"
+
   IDS_MENU_DEBUG "디버그(&D)"
 END

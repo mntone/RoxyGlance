@@ -13,5 +13,10 @@ END
 
 STRINGTABLE
 BEGIN
+  IDS_SHELL_MAIN         "Màn hình chính"
+  IDS_SHELL_MAINFMT      "Màn hình chính ({})"
+  IDS_SHELL_DISPFMT      "Màn hình {}"
+  IDS_SHELL_DISPNAMEFMT  "Màn hình {}: {}"
+
   IDS_MENU_DEBUG "&Gỡ lỗi"
 END

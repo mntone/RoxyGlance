@@ -13,5 +13,10 @@ END
 
 STRINGTABLE
 BEGIN
+  IDS_SHELL_MAIN         "Pantalla principal"
+  IDS_SHELL_MAINFMT      "Pantalla principal ({})"
+  IDS_SHELL_DISPFMT      "Pantalla {}"
+  IDS_SHELL_DISPNAMEFMT  "Pantalla {}: {}"
+
   IDS_MENU_DEBUG "&Depurar"
 END

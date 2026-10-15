@@ -13,5 +13,10 @@ END
 
 STRINGTABLE
 BEGIN
+  IDS_SHELL_MAIN         "Tela principal"
+  IDS_SHELL_MAINFMT      "Tela principal ({})"
+  IDS_SHELL_DISPFMT      "Tela {}"
+  IDS_SHELL_DISPNAMEFMT  "Tela {}: {}"
+
   IDS_MENU_DEBUG "&Depurar"
 END

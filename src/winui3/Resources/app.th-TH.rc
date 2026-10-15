@@ -13,5 +13,10 @@ END
 
 STRINGTABLE
 BEGIN
+  IDS_SHELL_MAIN         "จอแสดงผลหลัก"
+  IDS_SHELL_MAINFMT      "จอแสดงผลหลัก ({})"
+  IDS_SHELL_DISPFMT      "จอแสดงผล {}"
+  IDS_SHELL_DISPNAMEFMT  "จอแสดงผล {}: {}"
+
   IDS_MENU_DEBUG "ดีบัก"
 END

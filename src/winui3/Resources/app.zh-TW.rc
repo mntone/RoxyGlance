@@ -13,5 +13,10 @@ END
 
 STRINGTABLE
 BEGIN
+  IDS_SHELL_MAIN         "主顯示器"
+  IDS_SHELL_MAINFMT      "主顯示器（{}）"
+  IDS_SHELL_DISPFMT      "顯示器{}"
+  IDS_SHELL_DISPNAMEFMT  "顯示器{}: {}"
+
   IDS_MENU_DEBUG "偵錯(&D)"
 END

@@ -1,0 +1,13 @@
+namespace Mntone.RoxyGlance.ViewModels.Shell
+{
+  [bindable]
+  [default_interface]
+  runtimeclass MonitorViewModel
+  {
+    [noexcept] Int32 Id { get; };
+    [noexcept] String Name { get; };
+    [noexcept] Boolean IsPrimary { get; };
+    [noexcept] Windows.Foundation.Numerics.Vector4 DisplayArea { get; };
+    [noexcept] Windows.Foundation.Numerics.Vector4 WorkArea { get; };
+  }
+}

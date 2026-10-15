@@ -13,5 +13,10 @@ END
 
 STRINGTABLE
 BEGIN
+  IDS_SHELL_MAIN         "Hoofdscherm"
+  IDS_SHELL_MAINFMT      "Hoofdscherm ({})"
+  IDS_SHELL_DISPFMT      "Scherm {}"
+  IDS_SHELL_DISPNAMEFMT  "Scherm {}: {}"
+
   IDS_MENU_DEBUG "&Foutopsporing"
 END

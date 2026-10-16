@@ -108,6 +108,9 @@ LRESULT Window::windowProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam
     PostQuitMessage(hr);
     return 0;
   }
+  case WM_DISPLAYCHANGE:
+    notify(&IMessageListener::onDisplayChanged);
+    break;
   case WM_CLOSE:
     DestroyWindow(hwnd);
     return 0;

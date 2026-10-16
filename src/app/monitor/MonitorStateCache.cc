@@ -6,6 +6,8 @@
 namespace {
 inline constexpr std::wstring_view kFriendlyNameRetrieveFailed
   = L"Failed to retrieve monitor friendly names.";
+inline constexpr std::wstring_view kReinitializeFailed
+  = L"Failed to reinitialize monitor states after display change.";
 }
 
 struct MonitorCallbackData final {
@@ -70,7 +72,10 @@ BOOL __stdcall StateCache::EnumDisplayMonitorsCallback(
 winrt::hresult StateCache::initialize() noexcept {
   int const monitor_count = GetMonitorCount();
   if (monitor_count <= 0) {
-    storage_.clear();
+    if (!storage_.empty()) {
+      storage_.clear();
+      invoke();
+    }
     return S_OK;
   }
 
@@ -96,7 +101,10 @@ winrt::hresult StateCache::initialize() noexcept {
     return data.hresult;
   }
 
-  storage_ = std::move(data.states);
+  if (storage_ != data.states) {
+    storage_ = std::move(data.states);
+    invoke();
+  }
   return S_OK;
 }
 
@@ -107,4 +115,11 @@ State const* StateCache::findById(int id) const noexcept {
     }
   }
   return nullptr;
+}
+
+void StateCache::onDisplayChanged() noexcept {
+  winrt::hresult const hr = initialize();
+  if (FAILED(hr)) {
+    log_.warn(winrt::hstring{kReinitializeFailed}, hr);
+  }
 }

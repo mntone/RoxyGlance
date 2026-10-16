@@ -35,6 +35,7 @@ AppContext::AppContext() noexcept {
   settings_store_.setLogger(&logger_);
   ROXYG_DEBUG_ASSERT_SUCCEEDED(settings_store_.addListener(&engine_));
   message_window_.setLogger(&logger_);
+  ROXYG_DEBUG_ASSERT_SUCCEEDED(message_window_.addListener(&operation_context_.monitor()));
   context_logger_.setLogger(&logger_);
 
   window::StateWatcher& w = window::StateWatcher::instance();

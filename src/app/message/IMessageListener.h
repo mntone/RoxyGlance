@@ -3,8 +3,9 @@
 namespace roxyg::message {
 
 struct IMessageListener {
-  virtual void onAppExitRequested() noexcept = 0;
-  virtual void onShowSettingsRequested() noexcept = 0;
+  virtual void onAppExitRequested() noexcept {}
+  virtual void onDisplayChanged() noexcept {}
+  virtual void onShowSettingsRequested() noexcept {}
 
 protected:
   ~IMessageListener() = default;

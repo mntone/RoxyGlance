@@ -25,6 +25,8 @@ struct State final {
     friendly_name_ = value;
   }
 
+  [[nodiscard]] friend bool operator==(State const&, State const&) noexcept = default;
+
 private:
   numeric::float4 display_area_, work_area_;
   boost::static_wstring<14> friendly_name_;

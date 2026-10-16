@@ -4,7 +4,7 @@ namespace Mntone.RoxyGlance.ViewModels.Shell
 {
   [bindable]
   [default_interface]
-  runtimeclass MonitorsViewModel
+  runtimeclass MonitorsViewModel : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
   {
     [noexcept] IVectorView<IInspectable> Items { get; };
   }

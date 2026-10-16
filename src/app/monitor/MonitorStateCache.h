@@ -1,7 +1,9 @@
 #pragma once
 #include "MonitorState.h"
 
+#include "../message/IMessageListener.h"
 #include "../logging/LogHelper.h"
+#include "../utility/CallbackHost.h"
 #include "../utility/ValueCache.h"
 
 namespace roxyg::monitor {
@@ -14,7 +16,9 @@ namespace roxyg::monitor {
 /// accessing monitor states have completed.
 /// </remarks>
 class StateCache final
-  : public utility::ValueCache<HMONITOR, State> {
+  : public utility::ValueCache<HMONITOR, State>
+  , public utility::CallbackHost<StateCache>
+  , public roxyg::message::IMessageListener {
 public:
   [[nodiscard]] winrt::hresult initialize() noexcept;
 
@@ -25,6 +29,8 @@ public:
   }
 
 private:
+  void onDisplayChanged() noexcept override;
+
   static BOOL CALLBACK EnumDisplayMonitorsCallback(HMONITOR hmonitor, HDC, LPRECT lprcMonitor, LPARAM data) noexcept;
 
 private:

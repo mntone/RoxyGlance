@@ -7,16 +7,19 @@
 
 #include "../../../app/monitor/MonitorStateCache.h"  // requires monitor::StateCache
 #include "../../../app/win32/string.h"               // requires LoadResourceString, FormatResourceString
+#include "../../../app/winrt/weak_delegate.h"        // requires weak_delegate
 
 namespace winrt {
 using namespace ::winrt::Windows::Foundation;
 using namespace ::winrt::Windows::Foundation::Collections;
 
+using namespace ::winrt::Microsoft::UI::Dispatching;
 using namespace ::winrt::Mntone::RoxyGlance::ViewModels::Shell;
 }
 
 using namespace roxyg::monitor;
 using namespace roxyg::win32;
+using namespace roxyg::winrt;
 
 namespace winrt::Mntone::RoxyGlance::ViewModels::Shell::implementation {
 
@@ -26,7 +29,7 @@ IVectorView<T> single_threaded_vector_view(std::vector<T, Allocator>&& values = 
 }
 
 static ROXYG_ALWAYS_INLINE IVectorView<IInspectable>
-makeMonitorViewModels(StateCache& monitor) {
+makeMonitorViewModels(StateCache const& monitor) {
   using namespace roxyg::winui3::viewmodel::string;
 
   StateCache::ContainerType const& storage{monitor.storage()};
@@ -60,7 +63,28 @@ makeMonitorViewModels(StateCache& monitor) {
 }
 
 MonitorsViewModel::MonitorsViewModel(StateCache& monitor)
-  : Items_(makeMonitorViewModels(monitor)) {
+  : dispatcher_(DispatcherQueue::GetForCurrentThread())
+  , monitor_(&monitor)
+  , weak_ptr_(get_weak())
+  , Items_(makeMonitorViewModels(monitor)) {
+  ROXYG_DEBUG_ASSERT_SUCCEEDED(monitor.addCallback(&MonitorsViewModel::onMonitorChanged, get_abi(this)));
+}
+
+MonitorsViewModel::~MonitorsViewModel() noexcept {
+  monitor_->removeCallback(&MonitorsViewModel::onMonitorChanged, get_abi(this));
+}
+
+void MonitorsViewModel::onMonitorChanged(StateCache const& sender, void* context) noexcept {
+  MonitorsViewModel* const self{static_cast<MonitorsViewModel*>(context)};
+#ifdef _DEBUG
+  assert(!self->dispatcher_.HasThreadAccess());
+#endif
+
+  auto items = makeMonitorViewModels(sender);
+  self->dispatcher_.TryEnqueue(weak_delegate(self->weak_ptr_, [items](com_ptr<MonitorsViewModel> const& viewmodel) {
+    viewmodel->Items_ = items;
+    viewmodel->notifyPropertyChanged(L"Items");
+  }));
 }
 
 }  // namespace winrt::Mntone::RoxyGlance::ViewModels::Shell::implementation

@@ -31,21 +31,45 @@ constexpr bool is_weak_delegate_nothrow_v = [] {
 /// <param name="handler">Handler to execute.</param>
 template<typename T, typename Handler>
 auto weak_delegate(::winrt::weak_ref<T> weak, Handler handler) noexcept(
-  std::is_nothrow_move_constructible_v<::winrt::weak_ref<T>> &&
-  std::is_nothrow_move_constructible_v<Handler>
+  std::is_nothrow_move_constructible_v<::winrt::weak_ref<T>>
+  && std::is_nothrow_move_constructible_v<Handler>
 ) {
   return [weak = std::move(weak), handler = std::move(handler)](auto&&... args) mutable
-    noexcept(detail::is_weak_delegate_nothrow_v<Handler, T, decltype(args)...>) -> void {
-    if (T strong = weak.get()) {
-      if constexpr (std::is_invocable_v<Handler&, T const&, decltype(args)...>) {
+    noexcept(detail::is_weak_delegate_nothrow_v<
+      Handler,
+      decltype(weak.get()),
+      decltype(args)...
+    >) -> void {
+    if (auto strong = weak.get()) {
+      if constexpr (std::is_invocable_v<Handler&, decltype(strong) const&, decltype(args)...>) {
         handler(strong, std::forward<decltype(args)>(args)...);
-      } else if constexpr (std::is_invocable_v<Handler&, T&, decltype(args)...>) {
+      } else if constexpr (std::is_invocable_v<Handler&, decltype(strong)&, decltype(args)...>) {
         handler(strong, std::forward<decltype(args)>(args)...);
       } else {
         handler(std::forward<decltype(args)>(args)...);
       }
     }
   };
+}
+
+/// <summary>
+/// Creates a weak delegate from a strong COM reference.
+/// </summary>
+/// <typeparam name="T">The type of the target object.</typeparam>
+/// <typeparam name="Handler">The callable type.</typeparam>
+/// <param name="strong">Strong reference to the target.</param>
+/// <param name="handler">Handler to execute.</param>
+template<typename T, typename Handler>
+auto weak_delegate(::winrt::com_ptr<T> const& strong, Handler handler) {
+  ::winrt::weak_ref<T> weak;
+  if constexpr (::winrt::impl::is_implements_v<T>) {
+    if (strong) {
+      weak = strong->get_weak();
+    }
+  } else {
+    weak = ::winrt::weak_ref<T>{strong};
+  }
+  return weak_delegate(std::move(weak), std::move(handler));
 }
 
 /// <summary>
@@ -66,8 +90,12 @@ auto weak_delegate(T const& strong, Handler handler) noexcept(
 /// </summary>
 template<typename T, typename Class, typename Ret, typename... Args>
 auto weak_delegate(T const& target, Ret (Class::*method)(Args...) noexcept) noexcept {
-  return weak_delegate(target, [method](T& strong, Args... args) noexcept {
-    (strong.*method)(std::forward<Args>(args)...);
+  return weak_delegate(target, [method](auto const& strong, Args... args) noexcept {
+    if constexpr (requires { ((*strong).*method)(std::forward<Args>(args)...); }) {
+      ((*strong).*method)(std::forward<Args>(args)...);
+    } else {
+      (::winrt::get_self<Class>(strong)->*method)(std::forward<Args>(args)...);
+    }
   });
 }
 
@@ -77,8 +105,12 @@ auto weak_delegate(T const& target, Ret (Class::*method)(Args...) noexcept) noex
 /// </summary>
 template<typename T, typename Class, typename Ret, typename... Args>
 auto weak_delegate(T const& target, Ret (Class::*method)(Args...)) {
-  return weak_delegate(target, [method](T& strong, Args... args) {
-    (strong.*method)(std::forward<Args>(args)...);
+  return weak_delegate(target, [method](auto const& strong, Args... args) {
+    if constexpr (requires { ((*strong).*method)(std::forward<Args>(args)...); }) {
+      ((*strong).*method)(std::forward<Args>(args)...);
+    } else {
+      (::winrt::get_self<Class>(strong)->*method)(std::forward<Args>(args)...);
+    }
   });
 }
 

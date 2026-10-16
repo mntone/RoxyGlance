@@ -126,6 +126,7 @@
     <ClInclude Include="utility\backoff\jitter.h" />
     <ClInclude Include="utility\backoff\exponential.h" />
     <ClInclude Include="utility\backoff\fixed.h" />
+    <ClInclude Include="utility\CallbackHost.h" />
     <ClInclude Include="utility\fastfail.h" />
     <ClInclude Include="utility\macro.h" />
     <ClInclude Include="utility\ICollectionChangeListener.h" />
@@ -139,6 +140,7 @@
     <ClInclude Include="win32\MessageLoopThreadController.h" />
     <ClInclude Include="win32\monitor.h" />
     <ClInclude Include="win32\process.h" />
+    <ClInclude Include="win32\SRWLock.h" />
     <ClInclude Include="win32\string.h" />
     <ClInclude Include="win32\ThreadContext.h" />
     <ClInclude Include="win32\TrayIcon.h" />
@@ -182,6 +184,7 @@
     <ClCompile Include="pch.cc">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="utility\CallbackHost.cc" />
     <ClCompile Include="utility\ListenerHost.cc" />
     <ClCompile Include="win32\file.cc" />
     <ClCompile Include="win32\MessageLoopThreadController.cc" />

@@ -180,6 +180,9 @@
     <ClInclude Include="settings\UserSettings.h">
       <Filter>settings</Filter>
     </ClInclude>
+    <ClInclude Include="utility\CallbackHost.h">
+      <Filter>utility</Filter>
+    </ClInclude>
     <ClInclude Include="utility\ICollectionChangeListener.h">
       <Filter>utility</Filter>
     </ClInclude>
@@ -226,6 +229,9 @@
       <Filter>win32</Filter>
     </ClInclude>
     <ClInclude Include="win32\process.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\SRWLock.h">
       <Filter>win32</Filter>
     </ClInclude>
     <ClInclude Include="win32\string.h">
@@ -342,6 +348,9 @@
     </ClCompile>
     <ClCompile Include="settings\UserSettings.cc">
       <Filter>settings</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\CallbackHost.cc">
+      <Filter>utility</Filter>
     </ClCompile>
     <ClCompile Include="utility\ListenerHost.cc">
       <Filter>utility</Filter>

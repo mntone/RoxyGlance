@@ -41,6 +41,9 @@ struct RuleViewModel
   inline hstring Name() const noexcept {
     return hstring(rule_.name());
   }
+  inline Settings::TriggersViewModel Triggers() const noexcept {
+    return Triggers_;
+  }
   inline Windows::Foundation::Collections::IObservableVector<Settings::FilterKeyViewModel> UnusedFilterKeys() const noexcept {
     return UnusedFilterKeys_;
   }
@@ -62,6 +65,7 @@ private:
 
   Settings::ActionViewModel Action_;
   Windows::Foundation::Collections::IObservableVector<Settings::StringFilterViewModel> Filters_;
+  Settings::TriggersViewModel Triggers_;
   Windows::Foundation::Collections::IObservableVector<Settings::FilterKeyViewModel> UnusedFilterKeys_;
 
   static Microsoft::UI::Xaml::Data::PropertyChangedEventArgs ActionPropertyChangedEventArgs_;

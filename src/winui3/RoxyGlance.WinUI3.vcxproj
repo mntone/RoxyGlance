@@ -192,6 +192,9 @@
     <ClInclude Include="ViewModels\Settings\StringFilterViewModel.h">
       <DependentUpon>ViewModels\Settings\StringFilterViewModel.idl</DependentUpon>
     </ClInclude>
+    <ClInclude Include="ViewModels\Settings\TriggersViewModel.h">
+      <DependentUpon>ViewModels\Settings\TriggersViewModel.idl</DependentUpon>
+    </ClInclude>
     <ClInclude Include="ViewModels\Shell\MonitorsViewModel.h">
       <DependentUpon>ViewModels\Shell\MonitorsViewModel.idl</DependentUpon>
     </ClInclude>
@@ -264,6 +267,9 @@
     <ClCompile Include="ViewModels\Settings\StringFilterViewModel.cc">
       <DependentUpon>ViewModels\Settings\StringFilterViewModel.idl</DependentUpon>
     </ClCompile>
+    <ClCompile Include="ViewModels\Settings\TriggersViewModel.cc">
+      <DependentUpon>ViewModels\Settings\TriggersViewModel.idl</DependentUpon>
+    </ClCompile>
     <ClCompile Include="ViewModels\Shell\MonitorsViewModel.cc">
       <DependentUpon>ViewModels\Shell\MonitorsViewModel.idl</DependentUpon>
     </ClCompile>
@@ -289,6 +295,7 @@
     <Midl Include="ViewModels\Settings\RelativeMoveAndResizeViewModel.idl" />
     <Midl Include="ViewModels\Settings\RuleViewModel.idl" />
     <Midl Include="ViewModels\Settings\StringFilterViewModel.idl" />
+    <Midl Include="ViewModels\Settings\TriggersViewModel.idl" />
     <Midl Include="ViewModels\Shell\MonitorsViewModel.idl" />
     <Midl Include="ViewModels\Shell\MonitorViewModel.idl" />
     <Midl Include="Views\MainWindow.idl">

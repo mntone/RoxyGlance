@@ -1,5 +1,6 @@
 import "ViewModels/Settings/ActionViewModel.idl";
 import "ViewModels/Settings/StringFilterViewModel.idl";
+import "ViewModels/Settings/TriggersViewModel.idl";
 
 namespace Mntone.RoxyGlance.ViewModels.Settings
 {
@@ -12,6 +13,7 @@ namespace Mntone.RoxyGlance.ViewModels.Settings
     [noexcept] Microsoft.UI.Xaml.Input.ICommand AddFilterCommand { get; };
     [noexcept] Windows.Foundation.Collections.IObservableVector<StringFilterViewModel> Filters { get; };
     [noexcept] String Name { get; };
+    [noexcept] TriggersViewModel Triggers { get; };
     [noexcept] Windows.Foundation.Collections.IObservableVector<FilterKeyViewModel> UnusedFilterKeys { get; };
   }
 }

@@ -4,6 +4,9 @@
 #include "ViewModels/Settings/RuleViewModel.g.cpp"
 #endif
 
+// Triggers
+#include "TriggersViewModel.h"
+
 // Filters
 #include "FilterKeyViewModel.h"
 // StringFilterViewModel is included by RuleViewModel.h.
@@ -70,6 +73,7 @@ RuleViewModel::RuleViewModel(Rule& rule)
   , rule_(rule)
   , Action_(makeActionViewModel(rule.action()))
   , Filters_(nullptr)
+  , Triggers_(make<TriggersViewModel>(rule))
   , UnusedFilterKeys_(nullptr) {
   std::vector<winrt::StringFilterViewModel> new_filters;
   new_filters.reserve(kFilterKeyCount);
@@ -117,6 +121,7 @@ void RuleViewModel::save() {
   for (winrt::StringFilterViewModel const& vm : Filters_) {
     get_self<StringFilterViewModel>(vm)->save();
   }
+  get_self<TriggersViewModel>(Triggers_)->save();
 }
 
 void RuleViewModel::onAddFilterRequested(RuleViewModel& self, IInspectable const& param) {

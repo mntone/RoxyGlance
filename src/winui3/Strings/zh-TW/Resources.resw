@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!--
-    Microsoft ResX Schema
-
+  <!-- 
+    Microsoft ResX Schema 
+    
     Version 2.0
-
-    The primary goals of this format is to allow a simple XML format
-    that is mostly human readable. The generation and parsing of the
-    various data types are done through the TypeConverter classes
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
     associated with the data types.
-
+    
     Example:
-
+    
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-
-    There are any number of "resheader" rows that contain simple
+                
+    There are any number of "resheader" rows that contain simple 
     name/value pairs.
-
-    Each data row contains a name, and value. The row also contains a
-    type or mimetype. Type corresponds to a .NET class that support
-    text/value conversion through the TypeConverter architecture.
-    Classes that don't support this are serialized and stored with the
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
     mimetype set.
-
-    The mimetype is used for serialized objects, and tells the
-    ResXResourceReader how to depersist the object. This is currently not
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
     extensible. For a given mimetype the value must be set accordingly:
-
-    Note - application/x-microsoft.net.object.binary.base64 is the format
-    that the ResXResourceWriter will generate, however the reader can
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
     read any of the formats listed below.
-
+    
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with
+    value   : The object must be serialized with 
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-
+    
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with
+    value   : The object must be serialized with 
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array
+    value   : The object must be serialized into a byte array 
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -117,8 +117,101 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Action.Text" xml:space="preserve">
+    <value>執行操作</value>
+  </data>
+  <data name="Action_Type.Text" xml:space="preserve">
+    <value>類型</value>
+  </data>
+  <data name="Action_Type_AbsoluteMoveAndResize.Content" xml:space="preserve">
+    <value>移動與調整大小（絕對）</value>
+  </data>
+  <data name="Action_Type_RelativeMoveAndResize.Content" xml:space="preserve">
+    <value>移動與調整大小（相對）</value>
+  </data>
+  <data name="Filter.Text" xml:space="preserve">
+    <value>匹配條件</value>
+  </data>
+  <data name="Filter_AddButton.Content" xml:space="preserve">
+    <value>添加匹配條件</value>
+  </data>
+  <data name="MoveAndResize_Height.Text" xml:space="preserve">
+    <value>高度</value>
+  </data>
+  <data name="MoveAndResize_Width.Text" xml:space="preserve">
+    <value>寬度</value>
+  </data>
+  <data name="MoveAndResize_X.Text" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="MoveAndResize_Y.Text" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="Navigation_About.Content" xml:space="preserve">
+    <value>關於應用程式</value>
+  </data>
+  <data name="Navigation_General.Content" xml:space="preserve">
+    <value>一般</value>
+  </data>
+  <data name="Navigation_Rules.Content" xml:space="preserve">
+    <value>規則</value>
+  </data>
   <data name="Process Name" xml:space="preserve">
     <value>進程名稱</value>
+  </data>
+  <data name="RelativeMoveAndResize_Monitor.Text" xml:space="preserve">
+    <value>螢幕</value>
+  </data>
+  <data name="RelativeMoveAndResize_Target.Text" xml:space="preserve">
+    <value>目標</value>
+  </data>
+  <data name="SettingsWindowTitle" xml:space="preserve">
+    <value>設定 - Roxy Glance</value>
+  </data>
+  <data name="StringFilter_Column_Center.MinWidth" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="StringFilter_Column_Center.Width" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="StringFilter_Column_Start.MinWidth" xml:space="preserve">
+    <value>100</value>
+  </data>
+  <data name="StringFilter_Column_Start.Width" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="StringFilter_DeleteButton_ToolTip.Content" xml:space="preserve">
+    <value>刪除</value>
+  </data>
+  <data name="StringFilter_Match.Grid.Column" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="StringFilter_Match_Contains.Content" xml:space="preserve">
+    <value>包含</value>
+  </data>
+  <data name="StringFilter_Match_EndsWith.Content" xml:space="preserve">
+    <value>結尾是</value>
+  </data>
+  <data name="StringFilter_Match_Equals.Content" xml:space="preserve">
+    <value>等於</value>
+  </data>
+  <data name="StringFilter_Match_StartsWith.Content" xml:space="preserve">
+    <value>開頭是</value>
+  </data>
+  <data name="StringFilter_Value.Grid.Column" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="Trigger.Text" xml:space="preserve">
+    <value>觸發條件</value>
+  </data>
+  <data name="Trigger_AppLaunchCheckBox.Content" xml:space="preserve">
+    <value>應用程式啟動</value>
+  </data>
+  <data name="Trigger_WindowActiveCheckBox.Content" xml:space="preserve">
+    <value>視窗啟用</value>
+  </data>
+  <data name="Trigger_WindowShowCheckBox.Content" xml:space="preserve">
+    <value>視窗顯示</value>
   </data>
   <data name="Window Class" xml:space="preserve">
     <value>視窗類別</value>

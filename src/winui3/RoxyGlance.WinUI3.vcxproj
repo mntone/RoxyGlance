@@ -138,6 +138,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppLocator.h" />
+    <ClInclude Include="Controls\RuleEditorControl.xaml.h">
+      <DependentUpon>Controls\RuleEditorControl.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
     <ClInclude Include="Converters\bundle.h" />
     <ClInclude Include="Converters\EnumToInt32Converter.h">
       <DependentUpon>Converters\EnumToInt32Converter.idl</DependentUpon>
@@ -208,10 +212,15 @@
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml" />
+    <Page Include="Controls\RuleEditorControl.xaml" />
     <Page Include="Views\MainWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="Controls\RuleEditorControl.xaml.cc">
+      <DependentUpon>Controls\RuleEditorControl.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
     <ClCompile Include="Converters\EnumToInt32Converter.cc">
       <DependentUpon>Converters\EnumToInt32Converter.idl</DependentUpon>
     </ClCompile>
@@ -281,6 +290,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="Controls\RuleEditorControl.idl">
+      <DependentUpon>Controls\RuleEditorControl.xaml</DependentUpon>
+    </Midl>
     <Midl Include="Converters\EnumToInt32Converter.idl" />
     <Midl Include="Converters\EnumToSelectedIndexConverter.idl" />
     <Midl Include="Converters\FilterKeyToLocalizedStringConverter.idl" />

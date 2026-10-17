@@ -15,7 +15,13 @@ trim_trailing_whitespace = false
 [app.manifest]
 insert_final_newline = false
 
-[{Package.appxmanifest,packages.config,*.props,*.resw,*.slnx,*.targets,*.vcxproj,*.vcxproj.filters}]
+[{Package.appxmanifest,packages.config,*.props,*.slnx,*.targets,*.vcxproj,*.vcxproj.filters}]
 charset = utf-8-bom
 end_of_line = crlf
 insert_final_newline = false
+
+[*.resw]
+charset = utf-8-bom
+end_of_line = crlf
+insert_final_newline = false
+trim_trailing_whitespace = false

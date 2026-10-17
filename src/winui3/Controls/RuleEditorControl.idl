@@ -1,0 +1,23 @@
+import "ViewModels/Settings/RuleViewModel.idl";
+import "ViewModels/Shell/MonitorsViewModel.idl";
+
+namespace Mntone.RoxyGlance.Controls
+{
+  [default_interface]
+  runtimeclass RuleEditorControl : Microsoft.UI.Xaml.Controls.UserControl
+  {
+    RuleEditorControl();
+
+    Mntone.RoxyGlance.ViewModels.Settings.RuleViewModel Rule;
+    Mntone.RoxyGlance.ViewModels.Shell.MonitorsViewModel Monitors;
+
+    [noexcept] static Microsoft.UI.Xaml.DependencyProperty RuleProperty { get; };
+    [noexcept] static Microsoft.UI.Xaml.DependencyProperty MonitorsProperty { get; };
+
+    static Mntone.RoxyGlance.ViewModels.Settings.RuleViewModel GetRule(RuleEditorControl target);
+    static void SetRule(RuleEditorControl target, Mntone.RoxyGlance.ViewModels.Settings.RuleViewModel value);
+
+    static Mntone.RoxyGlance.ViewModels.Shell.MonitorsViewModel GetMonitors(RuleEditorControl target);
+    static void SetMonitors(RuleEditorControl target, Mntone.RoxyGlance.ViewModels.Shell.MonitorsViewModel value);
+  }
+}

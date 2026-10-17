@@ -5,6 +5,9 @@
       <UniqueIdentifier>{0a1c29b2-b1f8-4998-873f-803664116d26}</UniqueIdentifier>
       <Extensions>png</Extensions>
     </Filter>
+    <Filter Include="Controls">
+      <UniqueIdentifier>{816b735e-a48a-4d47-a370-03ea75838bc0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Converters">
       <UniqueIdentifier>{851cd40a-4596-473c-bf4c-e101615423f0}</UniqueIdentifier>
     </Filter>
@@ -82,6 +85,9 @@
     <ApplicationDefinition Include="App.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\RuleEditorControl.xaml">
+      <Filter>Controls</Filter>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Filter>Views</Filter>
     </Page>

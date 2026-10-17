@@ -3,9 +3,11 @@
 *.cpp  text diff=cpp eol=lf
 *.h    text diff=cpp eol=lf
 *.inl  text diff=cpp eol=lf
+*.xaml text          eol=lf
 
 # Visual Studio
 *.props            text eol=crlf
+*.resw             text eol=crlf whitespace=-blank-at-eol
 *.slnx             text eol=crlf
 *.targets          text eol=crlf
 *.vcxproj          text eol=crlf

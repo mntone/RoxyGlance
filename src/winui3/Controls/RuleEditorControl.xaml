@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="Mntone.RoxyGlance.Controls.RuleEditorControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:Mntone.RoxyGlance.Controls"
+             xmlns:conv="using:Mntone.RoxyGlance.Converters"
+             xmlns:helpers="using:Mntone.RoxyGlance.Helpers"
+             xmlns:viewmodels="using:Mntone.RoxyGlance.ViewModels.Settings"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+  <UserControl.Resources>
+    <Style x:Name="CardGrid"
+           TargetType="Grid">
+      <Setter Property="Background"
+              Value="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
+      <Setter Property="BorderBrush"
+              Value="{ThemeResource CardStrokeColorDefaultBrush}" />
+      <Setter Property="BorderThickness"
+              Value="1" />
+      <Setter Property="CornerRadius"
+              Value="{StaticResource ControlCornerRadius}" />
+      <Setter Property="Padding"
+              Value="16,12" />
+    </Style>
+    <Style x:Name="CardStackPanel"
+           TargetType="StackPanel">
+      <Setter Property="Background"
+              Value="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
+      <Setter Property="BorderBrush"
+              Value="{ThemeResource CardStrokeColorDefaultBrush}" />
+      <Setter Property="BorderThickness"
+              Value="1" />
+      <Setter Property="CornerRadius"
+              Value="{StaticResource ControlCornerRadius}" />
+      <Setter Property="Padding"
+              Value="16" />
+      <Setter Property="Spacing"
+              Value="12" />
+    </Style>
+    <CollectionViewSource x:Name="MonitorsSource"
+                          Source="{x:Bind Monitors.Items, Mode=OneWay}" />
+    <conv:EnumToInt32Converter x:Name="EnumToInt32Converter" />
+    <conv:EnumToSelectedIndexConverter x:Name="EnumToSelectedIndexConverter" />
+    <conv:FilterKeyToLocalizedStringConverter x:Name="FilterKeyToLocalizedStringConverter" />
+    <conv:ZeroToCollapsedConverter x:Name="ZeroToCollapsedConverter" />
+    <conv:TypeNameTemplateSelector x:Name="ActionTemplateSelector">
+      <conv:TypeNameTemplateSelector.EmptyItemTemplate>
+        <DataTemplate />
+      </conv:TypeNameTemplateSelector.EmptyItemTemplate>
+
+      <ResourceDictionary>
+        <Style x:Key="Int32CoordinateNumberBoxStyle"
+               TargetType="NumberBox">
+          <Setter Property="LargeChange"
+                  Value="100" />
+          <Setter Property="Maximum"
+                  Value="16384" />
+          <Setter Property="Minimum"
+                  Value="0" />
+          <Setter Property="SmallChange"
+                  Value="20" />
+          <Setter Property="SpinButtonPlacementMode"
+                  Value="Compact" />
+        </Style>
+        <DataTemplate x:DataType="viewmodels:AbsoluteMoveAndResizeViewModel"
+                      x:Key="Mntone.RoxyGlance.ViewModels.Settings.AbsoluteMoveAndResizeViewModel">
+          <Grid RowSpacing="12">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="118" />
+              <ColumnDefinition Width="12" />
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="118" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Uid="MoveAndResize_X"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource BodyTextBlockStyle}" />
+            <NumberBox Grid.Column="1"
+                       Value="{x:Bind X, Mode=TwoWay}"
+                       Style="{StaticResource Int32CoordinateNumberBoxStyle}" />
+            <TextBlock x:Uid="MoveAndResize_Y"
+                       Grid.Column="3"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource BodyTextBlockStyle}" />
+            <NumberBox Grid.Column="4"
+                       Value="{x:Bind Y, Mode=TwoWay}"
+                       Style="{StaticResource Int32CoordinateNumberBoxStyle}" />
+
+            <TextBlock x:Uid="MoveAndResize_Width"
+                       Grid.Row="1"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource BodyTextBlockStyle}" />
+            <NumberBox Grid.Column="1"
+                       Grid.Row="1"
+                       Value="{x:Bind Width, Mode=TwoWay}"
+                       Style="{StaticResource Int32CoordinateNumberBoxStyle}" />
+            <TextBlock x:Uid="MoveAndResize_Height"
+                       Grid.Column="3"
+                       Grid.Row="1"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource BodyTextBlockStyle}" />
+            <NumberBox Grid.Column="4"
+                       Grid.Row="1"
+                       Value="{x:Bind Height, Mode=TwoWay}"
+                       Style="{StaticResource Int32CoordinateNumberBoxStyle}" />
+          </Grid>
+        </DataTemplate>
+
+        <Style x:Key="FloatCoordinateNumberBoxStyle"
+               TargetType="NumberBox">
+          <Setter Property="LargeChange"
+                  Value="0.5" />
+          <Setter Property="Maximum"
+                  Value="1" />
+          <Setter Property="Minimum"
+                  Value="0" />
+          <Setter Property="SmallChange"
+                  Value="0.1" />
+          <Setter Property="SpinButtonPlacementMode"
+                  Value="Compact" />
+        </Style>
+
+        <DataTemplate x:DataType="viewmodels:RelativeMoveAndResizeViewModel"
+                      x:Key="Mntone.RoxyGlance.ViewModels.Settings.RelativeMoveAndResizeViewModel">
+          <Grid RowSpacing="12">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="118" />
+              <ColumnDefinition Width="12" />
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="118" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Uid="RelativeMoveAndResize_Target"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource BodyTextBlockStyle}" />
+            <!-- Workaround: use "{Binding Id, Mode=TwoWay}" by unknown_cast -->
+            <ComboBox Grid.Column="1"
+                      Grid.ColumnSpan="4"
+                      DisplayMemberPath="Name"
+                      ItemsSource="{Binding Source={StaticResource MonitorsSource}}"
+                      SelectedValue="{Binding Id, Mode=TwoWay}"
+                      SelectedValuePath="Id"
+                      Width="240" />
+
+            <TextBlock x:Uid="MoveAndResize_X"
+                       Grid.Row="1"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource BodyTextBlockStyle}" />
+            <NumberBox Grid.Column="1"
+                       Grid.Row="1"
+                       Value="{x:Bind X, Mode=TwoWay}"
+                       Style="{StaticResource FloatCoordinateNumberBoxStyle}" />
+            <TextBlock x:Uid="MoveAndResize_Y"
+                       Grid.Column="3"
+                       Grid.Row="1"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource BodyTextBlockStyle}" />
+            <NumberBox Grid.Column="4"
+                       Grid.Row="1"
+                       Value="{x:Bind Y, Mode=TwoWay}"
+                       Style="{StaticResource FloatCoordinateNumberBoxStyle}" />
+
+            <TextBlock x:Uid="MoveAndResize_Width"
+                       Grid.Row="2"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource BodyTextBlockStyle}" />
+            <NumberBox Grid.Column="1"
+                       Grid.Row="2"
+                       Value="{x:Bind Width, Mode=TwoWay}"
+                       Style="{StaticResource FloatCoordinateNumberBoxStyle}" />
+            <TextBlock x:Uid="MoveAndResize_Height"
+                       Grid.Column="3"
+                       Grid.Row="2"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource BodyTextBlockStyle}" />
+            <NumberBox Grid.Column="4"
+                       Grid.Row="2"
+                       Value="{x:Bind Height, Mode=TwoWay}"
+                       Style="{StaticResource FloatCoordinateNumberBoxStyle}" />
+          </Grid>
+        </DataTemplate>
+      </ResourceDictionary>
+    </conv:TypeNameTemplateSelector>
+  </UserControl.Resources>
+
+  <ScrollView Grid.RowSpan="2">
+    <StackPanel x:Name="RootPanel"
+                Margin="24"
+                MaxWidth="1000"
+                Spacing="24">
+      <TextBlock Margin="0,4,0,0"
+                 Text="{x:Bind Rule.Name, Mode=OneWay}"
+                 Style="{StaticResource TitleTextBlockStyle}" />
+
+      <StackPanel Spacing="8">
+        <TextBlock x:Uid="Trigger"
+                   Style="{StaticResource BodyStrongTextBlockStyle}" />
+        <StackPanel Padding="16,10"
+                    Style="{StaticResource CardStackPanel}">
+          <StackPanel Orientation="Horizontal"
+                      Spacing="12">
+            <CheckBox x:Uid="Trigger_AppLaunchCheckBox"
+                      IsChecked="{x:Bind Rule.Triggers.ApplicationStarted, Mode=TwoWay}"
+                      MinWidth="40" />
+            <CheckBox x:Uid="Trigger_WindowActiveCheckBox"
+                      IsChecked="{x:Bind Rule.Triggers.WindowActivated, Mode=TwoWay}"
+                      MinWidth="40" />
+            <CheckBox x:Uid="Trigger_WindowShowCheckBox"
+                      IsChecked="{x:Bind Rule.Triggers.WindowShown, Mode=TwoWay}"
+                      MinWidth="40" />
+          </StackPanel>
+        </StackPanel>
+      </StackPanel>
+
+      <StackPanel Spacing="8">
+        <TextBlock x:Uid="Filter"
+                   Style="{StaticResource BodyStrongTextBlockStyle}" />
+        <StackPanel Padding="16,16,8,16"
+                    Style="{StaticResource CardStackPanel}">
+          <ItemsRepeater ItemsSource="{x:Bind Rule.Filters, Mode=OneWay}"
+                         TabFocusNavigation="Local"
+                         Visibility="{x:Bind Rule.Filters.Size, Converter={StaticResource ZeroToCollapsedConverter}, Mode=OneWay}">
+            <ItemsRepeater.ItemTemplate>
+              <DataTemplate x:DataType="viewmodels:StringFilterViewModel">
+                <Grid ColumnSpacing="4"
+                      TabFocusNavigation="Once">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition x:Uid="StringFilter_Column_Start" />
+                    <ColumnDefinition x:Uid="StringFilter_Column_Center" />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Margin="0,0,8,0"
+                             Text="{x:Bind Key, Converter={StaticResource FilterKeyToLocalizedStringConverter}, Mode=OneTime}"
+                             VerticalAlignment="Center"
+                             Style="{StaticResource BodyTextBlockStyle}" />
+                  <ComboBox x:Uid="StringFilter_Match"
+                            HorizontalAlignment="Stretch"
+                            SelectedIndex="{x:Bind ValueMatchType, Converter={StaticResource EnumToInt32Converter}, Mode=TwoWay}">
+                    <ComboBoxItem x:Uid="StringFilter_Match_Contains" />
+                    <ComboBoxItem x:Uid="StringFilter_Match_Equals" />
+                    <ComboBoxItem x:Uid="StringFilter_Match_StartsWith" />
+                    <ComboBoxItem x:Uid="StringFilter_Match_EndsWith" />
+                  </ComboBox>
+                  <TextBox x:Uid="StringFilter_Value"
+                           Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                  <Button Grid.Column="3"
+                          Margin="4,0,0,0"
+                          Padding="8,0"
+                          VerticalAlignment="Stretch"
+                          Width="36"
+                          Command="{x:Bind DeleteCommand}"
+                          Style="{StaticResource SubtleButtonStyle}">
+                    <ToolTipService.ToolTip>
+                      <ToolTip x:Uid="StringFilter_DeleteButton_ToolTip" />
+                    </ToolTipService.ToolTip>
+                    <Viewbox>
+                      <SymbolIcon Symbol="Clear" />
+                    </Viewbox>
+                  </Button>
+                </Grid>
+              </DataTemplate>
+            </ItemsRepeater.ItemTemplate>
+            <ItemsRepeater.Layout>
+              <StackLayout Spacing="12" />
+            </ItemsRepeater.Layout>
+          </ItemsRepeater>
+
+          <DropDownButton x:Uid="Filter_AddButton"
+                          Visibility="{x:Bind Rule.UnusedFilterKeys.Size, Converter={StaticResource ZeroToCollapsedConverter}, Mode=OneWay}">
+            <DropDownButton.Flyout>
+              <MenuFlyout Placement="BottomEdgeAlignedLeft"
+                          helpers:MenuFlyoutHelper.ItemsSource="{x:Bind Rule.UnusedFilterKeys, Mode=OneWay}">
+                <helpers:MenuFlyoutHelper.ItemTemplate>
+                  <DataTemplate x:DataType="viewmodels:FilterKeyViewModel">
+                    <MenuFlyoutItem Text="{x:Bind Key, Converter={StaticResource FilterKeyToLocalizedStringConverter}}"
+                                    Command="{x:Bind AddCommand}"
+                                    CommandParameter="{x:Bind Key}" />
+                  </DataTemplate>
+                </helpers:MenuFlyoutHelper.ItemTemplate>
+              </MenuFlyout>
+            </DropDownButton.Flyout>
+          </DropDownButton>
+        </StackPanel>
+      </StackPanel>
+
+      <StackPanel Spacing="8">
+        <TextBlock x:Uid="Action"
+                   Style="{StaticResource BodyStrongTextBlockStyle}" />
+        <StackPanel Style="{StaticResource CardStackPanel}">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="60" />
+              <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Uid="Action_Type"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource BodyTextBlockStyle}" />
+            <ComboBox Grid.Column="1"
+                      SelectedIndex="{x:Bind Rule.ActionType, Converter={StaticResource EnumToSelectedIndexConverter}, Mode=TwoWay}"
+                      Width="240">
+              <ComboBoxItem x:Uid="Action_Type_AbsoluteMoveAndResize" />
+              <ComboBoxItem x:Uid="Action_Type_RelativeMoveAndResize" />
+            </ComboBox>
+          </Grid>
+
+          <ContentControl Content="{x:Bind Rule.Action, Mode=OneWay}"
+                          ContentTemplateSelector="{StaticResource ActionTemplateSelector}"
+                          IsTabStop="False" />
+        </StackPanel>
+      </StackPanel>
+    </StackPanel>
+  </ScrollView>
+</UserControl>

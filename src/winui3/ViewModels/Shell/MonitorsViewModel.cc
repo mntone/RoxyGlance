@@ -5,6 +5,9 @@
 #endif
 #include "ShellResource.h"
 
+#include <ranges>     // requires std::range
+#include <algorithm>  // requires std::range::sort
+
 #include "../../../app/monitor/MonitorStateCache.h"  // requires monitor::StateCache
 #include "../../../app/win32/string.h"               // requires LoadResourceString, FormatResourceString
 #include "../../../app/winrt/weak_delegate.h"        // requires weak_delegate
@@ -38,15 +41,21 @@ makeMonitorViewModels(StateCache const& monitor) {
     return nullptr;
   }
 
+  boost::container::small_vector<State const*, 5> states_by_id;
+  for (auto const& [_, state] : storage) {
+    states_by_id.stable_emplace_back(&state);
+  }
+  std::ranges::sort(states_by_id, {}, &State::id);
+
   std::vector<IInspectable> winrt_monitors(1);
   winrt_monitors.reserve(1 + storage_size);
 
   State const* primary_state{nullptr};
-  for (auto const& [_, state] : storage) {
-    winrt_monitors.push_back(make<MonitorViewModel>(state));
+  for (State const* state : states_by_id) {
+    winrt_monitors.push_back(make<MonitorViewModel>(*state));
 
-    if (state.isPrimary()) {
-      primary_state = &state;
+    if (state->isPrimary()) {
+      primary_state = state;
     }
   }
   if (!primary_state) {

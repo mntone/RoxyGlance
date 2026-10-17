@@ -6,6 +6,7 @@
 #include <regex>
 
 #include <boost/circular_buffer.hpp>          // use in Logger
+#include <boost/container/small_vector.hpp>
 #include <boost/container/static_vector.hpp>  // use in ListenerHost<I>
 #include <c4/yml/yml.hpp>
 #include <magic_enum/magic_enum.hpp>
@@ -28,9 +29,11 @@
 #include <winrt/Microsoft.UI.Xaml.h>
 #include <winrt/Microsoft.UI.Xaml.Controls.h>
 #include <winrt/Microsoft.UI.Xaml.Data.h>
+#include <winrt/Microsoft.UI.Xaml.Input.h>
 #include <winrt/Microsoft.UI.Xaml.Interop.h>
 #include <winrt/Microsoft.UI.Xaml.Markup.h>
 #include <winrt/Microsoft.UI.Xaml.Navigation.h>
+#include <winrt/Microsoft.Windows.ApplicationModel.Resources.h>
 #include <winrt/Microsoft.Windows.AppLifecycle.h>
 
 #include <wil/cppwinrt_helpers.h>

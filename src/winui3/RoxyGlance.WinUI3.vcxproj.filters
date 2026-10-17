@@ -14,11 +14,62 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{71b3686a-fe8d-4529-a8fe-be6642819ac9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Strings">
+      <UniqueIdentifier>{2ce619af-8ee8-4be8-8911-d911107b3c39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Strings\de-DE">
+      <UniqueIdentifier>{8d43d0f8-b2e1-4e49-a19c-f37ee017abd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Strings\en-US">
+      <UniqueIdentifier>{d7fc71f6-ac61-456a-98b3-87867de97021}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Strings\es-ES">
+      <UniqueIdentifier>{b60bb0bc-494f-474d-a213-75d08a223489}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Strings\fr-FR">
+      <UniqueIdentifier>{810c17c5-0b73-48b0-8217-41146152e524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Strings\id-ID">
+      <UniqueIdentifier>{ac96ecc0-7bc7-4a33-8c8b-4dd410a34b79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Strings\it-IT">
+      <UniqueIdentifier>{10de13c0-f1ed-47c2-a40c-8500228911e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Strings\ja-JP">
+      <UniqueIdentifier>{bee311ec-107e-4f15-b232-eac4148ed9c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Strings\ko-KR">
+      <UniqueIdentifier>{f4576db8-41e0-4f9c-b04a-ca28b6321349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Strings\nl-NL">
+      <UniqueIdentifier>{1f865ab9-4400-455c-a319-a1e7a58ce83b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Strings\pt-BR">
+      <UniqueIdentifier>{26e477d1-4898-409f-9b81-efaace658df4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Strings\ru-RU">
+      <UniqueIdentifier>{1662c089-4c85-401f-95a3-7714553ff006}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Strings\th-tH">
+      <UniqueIdentifier>{736be295-417e-4fef-b34d-f0cef50a1cae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Strings\vi-VN">
+      <UniqueIdentifier>{f5a5da0c-29ff-4eff-9f6d-a4b2cf914521}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Strings\zh-CN">
+      <UniqueIdentifier>{1db9baff-1183-47d6-a7ad-26921821cbb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Strings\zh-TW">
+      <UniqueIdentifier>{20ac58c1-55af-4ed7-a66c-2a969d03b5ae}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ViewModels">
       <UniqueIdentifier>{432dbbe7-1129-44d3-95bb-77361d8acee6}</UniqueIdentifier>
     </Filter>
     <Filter Include="ViewModels\Holders">
       <UniqueIdentifier>{94b44aed-f354-46ff-afdf-dcbc1f049ebc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewModels\Settings">
+      <UniqueIdentifier>{d431b08f-a4c3-4371-a2a7-e1e849d54df6}</UniqueIdentifier>
     </Filter>
     <Filter Include="ViewModels\Shell">
       <UniqueIdentifier>{4e373d3d-c454-4692-bc39-43a8b35857b1}</UniqueIdentifier>
@@ -42,6 +93,9 @@
     <Midl Include="Converters\EnumToSelectedIndexConverter.idl">
       <Filter>Converters</Filter>
     </Midl>
+    <Midl Include="Converters\FilterKeyToLocalizedStringConverter.idl">
+      <Filter>Converters</Filter>
+    </Midl>
     <Midl Include="Converters\TypeNameTemplateSelector.idl">
       <Filter>Converters</Filter>
     </Midl>
@@ -56,6 +110,15 @@
     </Midl>
     <Midl Include="ViewModels\LogViewModel.idl">
       <Filter>ViewModels</Filter>
+    </Midl>
+    <Midl Include="ViewModels\Settings\FilterKeyViewModel.idl">
+      <Filter>ViewModels\Settings</Filter>
+    </Midl>
+    <Midl Include="ViewModels\Settings\RuleViewModel.idl">
+      <Filter>ViewModels\Settings</Filter>
+    </Midl>
+    <Midl Include="ViewModels\Settings\StringFilterViewModel.idl">
+      <Filter>ViewModels\Settings</Filter>
     </Midl>
     <Midl Include="ViewModels\Shell\MonitorsViewModel.idl">
       <Filter>ViewModels\Shell</Filter>
@@ -80,6 +143,12 @@
     <ClCompile Include="ViewModels\LogViewModels.cc">
       <Filter>ViewModels</Filter>
     </ClCompile>
+    <ClCompile Include="ViewModels\Settings\initialize.cc">
+      <Filter>ViewModels\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewModels\Settings\SettingsWinRTConverters.cc">
+      <Filter>ViewModels\Settings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -100,6 +169,12 @@
     </ClInclude>
     <ClInclude Include="ViewModels\LogViewModels.h">
       <Filter>ViewModels</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewModels\Settings\initialize.h">
+      <Filter>ViewModels\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewModels\Settings\SettingsWinRTConverters.h">
+      <Filter>ViewModels\Settings</Filter>
     </ClInclude>
     <ClInclude Include="ViewModels\Shell\ShellResource.h">
       <Filter>ViewModels\Shell</Filter>
@@ -272,6 +347,11 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\app.rcconfig">
+      <Filter>Resources</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <MuiResourceCompile Include="Resources\app.de-DE.rc">
       <Filter>Resources</Filter>
     </MuiResourceCompile>
@@ -319,9 +399,51 @@
     </MuiResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\app.rcconfig">
-      <Filter>Resources</Filter>
-    </None>
+    <PRIResource Include="Strings\de-DE\Resources.resw">
+      <Filter>Strings\de-DE</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\en-US\Resources.resw">
+      <Filter>Strings\en-US</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\es-ES\Resources.resw">
+      <Filter>Strings\es-ES</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\fr-FR\Resources.resw">
+      <Filter>Strings\fr-FR</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\id-ID\Resources.resw">
+      <Filter>Strings\id-ID</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\it-IT\Resources.resw">
+      <Filter>Strings\it-IT</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\ja-JP\Resources.resw">
+      <Filter>Strings\ja-JP</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\ko-KR\Resources.resw">
+      <Filter>Strings\ko-KR</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\nl-NL\Resources.resw">
+      <Filter>Strings\nl-NL</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\pt-BR\Resources.resw">
+      <Filter>Strings\pt-BR</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\ru-RU\Resources.resw">
+      <Filter>Strings\ru-RU</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\th-TH\Resources.resw">
+      <Filter>Strings\th-tH</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\vi-VN\Resources.resw">
+      <Filter>Strings\vi-VN</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\zh-CN\Resources.resw">
+      <Filter>Strings\zh-CN</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\zh-TW\Resources.resw">
+      <Filter>Strings\zh-TW</Filter>
+    </PRIResource>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="app.manifest" />

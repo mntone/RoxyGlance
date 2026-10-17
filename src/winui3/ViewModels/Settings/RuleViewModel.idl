@@ -1,0 +1,14 @@
+import "ViewModels/Settings/StringFilterViewModel.idl";
+
+namespace Mntone.RoxyGlance.ViewModels.Settings
+{
+  [bindable]
+  [default_interface]
+  runtimeclass RuleViewModel : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+  {
+    [noexcept] Microsoft.UI.Xaml.Input.ICommand AddFilterCommand { get; };
+    [noexcept] Windows.Foundation.Collections.IObservableVector<StringFilterViewModel> Filters { get; };
+    [noexcept] String Name { get; };
+    [noexcept] Windows.Foundation.Collections.IObservableVector<FilterKeyViewModel> UnusedFilterKeys { get; };
+  }
+}

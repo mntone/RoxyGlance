@@ -1,0 +1,9 @@
+namespace Mntone.RoxyGlance.Converters
+{
+  [default_interface]
+  [marshaling_behavior(none)]
+  runtimeclass FilterKeyToLocalizedStringConverter : Microsoft.UI.Xaml.Data.IValueConverter
+  {
+    FilterKeyToLocalizedStringConverter();
+  }
+}

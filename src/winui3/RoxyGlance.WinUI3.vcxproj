@@ -145,6 +145,9 @@
     <ClInclude Include="Converters\EnumToSelectedIndexConverter.h">
       <DependentUpon>Converters\EnumToSelectedIndexConverter.idl</DependentUpon>
     </ClInclude>
+    <ClInclude Include="Converters\FilterKeyToLocalizedStringConverter.h">
+      <DependentUpon>Converters\FilterKeyToLocalizedStringConverter.idl</DependentUpon>
+    </ClInclude>
     <ClInclude Include="Converters\TypeNameTemplateSelector.h">
       <DependentUpon>Converters\TypeNameTemplateSelector.idl</DependentUpon>
     </ClInclude>
@@ -168,6 +171,17 @@
     <ClInclude Include="ViewModels\LogViewModel.h">
       <DependentUpon>ViewModels\LogViewModel.idl</DependentUpon>
     </ClInclude>
+    <ClInclude Include="ViewModels\Settings\FilterKeyViewModel.h">
+      <DependentUpon>ViewModels\Settings\FilterKeyViewModel.idl</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="ViewModels\Settings\initialize.h" />
+    <ClInclude Include="ViewModels\Settings\RuleViewModel.h">
+      <DependentUpon>ViewModels\Settings\RuleViewModel.idl</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="ViewModels\Settings\SettingsWinRTConverters.h" />
+    <ClInclude Include="ViewModels\Settings\StringFilterViewModel.h">
+      <DependentUpon>ViewModels\Settings\StringFilterViewModel.idl</DependentUpon>
+    </ClInclude>
     <ClInclude Include="ViewModels\Shell\MonitorsViewModel.h">
       <DependentUpon>ViewModels\Shell\MonitorsViewModel.idl</DependentUpon>
     </ClInclude>
@@ -190,6 +204,9 @@
     </ClCompile>
     <ClCompile Include="Converters\EnumToSelectedIndexConverter.cpp">
       <DependentUpon>Converters\EnumToSelectedIndexConverter.idl</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="Converters\FilterKeyToLocalizedStringConverter.cc">
+      <DependentUpon>Converters\FilterKeyToLocalizedStringConverter.idl</DependentUpon>
     </ClCompile>
     <ClCompile Include="Converters\TypeNameTemplateSelector.cc">
       <DependentUpon>Converters\TypeNameTemplateSelector.idl</DependentUpon>
@@ -215,6 +232,17 @@
     <ClCompile Include="ViewModels\LogViewModel.cc">
       <DependentUpon>ViewModels\LogViewModel.idl</DependentUpon>
     </ClCompile>
+    <ClCompile Include="ViewModels\Settings\FilterKeyViewModel.cc">
+      <DependentUpon>ViewModels\Settings\FilterKeyViewModel.idl</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="ViewModels\Settings\initialize.cc" />
+    <ClCompile Include="ViewModels\Settings\RuleViewModel.cc">
+      <DependentUpon>ViewModels\Settings\RuleViewModel.idl</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="ViewModels\Settings\SettingsWinRTConverters.cc" />
+    <ClCompile Include="ViewModels\Settings\StringFilterViewModel.cc">
+      <DependentUpon>ViewModels\Settings\StringFilterViewModel.idl</DependentUpon>
+    </ClCompile>
     <ClCompile Include="ViewModels\Shell\MonitorsViewModel.cc">
       <DependentUpon>ViewModels\Shell\MonitorsViewModel.idl</DependentUpon>
     </ClCompile>
@@ -228,11 +256,15 @@
   <ItemGroup>
     <Midl Include="Converters\EnumToInt32Converter.idl" />
     <Midl Include="Converters\EnumToSelectedIndexConverter.idl" />
+    <Midl Include="Converters\FilterKeyToLocalizedStringConverter.idl" />
     <Midl Include="Converters\TypeNameTemplateSelector.idl" />
     <Midl Include="Converters\ZeroToCollapsedConverter.idl" />
     <Midl Include="Helpers\MenuFlyoutHelper.idl" />
     <Midl Include="ViewModels\LogsViewModel.idl" />
     <Midl Include="ViewModels\LogViewModel.idl" />
+    <Midl Include="ViewModels\Settings\FilterKeyViewModel.idl" />
+    <Midl Include="ViewModels\Settings\RuleViewModel.idl" />
+    <Midl Include="ViewModels\Settings\StringFilterViewModel.idl" />
     <Midl Include="ViewModels\Shell\MonitorsViewModel.idl" />
     <Midl Include="ViewModels\Shell\MonitorViewModel.idl" />
     <Midl Include="Views\MainWindow.idl">
@@ -298,6 +330,11 @@
     <ResourceCompile Include="Resources\app.rc">
       <AdditionalOptions>/8 /g1 /q Resources\app.rcconfig /fm"$(IntDir)app_LN.res" %(AdditionalOptions)</AdditionalOptions>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\app.rcconfig" />
+  </ItemGroup>
+  <ItemGroup>
     <MuiResourceCompile Include="Resources\app.de-DE.rc">
       <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
       <MuiResourceLanguage>de-DE</MuiResourceLanguage>
@@ -359,7 +396,21 @@
     </MuiResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\app.rcconfig" />
+    <PRIResource Include="Strings\de-DE\Resources.resw" />
+    <PRIResource Include="Strings\en-US\Resources.resw" />
+    <PRIResource Include="Strings\es-ES\Resources.resw" />
+    <PRIResource Include="Strings\fr-FR\Resources.resw" />
+    <PRIResource Include="Strings\id-ID\Resources.resw" />
+    <PRIResource Include="Strings\it-IT\Resources.resw" />
+    <PRIResource Include="Strings\ja-JP\Resources.resw" />
+    <PRIResource Include="Strings\ko-KR\Resources.resw" />
+    <PRIResource Include="Strings\nl-NL\Resources.resw" />
+    <PRIResource Include="Strings\pt-BR\Resources.resw" />
+    <PRIResource Include="Strings\ru-RU\Resources.resw" />
+    <PRIResource Include="Strings\th-TH\Resources.resw" />
+    <PRIResource Include="Strings\vi-VN\Resources.resw" />
+    <PRIResource Include="Strings\zh-CN\Resources.resw" />
+    <PRIResource Include="Strings\zh-TW\Resources.resw" />
   </ItemGroup>
   <!--
     Defining the "Msix" ProjectCapability here allows the Single-project MSIX Packaging

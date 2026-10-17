@@ -1,0 +1,17 @@
+namespace Mntone.RoxyGlance.ViewModels.Settings
+{
+  enum FilterKey {
+    ProcessName,
+    WindowClass,
+    WindowTitle,
+  };
+
+  [bindable]
+  [default_interface]
+  [marshaling_behavior(none)]
+  runtimeclass FilterKeyViewModel
+  {
+    [noexcept] Microsoft.UI.Xaml.Input.ICommand AddCommand { get; };
+    [noexcept] FilterKey Key { get; };
+  }
+}

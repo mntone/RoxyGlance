@@ -1,0 +1,22 @@
+import "ViewModels/Settings/FilterKeyViewModel.idl";
+
+namespace Mntone.RoxyGlance.ViewModels.Settings
+{
+  enum StringMatchType {
+    Contains,
+    Equals,
+    StartsWith,
+    EndsWith,
+  };
+
+  [bindable]
+  [default_interface]
+  [marshaling_behavior(none)]
+  runtimeclass StringFilterViewModel
+  {
+    [noexcept] Microsoft.UI.Xaml.Input.ICommand DeleteCommand { get; };
+    [noexcept] FilterKey Key { get; };
+    StringMatchType ValueMatchType;
+    String Value;
+  }
+}

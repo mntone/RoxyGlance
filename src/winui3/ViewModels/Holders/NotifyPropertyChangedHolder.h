@@ -51,7 +51,12 @@ protected:
     return name##_; \
   } \
   void name(Type value);
-#define DEFINE_IINSPECTABLE_PROP(Type, name) \
+#define DEFINE_VALPROP(Type, name) \
+  inline Type name() const noexcept { \
+    return name##_; \
+  } \
+  void name(Type value);
+#define DEFINE_REFPROP(Type, name) \
   inline Type name() const noexcept { \
     return name##_; \
   } \

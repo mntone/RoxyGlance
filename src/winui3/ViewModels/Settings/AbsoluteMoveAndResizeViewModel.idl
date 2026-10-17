@@ -1,0 +1,15 @@
+import "ViewModels/Settings/ActionViewModel.idl";
+
+namespace Mntone.RoxyGlance.ViewModels.Settings
+{
+  [bindable]
+  [default_interface]
+  [marshaling_behavior(none)]
+  runtimeclass AbsoluteMoveAndResizeViewModel : ActionViewModel
+  {
+    Int32 X;
+    Int32 Y;
+    Int32 Width;
+    Int32 Height;
+  }
+}

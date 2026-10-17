@@ -8,6 +8,11 @@
 #include "FilterKeyViewModel.h"
 // StringFilterViewModel is included by RuleViewModel.h.
 
+// Actions
+#include "ActionViewModel.h"
+#include "AbsoluteMoveAndResizeViewModel.h"
+#include "RelativeMoveAndResizeViewModel.h"
+
 // Common
 #include <ranges>
 #include "SettingsWinRTConverters.h"
@@ -17,7 +22,9 @@
 namespace winrt {
 using namespace ::winrt::Windows::Foundation;
 using namespace ::winrt::Windows::Foundation::Collections;
+
 using namespace ::winrt::Microsoft::UI::Xaml;
+using namespace ::winrt::Microsoft::UI::Xaml::Data;
 using namespace ::winrt::Mntone::RoxyGlance::ViewModels::Settings;
 }
 
@@ -27,9 +34,41 @@ using namespace roxyg::winui3::viewmodel::settings;
 
 namespace winrt::Mntone::RoxyGlance::ViewModels::Settings::implementation {
 
+static inline winrt::ActionViewModel makeActionViewModel(Action& action) {
+  using SAT = ::roxyg::settings::ActionType;
+
+  winrt::ActionViewModel action_viewmodel{nullptr};
+  switch (action.type()) {
+  case SAT::kAbsoluteMoveAndResize:
+    action_viewmodel = make<AbsoluteMoveAndResizeViewModel>(action.as<AbsoluteMoveAndResize>());
+    break;
+  case SAT::kRelativeMoveAndResize:
+    action_viewmodel = make<RelativeMoveAndResizeViewModel>(action.as<RelativeMoveAndResize>());
+    break;
+  case SAT::kInvalid:
+    action_viewmodel = nullptr;
+    break;
+  default:
+#ifdef _DEBUG
+    __debugbreak();
+#endif
+    throw hresult_invalid_argument();
+  }
+  return action_viewmodel;
+}
+
+PropertyChangedEventArgs RuleViewModel::ActionPropertyChangedEventArgs_{nullptr};
+PropertyChangedEventArgs RuleViewModel::ActionTypePropertyChangedEventArgs_{nullptr};
+
+void RuleViewModel::initialize() {
+  ActionPropertyChangedEventArgs_ = PropertyChangedEventArgs{L"Action"};
+  ActionTypePropertyChangedEventArgs_ = PropertyChangedEventArgs{L"ActionType"};
+}
+
 RuleViewModel::RuleViewModel(Rule& rule)
   : StaticCommandHolder(&RuleViewModel::onAddFilterRequested)
   , rule_(rule)
+  , Action_(makeActionViewModel(rule.action()))
   , Filters_(nullptr)
   , UnusedFilterKeys_(nullptr) {
   std::vector<winrt::StringFilterViewModel> new_filters;
@@ -50,6 +89,19 @@ RuleViewModel::RuleViewModel(Rule& rule)
   UnusedFilterKeys_ = single_threaded_observable_vector<winrt::FilterKeyViewModel>(std::move(new_unused_filters));
 }
 
+void RuleViewModel::ActionType(Settings::ActionType value) {
+  roxyg::settings::ActionType const settings_value{toSettingsActionType(value)};
+  roxyg::settings::Action& action{rule_.action()};
+  if (action.type() == settings_value) {
+    return;
+  }
+
+  action.setType(settings_value);
+  Action_ = makeActionViewModel(action);
+  notifyPropertyChanged(ActionPropertyChangedEventArgs_);
+  notifyPropertyChanged(ActionTypePropertyChangedEventArgs_);
+}
+
 void RuleViewModel::save() {
   if (!deleting_keys_.empty()) {
     Filter& f{rule_.filter()};
@@ -59,6 +111,9 @@ void RuleViewModel::save() {
     deleting_keys_.clear();
   }
 
+  if (Action_) {
+    get_self<ActionViewModel>(Action_)->save();
+  }
   for (winrt::StringFilterViewModel const& vm : Filters_) {
     get_self<StringFilterViewModel>(vm)->save();
   }

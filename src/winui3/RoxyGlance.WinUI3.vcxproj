@@ -171,10 +171,20 @@
     <ClInclude Include="ViewModels\LogViewModel.h">
       <DependentUpon>ViewModels\LogViewModel.idl</DependentUpon>
     </ClInclude>
+    <ClInclude Include="ViewModels\Settings\AbsoluteMoveAndResizeViewModel.h">
+      <DependentUpon>ViewModels\Settings\AbsoluteMoveAndResizeViewModel.idl</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="ViewModels\Settings\ActionViewModel.h">
+      <DependentUpon>ViewModels\Settings\ActionViewModel.idl</DependentUpon>
+    </ClInclude>
     <ClInclude Include="ViewModels\Settings\FilterKeyViewModel.h">
       <DependentUpon>ViewModels\Settings\FilterKeyViewModel.idl</DependentUpon>
     </ClInclude>
     <ClInclude Include="ViewModels\Settings\initialize.h" />
+    <ClInclude Include="ViewModels\Settings\MoveAndResizeViewModelProperties.h" />
+    <ClInclude Include="ViewModels\Settings\RelativeMoveAndResizeViewModel.h">
+      <DependentUpon>ViewModels\Settings\RelativeMoveAndResizeViewModel.idl</DependentUpon>
+    </ClInclude>
     <ClInclude Include="ViewModels\Settings\RuleViewModel.h">
       <DependentUpon>ViewModels\Settings\RuleViewModel.idl</DependentUpon>
     </ClInclude>
@@ -232,10 +242,21 @@
     <ClCompile Include="ViewModels\LogViewModel.cc">
       <DependentUpon>ViewModels\LogViewModel.idl</DependentUpon>
     </ClCompile>
+    <ClCompile Include="ViewModels\Settings\AbsoluteMoveAndResizeViewModel.cc">
+      <DependentUpon>ViewModels\Settings\AbsoluteMoveAndResizeViewModel.idl</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="ViewModels\Settings\ActionViewModel.cc">
+      <DependentUpon>ViewModels\Settings\ActionViewModel.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
     <ClCompile Include="ViewModels\Settings\FilterKeyViewModel.cc">
       <DependentUpon>ViewModels\Settings\FilterKeyViewModel.idl</DependentUpon>
     </ClCompile>
     <ClCompile Include="ViewModels\Settings\initialize.cc" />
+    <ClCompile Include="ViewModels\Settings\MoveAndResizeViewModelProperties.cc" />
+    <ClCompile Include="ViewModels\Settings\RelativeMoveAndResizeViewModel.cc">
+      <DependentUpon>ViewModels\Settings\RelativeMoveAndResizeViewModel.idl</DependentUpon>
+    </ClCompile>
     <ClCompile Include="ViewModels\Settings\RuleViewModel.cc">
       <DependentUpon>ViewModels\Settings\RuleViewModel.idl</DependentUpon>
     </ClCompile>
@@ -262,7 +283,10 @@
     <Midl Include="Helpers\MenuFlyoutHelper.idl" />
     <Midl Include="ViewModels\LogsViewModel.idl" />
     <Midl Include="ViewModels\LogViewModel.idl" />
+    <Midl Include="ViewModels\Settings\AbsoluteMoveAndResizeViewModel.idl" />
+    <Midl Include="ViewModels\Settings\ActionViewModel.idl" />
     <Midl Include="ViewModels\Settings\FilterKeyViewModel.idl" />
+    <Midl Include="ViewModels\Settings\RelativeMoveAndResizeViewModel.idl" />
     <Midl Include="ViewModels\Settings\RuleViewModel.idl" />
     <Midl Include="ViewModels\Settings\StringFilterViewModel.idl" />
     <Midl Include="ViewModels\Shell\MonitorsViewModel.idl" />

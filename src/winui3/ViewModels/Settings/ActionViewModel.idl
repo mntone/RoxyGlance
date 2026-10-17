@@ -1,0 +1,18 @@
+namespace Mntone.RoxyGlance.ViewModels.Settings
+{
+  enum ActionType {
+    Invalid,
+    AbsoluteMoveAndResize,
+    RelativeMoveAndResize,
+  };
+
+  [bindable]
+  [default_interface]
+  [marshaling_behavior(none)]
+  unsealed runtimeclass ActionViewModel
+  {
+    protected ActionViewModel(ActionType type);
+
+    [noexcept] ActionType Type { get; };
+  }
+}

@@ -111,7 +111,16 @@
     <Midl Include="ViewModels\LogViewModel.idl">
       <Filter>ViewModels</Filter>
     </Midl>
+    <Midl Include="ViewModels\Settings\AbsoluteMoveAndResizeViewModel.idl">
+      <Filter>ViewModels\Settings</Filter>
+    </Midl>
+    <Midl Include="ViewModels\Settings\ActionViewModel.idl">
+      <Filter>ViewModels\Settings</Filter>
+    </Midl>
     <Midl Include="ViewModels\Settings\FilterKeyViewModel.idl">
+      <Filter>ViewModels\Settings</Filter>
+    </Midl>
+    <Midl Include="ViewModels\Settings\RelativeMoveAndResizeViewModel.idl">
       <Filter>ViewModels\Settings</Filter>
     </Midl>
     <Midl Include="ViewModels\Settings\RuleViewModel.idl">
@@ -146,6 +155,9 @@
     <ClCompile Include="ViewModels\Settings\initialize.cc">
       <Filter>ViewModels\Settings</Filter>
     </ClCompile>
+    <ClCompile Include="ViewModels\Settings\MoveAndResizeViewModelProperties.cc">
+      <Filter>ViewModels\Settings</Filter>
+    </ClCompile>
     <ClCompile Include="ViewModels\Settings\SettingsWinRTConverters.cc">
       <Filter>ViewModels\Settings</Filter>
     </ClCompile>
@@ -171,6 +183,9 @@
       <Filter>ViewModels</Filter>
     </ClInclude>
     <ClInclude Include="ViewModels\Settings\initialize.h">
+      <Filter>ViewModels\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewModels\Settings\MoveAndResizeViewModelProperties.h">
       <Filter>ViewModels\Settings</Filter>
     </ClInclude>
     <ClInclude Include="ViewModels\Settings\SettingsWinRTConverters.h">

@@ -1,3 +1,4 @@
+import "ViewModels/Settings/ActionViewModel.idl";
 import "ViewModels/Settings/StringFilterViewModel.idl";
 
 namespace Mntone.RoxyGlance.ViewModels.Settings
@@ -6,6 +7,8 @@ namespace Mntone.RoxyGlance.ViewModels.Settings
   [default_interface]
   runtimeclass RuleViewModel : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
   {
+    [noexcept] ActionViewModel Action { get; };
+    ActionType ActionType;
     [noexcept] Microsoft.UI.Xaml.Input.ICommand AddFilterCommand { get; };
     [noexcept] Windows.Foundation.Collections.IObservableVector<StringFilterViewModel> Filters { get; };
     [noexcept] String Name { get; };

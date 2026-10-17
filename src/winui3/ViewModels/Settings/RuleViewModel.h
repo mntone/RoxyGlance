@@ -20,6 +20,18 @@ struct RuleViewModel
   , roxyg::winui3::viewmodel::StaticCommandHolder<RuleViewModel> {
   RuleViewModel(roxyg::settings::Rule& rule);
 
+  inline Settings::ActionViewModel Action() const noexcept {
+    return Action_;
+  }
+
+  inline Settings::ActionType ActionType() const noexcept {
+    if (!Action_) {
+      return Settings::ActionType::Invalid;
+    }
+    return Action_.Type();
+  }
+  void ActionType(Settings::ActionType);
+
   inline Microsoft::UI::Xaml::Input::ICommand AddFilterCommand() const noexcept {
     return *this;
   }
@@ -35,6 +47,8 @@ struct RuleViewModel
 
   void save();
 
+  static void initialize();
+
 private:
   static void onAddFilterRequested(RuleViewModel& self, Windows::Foundation::IInspectable const& param);
   static void onDeleteRequested(
@@ -46,8 +60,12 @@ private:
   roxyg::settings::Rule& rule_;
   boost::container::small_vector<FilterKey, 3> deleting_keys_;
 
+  Settings::ActionViewModel Action_;
   Windows::Foundation::Collections::IObservableVector<Settings::StringFilterViewModel> Filters_;
   Windows::Foundation::Collections::IObservableVector<Settings::FilterKeyViewModel> UnusedFilterKeys_;
+
+  static Microsoft::UI::Xaml::Data::PropertyChangedEventArgs ActionPropertyChangedEventArgs_;
+  static Microsoft::UI::Xaml::Data::PropertyChangedEventArgs ActionTypePropertyChangedEventArgs_;
 };
 
 }

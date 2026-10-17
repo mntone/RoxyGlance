@@ -16,7 +16,9 @@ struct State final {
 
   [[nodiscard]] constexpr int id() const noexcept { return id_; }
   [[nodiscard]] constexpr HMONITOR handle() const noexcept { return handle_; }
-  [[nodiscard]] constexpr boost::static_wstring<14> friendlyName() const noexcept { return friendly_name_; }
+  [[nodiscard]] constexpr std::wstring_view friendlyName() const noexcept {
+    return {friendly_name_.data(), friendly_name_.size()};
+  }
   [[nodiscard]] constexpr bool isPrimary() const noexcept { return primary_; }
   [[nodiscard]] inline numeric::float4 displayArea() const noexcept { return display_area_; }
   [[nodiscard]] inline numeric::float4 workArea() const noexcept { return work_area_; }

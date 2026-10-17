@@ -65,7 +65,7 @@ makeMonitorViewModels(StateCache const& monitor) {
   auto const& friendlyName = primary_state->friendlyName();
   hstring const name{friendlyName.empty()
     ? LoadResourceString(kShellMain)
-    : FormatResourceString(kShellMainFormat, std::wstring_view{friendlyName.c_str(), friendlyName.size()})
+    : FormatResourceString(kShellMainFormat, friendlyName)
   };
   winrt_monitors[0] = make<MonitorViewModel>(*primary_state, 0, name);
   return single_threaded_vector_view(std::move(winrt_monitors));

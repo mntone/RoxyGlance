@@ -23,11 +23,7 @@ static ROXYG_ALWAYS_INLINE hstring makeName(roxyg::monitor::State const& state) 
   auto const& friendlyName = state.friendlyName();
   return friendlyName.empty()
     ? FormatResourceString(kShellDisplayFormat, state.id())
-    : FormatResourceString(
-        kShellDisplayNameFormat,
-        state.id(),
-        std::wstring_view{friendlyName.c_str(), friendlyName.size()}
-      );
+    : FormatResourceString(kShellDisplayNameFormat, state.id(), friendlyName);
 }
 
 static ROXYG_ALWAYS_INLINE float4 makeVector4(roxyg::numeric::float4 vec) noexcept {

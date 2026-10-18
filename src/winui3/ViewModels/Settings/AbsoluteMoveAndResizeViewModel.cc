@@ -67,7 +67,7 @@ void AbsoluteMoveAndResizeViewModel::Y(int32_t value) {
 }
 
 void AbsoluteMoveAndResizeViewModel::Width(int32_t value) {
-  if (value < kAbsoluteCoordinateMin || kAbsoluteCoordinateMax < value) {
+  if (value < kAbsoluteLengthMin || kAbsoluteLengthMax < value) {
     throw hresult_invalid_argument();
   }
 
@@ -77,7 +77,7 @@ void AbsoluteMoveAndResizeViewModel::Width(int32_t value) {
 }
 
 void AbsoluteMoveAndResizeViewModel::Height(int32_t value) {
-  if (value < kAbsoluteCoordinateMin || kAbsoluteCoordinateMax < value) {
+  if (value < kAbsoluteLengthMin || kAbsoluteLengthMax < value) {
     throw hresult_invalid_argument();
   }
 

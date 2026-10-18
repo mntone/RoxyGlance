@@ -39,8 +39,10 @@ inline constexpr std::wstring_view kInvalidNodeMessage = L"invalid node";
 
 namespace numeric_limit {
 
-inline constexpr long kAbsoluteCoordinateMin = 0;
+inline constexpr long kAbsoluteCoordinateMin = -0x4000L;
 inline constexpr long kAbsoluteCoordinateMax = 0x4000;
+inline constexpr long kAbsoluteLengthMin = 0;
+inline constexpr long kAbsoluteLengthMax = 0x4000;
 inline constexpr int kRelativeMonitorIdUnset = 0;
 inline constexpr int kRelativeMonitorIdMin = 1;
 inline constexpr int kRelativeMonitorIdMax = 16;

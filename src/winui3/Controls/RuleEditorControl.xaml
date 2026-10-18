@@ -81,6 +81,7 @@
                        VerticalAlignment="Center"
                        Style="{StaticResource BodyTextBlockStyle}" />
             <NumberBox Grid.Column="1"
+                       Minimum="-16384"
                        Value="{x:Bind X, Mode=TwoWay}"
                        Style="{StaticResource Int32CoordinateNumberBoxStyle}" />
             <TextBlock x:Uid="MoveAndResize_Y"
@@ -89,6 +90,7 @@
                        VerticalAlignment="Center"
                        Style="{StaticResource BodyTextBlockStyle}" />
             <NumberBox Grid.Column="4"
+                       Minimum="-16384"
                        Value="{x:Bind Y, Mode=TwoWay}"
                        Style="{StaticResource Int32CoordinateNumberBoxStyle}" />
 

@@ -41,15 +41,15 @@ AbsoluteMoveAndResize::AbsoluteMoveAndResize(c4::yml::NodeRef node)
     ReadLongFromNodeOrDefault(
       node_[key::kWidth],
       KeyId::kWidth,
-      numeric_limit::kAbsoluteCoordinateMin,
-      numeric_limit::kAbsoluteCoordinateMax,
+      numeric_limit::kAbsoluteLengthMin,
+      numeric_limit::kAbsoluteLengthMax,
       640
     ),
     ReadLongFromNodeOrDefault(
       node_[key::kHeight],
       KeyId::kHeight,
-      numeric_limit::kAbsoluteCoordinateMin,
-      numeric_limit::kAbsoluteCoordinateMax,
+      numeric_limit::kAbsoluteLengthMin,
+      numeric_limit::kAbsoluteLengthMax,
       400
     )
   )) {
@@ -81,8 +81,8 @@ void AbsoluteMoveAndResize::setY(long val) {
 
 void AbsoluteMoveAndResize::setWidth(long val) {
   ROXYG_UNCHECKED_ASSERT(
-    numeric_limit::kAbsoluteCoordinateMin <= val
-    && val <= numeric_limit::kAbsoluteCoordinateMax
+    numeric_limit::kAbsoluteLengthMin <= val
+    && val <= numeric_limit::kAbsoluteLengthMax
   );
 
   if (window_bounds_.z() != val) {
@@ -93,8 +93,8 @@ void AbsoluteMoveAndResize::setWidth(long val) {
 
 void AbsoluteMoveAndResize::setHeight(long val) {
   ROXYG_UNCHECKED_ASSERT(
-    numeric_limit::kAbsoluteCoordinateMin <= val
-    && val <= numeric_limit::kAbsoluteCoordinateMax
+    numeric_limit::kAbsoluteLengthMin <= val
+    && val <= numeric_limit::kAbsoluteLengthMax
   );
 
   if (window_bounds_.w() != val) {

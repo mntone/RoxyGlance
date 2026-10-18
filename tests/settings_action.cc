@@ -14,13 +14,13 @@ using namespace ::roxyg::settings::numeric_limit;
 
 TEST(AbsoluteMoveAndResize, ReadWithAllProps) {
   TEST_YAML(root, R"(
-x: 0
+x: -40
 y: 40
 width: 320
 height: 240
 )");
   AbsoluteMoveAndResize const action{root};
-  EXPECT_EQ(action.windowBounds().x(), 0);
+  EXPECT_EQ(action.windowBounds().x(), -40);
   EXPECT_EQ(action.windowBounds().y(), 40);
   EXPECT_EQ(action.windowBounds().z(), 320);
   EXPECT_EQ(action.windowBounds().w(), 240);
@@ -36,24 +36,48 @@ TEST(AbsoluteMoveAndResize, ReadDefaults) {
   EXPECT_EQ(action.windowBounds().w(), 400);
 }
 
-TEST(AbsoluteMoveAndResize, ReadInvalidSmallNumber) {
-  TEST_YAML(root, R"(
-x: -1
-y: 40
-width: 320
-height: 240
-)");
-  EXPECT_THROW(AbsoluteMoveAndResize{root}, ParseError);
+TEST(AbsoluteMoveAndResize, ReadInvalidLargeNegativeCoordinate) {
+  {
+    TEST_YAML(large_x, "x: -16385");
+    EXPECT_THROW(AbsoluteMoveAndResize{large_x}, ParseError);
+  }
+  {
+    TEST_YAML(large_y, "y: -16385");
+    EXPECT_THROW(AbsoluteMoveAndResize{large_y}, ParseError);
+  }
 }
 
-TEST(AbsoluteMoveAndResize, ReadInvalidLargeNumber) {
-  TEST_YAML(root, R"(
-x: 40
-y: 40
-width: 16385
-height: 240
-)");
-  EXPECT_THROW(AbsoluteMoveAndResize{root}, ParseError);
+TEST(AbsoluteMoveAndResize, ReadInvalidLargePositiveCoordinate) {
+  {
+    TEST_YAML(large_x, "x: 16385");
+    EXPECT_THROW(AbsoluteMoveAndResize{large_x}, ParseError);
+  }
+  {
+    TEST_YAML(large_y, "y: 16385");
+    EXPECT_THROW(AbsoluteMoveAndResize{large_y}, ParseError);
+  }
+}
+
+TEST(AbsoluteMoveAndResize, ReadInvalidNegativeLength) {
+  {
+    TEST_YAML(neg_width, "width: -1");
+    EXPECT_THROW(AbsoluteMoveAndResize{neg_width}, ParseError);
+  }
+  {
+    TEST_YAML(neg_height, "height: -1");
+    EXPECT_THROW(AbsoluteMoveAndResize{neg_height}, ParseError);
+  }
+}
+
+TEST(AbsoluteMoveAndResize, ReadInvalidLargeLength) {
+  {
+    TEST_YAML(large_width, "width: 16385");
+    EXPECT_THROW(AbsoluteMoveAndResize{large_width}, ParseError);
+  }
+  {
+    TEST_YAML(large_height, "height: 16385");
+    EXPECT_THROW(AbsoluteMoveAndResize{large_height}, ParseError);
+  }
 }
 
 TEST(AbsoluteMoveAndResize, WriteBounds) {

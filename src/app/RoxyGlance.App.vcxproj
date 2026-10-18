@@ -68,7 +68,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir);$(GeneratedFilesDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_LIB;WINRT_NO_MODULE_LOCK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <TreatSpecificWarningsAsErrors>4265;5038;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>

@@ -97,11 +97,13 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>DISABLE_XAML_GENERATED_MAIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalOptions>%(AdditionalOptions) /bigobj</AdditionalOptions>
+      <PreprocessorDefinitions>DISABLE_XAML_GENERATED_MAIN;WINRT_NO_MODULE_LOCK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>dwmapi.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AppContainer>false</AppContainer>
+      <HeapCommitSize>0x400000</HeapCommitSize>
+      <HeapReserveSize>0x600000</HeapReserveSize>
       <StackReserveSize>0x20000</StackReserveSize>
       <StackCommitSize>0x2000</StackCommitSize>
       <DelayLoadDLLs>dwmapi.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>

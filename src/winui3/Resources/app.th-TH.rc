@@ -6,8 +6,8 @@ IDC_MENU_TRAY MENU
 BEGIN
   POPUP ""
   BEGIN
-    MENUITEM "การตั้งค่า", IDM_TRAY_SETTINGS
-    MENUITEM "ออก",    IDM_TRAY_EXIT
+    MENUITEM "การตั้งค่า(&S)", IDM_TRAY_SETTINGS
+    MENUITEM "ออก(&X)",    IDM_TRAY_EXIT
   END
 END
 
@@ -18,5 +18,5 @@ BEGIN
   IDS_SHELL_DISPFMT      "จอแสดงผล {}"
   IDS_SHELL_DISPNAMEFMT  "จอแสดงผล {}: {}"
 
-  IDS_MENU_DEBUG "ดีบัก"
+  IDS_MENU_DEBUG "ดีบัก(&D)"
 END

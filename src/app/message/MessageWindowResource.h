@@ -6,7 +6,7 @@
 #define IDM_TRAY_EXIT      40301  // Menu item ID for "E&xit" in the tray menu
 #define IDM_TRAY_SETTINGS  40302  // Menu item ID for "&Settings" in the tray menu
 #define IDM_TRAY_DEBUG     40303  // Menu item ID for "&Debug" in the tray menu
-#define IDS_MENU_DEBUG     10301
+#define IDS_MENU_DEBUG     1632   // 0x66* (0x66=103 - 1)
 
 #else
 
@@ -24,8 +24,8 @@ inline constexpr WORD kTrayDebug = kTrayCommandBase + 3;
 }
 
 namespace string {
-inline constexpr WORD kStringBase = 10300;
-inline constexpr WORD kTrayDebug = kStringBase + 1;
+inline constexpr UINT kStringBase = 1632;
+inline constexpr UINT kTrayDebug = kStringBase;
 }
 
 }

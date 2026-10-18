@@ -27,7 +27,7 @@
 #endif
 
 #include "../../app/AppResource.h"                    // 101 is reserved.
-#include "../../app/message/MessageWindowResource.h"  // 103, 403xx, 103xx is reserved.
+#include "../../app/message/MessageWindowResource.h"  // 103, 403xx, 0x66* is reserved.
 #include "../ViewModels/Shell/ShellResource.h"        // ___, _____, 0x00* is reserved.
 
 // Next default values for new objects

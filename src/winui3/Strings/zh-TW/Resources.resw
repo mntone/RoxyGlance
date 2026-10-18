@@ -132,6 +132,9 @@
   <data name="Filter.Text" xml:space="preserve">
     <value>匹配條件</value>
   </data>
+  <data name="Filter_AddButton.AccessKey" xml:space="preserve">
+    <value>A</value>
+  </data>
   <data name="Filter_AddButton.Content" xml:space="preserve">
     <value>添加匹配條件</value>
   </data>
@@ -179,6 +182,9 @@
   </data>
   <data name="StringFilter_Column_Start.Width" xml:space="preserve">
     <value>Auto</value>
+  </data>
+  <data name="StringFilter_DeleteButton.AccessKey" xml:space="preserve">
+    <value>R</value>
   </data>
   <data name="StringFilter_DeleteButton_ToolTip.Content" xml:space="preserve">
     <value>刪除</value>

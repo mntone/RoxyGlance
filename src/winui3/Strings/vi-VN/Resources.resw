@@ -132,6 +132,9 @@
   <data name="Filter.Text" xml:space="preserve">
     <value>Điều kiện</value>
   </data>
+  <data name="Filter_AddButton.AccessKey" xml:space="preserve">
+    <value>T</value>
+  </data>
   <data name="Filter_AddButton.Content" xml:space="preserve">
     <value>Thêm điều kiện</value>
   </data>
@@ -179,6 +182,9 @@
   </data>
   <data name="StringFilter_Column_Start.Width" xml:space="preserve">
     <value>Auto</value>
+  </data>
+  <data name="StringFilter_DeleteButton.AccessKey" xml:space="preserve">
+    <value>X</value>
   </data>
   <data name="StringFilter_DeleteButton_ToolTip.Content" xml:space="preserve">
     <value>Xóa</value>

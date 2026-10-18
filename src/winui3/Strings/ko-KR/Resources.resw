@@ -132,6 +132,9 @@
   <data name="Filter.Text" xml:space="preserve">
     <value>조건</value>
   </data>
+  <data name="Filter_AddButton.AccessKey" xml:space="preserve">
+    <value>추</value>
+  </data>
   <data name="Filter_AddButton.Content" xml:space="preserve">
     <value>조건 추가</value>
   </data>
@@ -179,6 +182,9 @@
   </data>
   <data name="StringFilter_Column_Start.Width" xml:space="preserve">
     <value>*</value>
+  </data>
+  <data name="StringFilter_DeleteButton.AccessKey" xml:space="preserve">
+    <value>삭</value>
   </data>
   <data name="StringFilter_DeleteButton_ToolTip.Content" xml:space="preserve">
     <value>삭제</value>

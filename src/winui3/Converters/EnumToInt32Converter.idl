@@ -1,6 +1,7 @@
 namespace Mntone.RoxyGlance.Converters
 {
   [default_interface]
+  [marshaling_behavior(none)]
   runtimeclass EnumToInt32Converter : Microsoft.UI.Xaml.Data.IValueConverter
   {
     EnumToInt32Converter();

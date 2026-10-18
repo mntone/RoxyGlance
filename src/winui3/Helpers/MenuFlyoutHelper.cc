@@ -44,7 +44,7 @@ DependencyProperty MenuFlyoutHelper::ItemTemplateProperty_{
   )
 };
 
-struct VectorChangedEventBag: implements<VectorChangedEventBag, IInspectable> {
+struct VectorChangedEventBag: implements<VectorChangedEventBag, IInspectable, non_agile, no_weak_ref> {
   IObservableVector<IInspectable>::VectorChanged_revoker revoker;
 
   explicit inline VectorChangedEventBag(

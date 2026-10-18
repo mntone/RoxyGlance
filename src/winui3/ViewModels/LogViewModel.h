@@ -5,7 +5,7 @@
 
 namespace winrt::Mntone::RoxyGlance::ViewModels::implementation {
 
-struct LogViewModel: LogViewModelT<LogViewModel> {
+struct LogViewModel: LogViewModelT<LogViewModel, non_agile> {
 public:
   LogViewModel() noexcept = default;
 

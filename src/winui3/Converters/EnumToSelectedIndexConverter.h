@@ -3,7 +3,7 @@
 
 namespace winrt::Mntone::RoxyGlance::Converters::implementation {
 
-struct EnumToSelectedIndexConverter: EnumToSelectedIndexConverterT<EnumToSelectedIndexConverter> {
+struct EnumToSelectedIndexConverter: EnumToSelectedIndexConverterT<EnumToSelectedIndexConverter, non_agile, no_weak_ref> {
   EnumToSelectedIndexConverter() = default;
 
   Windows::Foundation::IInspectable Convert(

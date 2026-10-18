@@ -3,6 +3,7 @@ import "ViewModels/LogViewModel.idl";
 namespace Mntone.RoxyGlance.ViewModels
 {
   [default_interface]
+  [marshaling_behavior(none)]
   runtimeclass LogsViewModel
   {
     [noexcept] Windows.Foundation.Collections.IObservableVector<LogViewModel> Logs { get; };

@@ -12,7 +12,7 @@ class Logger;
 namespace winrt::Mntone::RoxyGlance::ViewModels::implementation {
 
 struct LogsViewModel
-  : LogsViewModelT<LogsViewModel>
+  : LogsViewModelT<LogsViewModel, non_agile>
   , roxyg::utility::ICollectionChangeListener<roxyg::logging::Log> {
 public:
   LogsViewModel(roxyg::logging::Logger& logger);

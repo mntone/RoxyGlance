@@ -3,7 +3,7 @@
 
 namespace winrt::Mntone::RoxyGlance::Converters::implementation {
 
-struct ZeroToCollapsedConverter: ZeroToCollapsedConverterT<ZeroToCollapsedConverter> {
+struct ZeroToCollapsedConverter: ZeroToCollapsedConverterT<ZeroToCollapsedConverter, non_agile, no_weak_ref> {
   ZeroToCollapsedConverter() = default;
 
   Windows::Foundation::IInspectable Convert(

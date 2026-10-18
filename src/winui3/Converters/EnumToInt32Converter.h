@@ -3,7 +3,7 @@
 
 namespace winrt::Mntone::RoxyGlance::Converters::implementation {
 
-struct EnumToInt32Converter: EnumToInt32ConverterT<EnumToInt32Converter> {
+struct EnumToInt32Converter: EnumToInt32ConverterT<EnumToInt32Converter, non_agile, no_weak_ref> {
   EnumToInt32Converter() = default;
 
   Windows::Foundation::IInspectable Convert(

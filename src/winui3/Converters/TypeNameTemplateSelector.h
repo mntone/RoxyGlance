@@ -3,7 +3,7 @@
 
 namespace winrt::Mntone::RoxyGlance::Converters::implementation {
 
-struct TypeNameTemplateSelector: TypeNameTemplateSelectorT<TypeNameTemplateSelector> {
+struct TypeNameTemplateSelector: TypeNameTemplateSelectorT<TypeNameTemplateSelector, no_weak_ref> {
   TypeNameTemplateSelector() = default;
 
   inline Microsoft::UI::Xaml::DataTemplate EmptyItemTemplate() const noexcept {

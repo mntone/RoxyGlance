@@ -1,6 +1,7 @@
 namespace Mntone.RoxyGlance.ViewModels
 {
   [default_interface]
+  [marshaling_behavior(none)]
   runtimeclass LogViewModel
   {
     [noexcept] String Content { get; };

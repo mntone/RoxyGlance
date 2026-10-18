@@ -158,6 +158,7 @@
     <ClInclude Include="Converters\ZeroToCollapsedConverter.h">
       <DependentUpon>Converters\ZeroToCollapsedConverter.idl</DependentUpon>
     </ClInclude>
+    <ClInclude Include="Helpers\KeyboardModifiers.h" />
     <ClInclude Include="Helpers\MenuFlyoutHelper.h">
       <DependentUpon>Helpers\MenuFlyoutHelper.idl</DependentUpon>
     </ClInclude>

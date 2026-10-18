@@ -25,6 +25,19 @@ struct RuleEditorControl: RuleEditorControlT<RuleEditorControl> {
     SetValue(MonitorsProperty_, value);
   }
 
+  void TriggersViewKeyDown(
+    winrt::Windows::Foundation::IInspectable const& sender,
+    winrt::Microsoft::UI::Xaml::Input::KeyRoutedEventArgs const& args
+  );
+  void FilterRootKeyDown(
+    winrt::Windows::Foundation::IInspectable const& sender,
+    winrt::Microsoft::UI::Xaml::Input::KeyRoutedEventArgs const& args
+  );
+  void FilterValueKeyDown(
+    winrt::Windows::Foundation::IInspectable const& sender,
+    winrt::Microsoft::UI::Xaml::Input::KeyRoutedEventArgs const& args
+  );
+
   static inline Microsoft::UI::Xaml::DependencyProperty RuleProperty() noexcept {
     return RuleProperty_;
   }

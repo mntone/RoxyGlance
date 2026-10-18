@@ -198,7 +198,13 @@
   <data name="StringFilter_Match_StartsWith.Content" xml:space="preserve">
     <value>로 시작</value>
   </data>
+  <data name="StringFilter_Match.TabIndex" xml:space="preserve">
+    <value>2</value>
+  </data>
   <data name="StringFilter_Value.Grid.Column" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="StringFilter_Value.TabIndex" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="Trigger.Text" xml:space="preserve">

@@ -35,8 +35,6 @@
               Value="{StaticResource ControlCornerRadius}" />
       <Setter Property="Padding"
               Value="16" />
-      <Setter Property="Spacing"
-              Value="12" />
     </Style>
     <CollectionViewSource x:Name="MonitorsSource"
                           Source="{x:Bind Monitors.Items, Mode=OneWay}" />
@@ -216,35 +214,44 @@
       <StackPanel Spacing="8">
         <TextBlock x:Uid="Trigger"
                    Style="{StaticResource BodyStrongTextBlockStyle}" />
-        <StackPanel Padding="16,10"
+        <StackPanel KeyDown="TriggersViewKeyDown"
+                    Orientation="Horizontal"
+                    Padding="16,10"
+                    Spacing="12"
+                    XYFocusKeyboardNavigation="Enabled"
                     Style="{StaticResource CardStackPanel}">
-          <StackPanel Orientation="Horizontal"
-                      Spacing="12">
-            <CheckBox x:Uid="Trigger_AppLaunchCheckBox"
-                      IsChecked="{x:Bind Rule.Triggers.ApplicationStarted, Mode=TwoWay}"
-                      MinWidth="40" />
-            <CheckBox x:Uid="Trigger_WindowActiveCheckBox"
-                      IsChecked="{x:Bind Rule.Triggers.WindowActivated, Mode=TwoWay}"
-                      MinWidth="40" />
-            <CheckBox x:Uid="Trigger_WindowShowCheckBox"
-                      IsChecked="{x:Bind Rule.Triggers.WindowShown, Mode=TwoWay}"
-                      MinWidth="40" />
-          </StackPanel>
+          <CheckBox x:Name="AppLaunchCheckBox"
+                    x:Uid="Trigger_AppLaunchCheckBox"
+                    IsChecked="{x:Bind Rule.Triggers.ApplicationStarted, Mode=TwoWay}"
+                    MinWidth="40" />
+          <CheckBox x:Uid="Trigger_WindowActiveCheckBox"
+                    IsChecked="{x:Bind Rule.Triggers.WindowActivated, Mode=TwoWay}"
+                    MinWidth="40" />
+          <CheckBox x:Uid="Trigger_WindowShowCheckBox"
+                    IsChecked="{x:Bind Rule.Triggers.WindowShown, Mode=TwoWay}"
+                    MinWidth="40" />
         </StackPanel>
       </StackPanel>
 
       <StackPanel Spacing="8">
         <TextBlock x:Uid="Filter"
                    Style="{StaticResource BodyStrongTextBlockStyle}" />
-        <StackPanel Padding="16,16,8,16"
+        <StackPanel Padding="0,10,0,10"
                     Style="{StaticResource CardStackPanel}">
-          <ItemsRepeater ItemsSource="{x:Bind Rule.Filters, Mode=OneWay}"
-                         TabFocusNavigation="Local"
-                         Visibility="{x:Bind Rule.Filters.Size, Converter={StaticResource ZeroToCollapsedConverter}, Mode=OneWay}">
+          <ItemsRepeater x:Name="FiltersView"
+                         ItemsSource="{x:Bind Rule.Filters, Mode=OneWay}"
+                         Visibility="{x:Bind Rule.Filters.Size, Converter={StaticResource ZeroToCollapsedConverter}, Mode=OneWay}"
+                         XYFocusKeyboardNavigation="Enabled">
             <ItemsRepeater.ItemTemplate>
               <DataTemplate x:DataType="viewmodels:StringFilterViewModel">
                 <Grid ColumnSpacing="4"
-                      TabFocusNavigation="Once">
+                      CornerRadius="10"
+                      FocusVisualMargin="2,0,2,0"
+                      IsTabStop="True"
+                      KeyDown="FilterRootKeyDown"
+                      Padding="16,6,8,6"
+                      UseSystemFocusVisuals="True"
+                      XYFocusKeyboardNavigation="Disabled">
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition x:Uid="StringFilter_Column_Start" />
@@ -257,6 +264,7 @@
                              Style="{StaticResource BodyTextBlockStyle}" />
                   <ComboBox x:Uid="StringFilter_Match"
                             HorizontalAlignment="Stretch"
+                            KeyDown="FilterValueKeyDown"
                             SelectedIndex="{x:Bind ValueMatchType, Converter={StaticResource EnumToInt32Converter}, Mode=TwoWay}">
                     <ComboBoxItem x:Uid="StringFilter_Match_Contains" />
                     <ComboBoxItem x:Uid="StringFilter_Match_Equals" />
@@ -264,13 +272,14 @@
                     <ComboBoxItem x:Uid="StringFilter_Match_EndsWith" />
                   </ComboBox>
                   <TextBox x:Uid="StringFilter_Value"
+                           KeyDown="FilterValueKeyDown"
                            Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                   <Button Grid.Column="3"
+                          Command="{x:Bind DeleteCommand}"
                           Margin="4,0,0,0"
                           Padding="8,0"
                           VerticalAlignment="Stretch"
                           Width="36"
-                          Command="{x:Bind DeleteCommand}"
                           Style="{StaticResource SubtleButtonStyle}">
                     <ToolTipService.ToolTip>
                       <ToolTip x:Uid="StringFilter_DeleteButton_ToolTip" />
@@ -283,11 +292,13 @@
               </DataTemplate>
             </ItemsRepeater.ItemTemplate>
             <ItemsRepeater.Layout>
-              <StackLayout Spacing="12" />
+              <StackLayout />
             </ItemsRepeater.Layout>
           </ItemsRepeater>
 
-          <DropDownButton x:Uid="Filter_AddButton"
+          <DropDownButton x:Name="AddFilterButton"
+                          x:Uid="Filter_AddButton"
+                          Margin="16,6,16,6"
                           Visibility="{x:Bind Rule.UnusedFilterKeys.Size, Converter={StaticResource ZeroToCollapsedConverter}, Mode=OneWay}">
             <DropDownButton.Flyout>
               <MenuFlyout Placement="BottomEdgeAlignedLeft"
@@ -308,7 +319,8 @@
       <StackPanel Spacing="8">
         <TextBlock x:Uid="Action"
                    Style="{StaticResource BodyStrongTextBlockStyle}" />
-        <StackPanel Style="{StaticResource CardStackPanel}">
+        <StackPanel Spacing="12"
+                    Style="{StaticResource CardStackPanel}">
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="60" />

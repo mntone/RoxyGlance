@@ -7,6 +7,7 @@
 #include <winrt/Microsoft.UI.Windowing.h>  // requires OverlappedPresenter
 
 #include "RuleEditorPage.xaml.h"
+#include "../Helpers/KeyboardModifiers.h"
 #include "../Resources/SettingsResource.h"
 #include "../ViewModels/Settings/initialize.h"
 
@@ -16,17 +17,21 @@
 
 namespace winrt {
 using namespace ::winrt::Windows::Foundation;
+using namespace ::winrt::Windows::System;
 using namespace ::winrt::Windows::UI::Xaml::Interop;
 
 using Color = ::winrt::Windows::UI::Color;
 using Colors = ::winrt::Microsoft::UI::Colors;
 
 using namespace ::winrt::Microsoft::UI;
+using namespace ::winrt::Microsoft::UI::Input;
 using namespace ::winrt::Microsoft::UI::Windowing;
 using namespace ::winrt::Microsoft::UI::Xaml;
 using namespace ::winrt::Microsoft::UI::Xaml::Controls;
+using namespace ::winrt::Microsoft::UI::Xaml::Input;
 using namespace ::winrt::Microsoft::UI::Xaml::Interop;
 using namespace ::winrt::Microsoft::UI::Xaml::Media::Animation;
+using namespace ::winrt::Microsoft::UI::Xaml::Navigation;
 using namespace ::winrt::Microsoft::Windows::ApplicationModel::Resources;
 using namespace ::winrt::Mntone::RoxyGlance::Views;
 }
@@ -113,16 +118,88 @@ void SettingsWindow::InitializeComponent() {
   titlebar.ButtonPressedForegroundColor(theme_color);
 }
 
+bool SettingsWindow::tryGoBack() {
+  Frame const frame{RootFrame()};
+  if (frame.CanGoBack()) {
+    frame.GoBack();
+    return true;
+  }
+  return false;
+}
+
+bool SettingsWindow::tryGoForward() {
+  Frame const frame{RootFrame()};
+  if (frame.CanGoForward()) {
+    frame.GoForward();
+    return true;
+  }
+  return false;
+}
+
+void SettingsWindow::RootGridKeyDown(IInspectable const& sender, KeyRoutedEventArgs const& args) {
+  roxyg::winui3::KeyboardModifiers const states;
+  if (!states.isAltOnlyPressed()) {
+    return;
+  }
+
+  VirtualKey const key{args.Key()};
+  if (key == VirtualKey::Left) {
+    if (tryGoBack()) {
+      args.Handled(true);
+    }
+  } else if (key == VirtualKey::Right) {
+    if (tryGoForward()) {
+      args.Handled(true);
+    }
+  }
+}
+
+void SettingsWindow::RootGridPointerPressed(IInspectable const& sender, PointerRoutedEventArgs const& args) {
+  PointerPointProperties properties{args.GetCurrentPoint(Content()).Properties()};
+  if (properties.IsXButton1Pressed()) {
+    if (tryGoBack()) {
+      args.Handled(true);
+    }
+  } else if (properties.IsXButton2Pressed()) {
+    if (tryGoForward()) {
+      args.Handled(true);
+    }
+  }
+}
+
+void SettingsWindow::NavigationViewBackRequested(
+  NavigationView const& /*sender*/,
+  NavigationViewBackRequestedEventArgs const& /*args*/
+) {
+  tryGoBack();
+}
+
 void SettingsWindow::NavigationViewSelectionChanged(
   NavigationView const& /*sender*/,
   NavigationViewSelectionChangedEventArgs const& args
 ) {
   NavigationViewItem item{args.SelectedItem().as<NavigationViewItem>()};
+  hstring const page_type{unbox_value<hstring>(item.Tag())};
+  if (RootFrame().CurrentSourcePageType().Name == page_type) {
+    return;
+  }
+
   RootFrame().Navigate(
-    TypeName{unbox_value<hstring>(item.Tag())},
+    TypeName{page_type},
     nullptr,
     SuppressNavigationTransitionInfo()
   );
+}
+
+void SettingsWindow::RootFrameNavigated(IInspectable const& /*sender*/, NavigationEventArgs const& args) {
+  for (IInspectable const& item : NavigationViewControl().MenuItems()) {
+    NavigationViewItem const& navitem{item.as<NavigationViewItem>()};
+    hstring const tag{unbox_value<hstring>(navitem.Tag())};
+    if (args.SourcePageType().Name == tag) {
+      navitem.IsSelected(true);
+      break;
+    }
+  }
 }
 
 }  // namespace winrt::Mntone::RoxyGlance::Views::implementation

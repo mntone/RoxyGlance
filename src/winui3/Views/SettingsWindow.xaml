@@ -10,7 +10,8 @@
     <MicaBackdrop Kind="BaseAlt" />
   </Window.SystemBackdrop>
 
-  <Grid>
+  <Grid KeyDown="RootGridKeyDown"
+        PointerPressed="RootGridPointerPressed">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition />
@@ -21,8 +22,11 @@
         <ImageIconSource ImageSource="/Assets/Icon.png" />
       </TitleBar.IconSource>
     </TitleBar>
-    <NavigationView Grid.Row="1"
+    <NavigationView x:Name="NavigationViewControl"
+                    Grid.Row="1"
                     Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
+                    BackRequested="NavigationViewBackRequested"
+                    IsBackEnabled="{x:Bind RootFrame.CanGoBack, Mode=OneWay}"
                     IsSettingsVisible="False"
                     PaneDisplayMode="Top"
                     SelectionChanged="NavigationViewSelectionChanged">
@@ -32,7 +36,8 @@
                             KeyTipPlacementMode="Bottom"
                             Tag="Mntone.RoxyGlance.Views.RuleEditorPage" />
       </NavigationView.MenuItems>
-      <Frame x:Name="RootFrame">
+      <Frame x:Name="RootFrame"
+             Navigated="RootFrameNavigated">
         <Frame.ContentTransitions>
           <TransitionCollection>
             <NavigationThemeTransition />

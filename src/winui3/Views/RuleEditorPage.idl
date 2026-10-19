@@ -1,0 +1,14 @@
+import "ViewModels/Settings/RulesViewModel.idl";
+import "ViewModels/Shell/MonitorsViewModel.idl";
+
+namespace Mntone.RoxyGlance.Views
+{
+  [default_interface]
+  runtimeclass RuleEditorPage : Microsoft.UI.Xaml.Controls.Page
+  {
+    RuleEditorPage();
+
+    [noexcept] Mntone.RoxyGlance.ViewModels.Settings.RulesViewModel Rules { get; };
+    [noexcept] Mntone.RoxyGlance.ViewModels.Shell.MonitorsViewModel Monitors { get; };
+  }
+}

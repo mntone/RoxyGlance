@@ -1,0 +1,12 @@
+import "ViewModels/Settings/RuleViewModel.idl";
+
+namespace Mntone.RoxyGlance.ViewModels.Settings
+{
+  [bindable]
+  [default_interface]
+  runtimeclass RulesViewModel : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+  {
+    [noexcept] IObservableVector<RuleViewModel> Items { get; };
+    RuleViewModel SelectedItem;
+  }
+}

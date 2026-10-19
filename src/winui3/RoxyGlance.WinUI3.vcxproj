@@ -192,6 +192,9 @@
     <ClInclude Include="ViewModels\Settings\RelativeMoveAndResizeViewModel.h">
       <DependentUpon>ViewModels\Settings\RelativeMoveAndResizeViewModel.idl</DependentUpon>
     </ClInclude>
+    <ClInclude Include="ViewModels\Settings\RulesViewModel.h">
+      <DependentUpon>ViewModels\Settings\RulesViewModel.idl</DependentUpon>
+    </ClInclude>
     <ClInclude Include="ViewModels\Settings\RuleViewModel.h">
       <DependentUpon>ViewModels\Settings\RuleViewModel.idl</DependentUpon>
     </ClInclude>
@@ -212,11 +215,15 @@
     <ClInclude Include="Views\MainWindow.xaml.h">
       <DependentUpon>Views\MainWindow.xaml</DependentUpon>
     </ClInclude>
+    <ClInclude Include="Views\RuleEditorPage.xaml.h">
+      <DependentUpon>Views\RuleEditorPage.xaml</DependentUpon>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml" />
     <Page Include="Controls\RuleEditorControl.xaml" />
     <Page Include="Views\MainWindow.xaml" />
+    <Page Include="Views\RuleEditorPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
@@ -272,6 +279,9 @@
     <ClCompile Include="ViewModels\Settings\RelativeMoveAndResizeViewModel.cc">
       <DependentUpon>ViewModels\Settings\RelativeMoveAndResizeViewModel.idl</DependentUpon>
     </ClCompile>
+    <ClCompile Include="ViewModels\Settings\RulesViewModel.cc">
+      <DependentUpon>ViewModels\Settings\RulesViewModel.idl</DependentUpon>
+    </ClCompile>
     <ClCompile Include="ViewModels\Settings\RuleViewModel.cc">
       <DependentUpon>ViewModels\Settings\RuleViewModel.idl</DependentUpon>
     </ClCompile>
@@ -291,6 +301,9 @@
     <ClCompile Include="Views\MainWindow.xaml.cc">
       <DependentUpon>Views\MainWindow.xaml</DependentUpon>
     </ClCompile>
+    <ClCompile Include="Views\RuleEditorPage.xaml.cc">
+      <DependentUpon>Views\RuleEditorPage.xaml</DependentUpon>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="Controls\RuleEditorControl.idl">
@@ -308,6 +321,7 @@
     <Midl Include="ViewModels\Settings\ActionViewModel.idl" />
     <Midl Include="ViewModels\Settings\FilterKeyViewModel.idl" />
     <Midl Include="ViewModels\Settings\RelativeMoveAndResizeViewModel.idl" />
+    <Midl Include="ViewModels\Settings\RulesViewModel.idl" />
     <Midl Include="ViewModels\Settings\RuleViewModel.idl" />
     <Midl Include="ViewModels\Settings\StringFilterViewModel.idl" />
     <Midl Include="ViewModels\Settings\TriggersViewModel.idl" />
@@ -316,6 +330,9 @@
     <Midl Include="Views\MainWindow.idl">
       <SubType>Code</SubType>
       <DependentUpon>Views\MainWindow.xaml</DependentUpon>
+    </Midl>
+    <Midl Include="Views\RuleEditorPage.idl">
+      <DependentUpon>Views\RuleEditorPage.xaml</DependentUpon>
     </Midl>
   </ItemGroup>
   <ItemGroup>

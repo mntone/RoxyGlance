@@ -7,6 +7,7 @@
 #include "StringFilterViewModel.h"
 #include "TriggersViewModel.h"
 #include "RuleViewModel.h"
+#include "RulesViewModel.h"
 
 namespace winrt::Mntone::RoxyGlance::ViewModels::Settings::implementation {
 
@@ -16,6 +17,7 @@ void initialize() {
   std::call_once(initialized, [] {
     MoveAndResizeViewModelProperties::initialize();
     RelativeMoveAndResizeViewModel::initialize();
+    RulesViewModel::initialize();
     RuleViewModel::initialize();
     StringFilterViewModel::initialize();
     TriggersViewModel::initialize();

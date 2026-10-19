@@ -178,7 +178,7 @@
     <value>*</value>
   </data>
   <data name="StringFilter_Column_Start.MinWidth" xml:space="preserve">
-    <value>120</value>
+    <value>100</value>
   </data>
   <data name="StringFilter_Column_Start.Width" xml:space="preserve">
     <value>Auto</value>

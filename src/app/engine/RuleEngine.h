@@ -2,7 +2,7 @@
 
 #include "../context/OperationContext.h"
 #include "../logging/LogHelper.h"
-#include "../settings/ISettingsListener.h"
+#include "../settings/ISettingsDocumentListener.h"
 #include "../settings/TriggerFlags.h"
 #include "../window/IWindowStateListener.h"
 
@@ -12,7 +12,7 @@ struct Rule;
 using RuleSet = std::vector<Rule>;
 
 class RuleEngine final
-  : public settings::ISettingsListener
+  : public settings::IUserSettingsDocumentListener
   , public window::IWindowStateListener {
   RuleEngine(RuleEngine const&) = delete;
   RuleEngine& operator=(RuleEngine const&) = delete;

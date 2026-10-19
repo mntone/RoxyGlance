@@ -50,7 +50,21 @@ UserSettings::UserSettings(NodeRef node, logging::Logger* logger)
   , rules_(readRules(node_, logger)) {
 }
 
-void UserSettingsDocument::load(std::string_view yaml, logging::Logger* logger) {
+void UserSettingsDocument::parse(std::string_view yaml, logging::Logger* logger) {
   parse_in_arena(c4::to_csubstr(yaml), &tree_);
   root_ = std::make_unique<UserSettings>(tree_.rootref(), logger);
+}
+
+void UserSettingsDocument::reset() noexcept {
+  root_.reset();
+  tree_.clear();
+}
+
+std::string UserSettingsDocument::str() const {
+  std::string str = emitrs_yaml<std::string>(tree_);
+  return str;
+}
+
+std::wstring_view UserSettingsDocument::fileName() noexcept {
+  return kUserSettingsFileName;
 }

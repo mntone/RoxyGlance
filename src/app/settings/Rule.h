@@ -28,4 +28,6 @@ private:
   Action action_;
 };
 
+using Rules = std::vector<Rule>;
+
 }  // namespace roxyg::settings

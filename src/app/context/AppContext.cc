@@ -2,6 +2,10 @@
 #include "AppContext.h"
 
 #include "../engine/Rule.h"
+#include "../utility/backoff/exponential.h"
+#include "../utility/fastfail.h"
+#include "../utility/RetryState.inl"
+#include "../win32/hresult.h"
 #include "../window/WindowStateWatcher.h"
 
 namespace {
@@ -14,6 +18,8 @@ inline constexpr std::wstring_view kMessageWindowStartFailed
   = L"Failed to start the message window.";
 inline constexpr std::wstring_view kStateWatcherStartFailed
   = L"Failed to start the window state watcher.";
+inline constexpr std::wstring_view kSettingsLoadFailed
+  = L"Failed to load the user settings.";
 inline constexpr std::wstring_view kMessageWindowStopAfterInitializationFailure
   = L"Failed to stop the message window after initialization failed.";
 inline constexpr std::wstring_view kStateWatcherStopFailed
@@ -63,13 +69,38 @@ winrt::hresult AppContext::initialize() {
     return hr;
   }
 
+  utility::RetryState<3, utility::uint32_exponential_backoff<1000, 10000, 2.f>> retry;
+  while (true) {
+    hr = settings_store_.load();
+    if (SUCCEEDED(hr)) {
+      break;
+    }
+    if (!settings::detail::IsTransientReadError(hr)) {
+      retry.forceExpire();
+      break;
+    }
+
+    retry.advanceAttempt();
+    if (!retry.available()) {
+      break;
+    }
+
+    uint32_t const delay{retry.currentDelay()};
+    Sleep(delay);
+    static_cast<void>(retry.nextDelay());  // Advance the backoff for the next retry.
+  }
+  if (retry.expired()) {
+    if (hr == win32::hresult::kErrorNotEnoughMemory) {
+      utility::fastfail();  // continuing without initial settings is meaningless
+    }
+    context_logger_.error(winrt::hstring{kSettingsLoadFailed}, hr);
+  }
+
   hr = message_window_.start();
   if (FAILED(hr)) {
     context_logger_.error(winrt::hstring{kMessageWindowStartFailed}, hr);
     return hr;
   }
-
-  settings_store_.reloadUserSettings();
 
   hr = window::StateWatcher::instance().start();
   if (FAILED(hr)) {

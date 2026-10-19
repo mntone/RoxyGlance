@@ -147,13 +147,19 @@
     <ClInclude Include="settings\action\MoveAndResize.h">
       <Filter>settings\action</Filter>
     </ClInclude>
+    <ClInclude Include="settings\BasicSettingsReader.h">
+      <Filter>settings</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\BasicSettingsStore.h">
+      <Filter>settings</Filter>
+    </ClInclude>
     <ClInclude Include="settings\constants.h">
       <Filter>settings</Filter>
     </ClInclude>
     <ClInclude Include="settings\Filter.h">
       <Filter>settings</Filter>
     </ClInclude>
-    <ClInclude Include="settings\ISettingsListener.h">
+    <ClInclude Include="settings\ISettingsDocumentListener.h">
       <Filter>settings</Filter>
     </ClInclude>
     <ClInclude Include="settings\NodeHelper.h">
@@ -166,9 +172,6 @@
       <Filter>settings</Filter>
     </ClInclude>
     <ClInclude Include="settings\Rule.h">
-      <Filter>settings</Filter>
-    </ClInclude>
-    <ClInclude Include="settings\SettingsStore.h">
       <Filter>settings</Filter>
     </ClInclude>
     <ClInclude Include="settings\String.h">
@@ -328,6 +331,9 @@
     <ClCompile Include="settings\Action.cc">
       <Filter>settings</Filter>
     </ClCompile>
+    <ClCompile Include="settings\BasicSettingsReader.cc">
+      <Filter>settings</Filter>
+    </ClCompile>
     <ClCompile Include="settings\Filter.cc">
       <Filter>settings</Filter>
     </ClCompile>
@@ -338,9 +344,6 @@
       <Filter>settings</Filter>
     </ClCompile>
     <ClCompile Include="settings\Rule.cc">
-      <Filter>settings</Filter>
-    </ClCompile>
-    <ClCompile Include="settings\SettingsStore.cc">
       <Filter>settings</Filter>
     </ClCompile>
     <ClCompile Include="settings\TriggerFlags.cc">

@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef __INTELLISENSE__
+#include <magic_enum/magic_enum.hpp>
+#endif
+
 namespace roxyg::settings {
 
 enum class ActionType {

@@ -139,6 +139,9 @@
     <Manifest Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="App.xaml.h">
+      <DependentUpon>App.xaml</DependentUpon>
+    </ClInclude>
     <ClInclude Include="AppLocator.h" />
     <ClInclude Include="Controls\RuleEditorControl.xaml.h">
       <DependentUpon>Controls\RuleEditorControl.xaml</DependentUpon>
@@ -165,9 +168,6 @@
       <DependentUpon>Helpers\MenuFlyoutHelper.idl</DependentUpon>
     </ClInclude>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="App.xaml.h">
-      <DependentUpon>App.xaml</DependentUpon>
-    </ClInclude>
     <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="Resources\SettingsResource.h" />
     <ClInclude Include="ViewModels\Holders\CallbackHolder.h" />
@@ -232,6 +232,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="App.xaml.cc">
+      <DependentUpon>App.xaml</DependentUpon>
+    </ClCompile>
     <ClCompile Include="Controls\RuleEditorControl.xaml.cc">
       <DependentUpon>Controls\RuleEditorControl.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -239,7 +242,7 @@
     <ClCompile Include="Converters\EnumToInt32Converter.cc">
       <DependentUpon>Converters\EnumToInt32Converter.idl</DependentUpon>
     </ClCompile>
-    <ClCompile Include="Converters\EnumToSelectedIndexConverter.cpp">
+    <ClCompile Include="Converters\EnumToSelectedIndexConverter.cc">
       <DependentUpon>Converters\EnumToSelectedIndexConverter.idl</DependentUpon>
     </ClCompile>
     <ClCompile Include="Converters\FilterKeyToLocalizedStringConverter.cc">
@@ -257,9 +260,6 @@
     <ClCompile Include="main.cc" />
     <ClCompile Include="pch.cc">
       <PrecompiledHeader>Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="App.xaml.cc">
-      <DependentUpon>App.xaml</DependentUpon>
     </ClCompile>
     <ClCompile Include="ViewModels\Holders\NotifyPropertyChangedHolder.cc" />
     <ClCompile Include="ViewModels\Holders\StaticCommandHolder.cc" />
@@ -336,7 +336,6 @@
     <Midl Include="ViewModels\Shell\MonitorsViewModel.idl" />
     <Midl Include="ViewModels\Shell\MonitorViewModel.idl" />
     <Midl Include="Views\MainWindow.idl">
-      <SubType>Code</SubType>
       <DependentUpon>Views\MainWindow.xaml</DependentUpon>
     </Midl>
     <Midl Include="Views\RuleEditorPage.idl">

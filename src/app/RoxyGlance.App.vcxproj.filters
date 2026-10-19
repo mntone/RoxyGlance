@@ -273,7 +273,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppDelegate.cc" />
-    <ClCompile Include="compiler\CompilationContext.cpp">
+    <ClCompile Include="compiler\CompilationContext.cc">
       <Filter>compiler</Filter>
     </ClCompile>
     <ClCompile Include="compiler\CompileAction.cc">

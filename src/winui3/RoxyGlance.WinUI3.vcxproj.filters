@@ -164,12 +164,6 @@
     <ClCompile Include="ViewModels\Holders\NotifyPropertyChangedHolder.cc">
       <Filter>ViewModels\Holders</Filter>
     </ClCompile>
-    <ClCompile Include="ViewModels\LogViewModel.cc">
-      <Filter>ViewModels</Filter>
-    </ClCompile>
-    <ClCompile Include="ViewModels\LogViewModels.cc">
-      <Filter>ViewModels</Filter>
-    </ClCompile>
     <ClCompile Include="ViewModels\Settings\initialize.cc">
       <Filter>ViewModels\Settings</Filter>
     </ClCompile>
@@ -181,12 +175,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h" />
+    <ClInclude Include="AppLocator.h" />
     <ClInclude Include="Converters\bundle.h">
       <Filter>Converters</Filter>
     </ClInclude>
     <ClInclude Include="Helpers\KeyboardModifiers.h">
       <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Resources\resource.h">
+      <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="Resources\SettingsResource.h">
       <Filter>ViewModels\Settings</Filter>
@@ -200,12 +198,6 @@
     <ClInclude Include="ViewModels\Holders\StaticCommandHolder.h">
       <Filter>ViewModels\Holders</Filter>
     </ClInclude>
-    <ClInclude Include="ViewModels\LogViewModel.h">
-      <Filter>ViewModels</Filter>
-    </ClInclude>
-    <ClInclude Include="ViewModels\LogViewModels.h">
-      <Filter>ViewModels</Filter>
-    </ClInclude>
     <ClInclude Include="ViewModels\Settings\initialize.h">
       <Filter>ViewModels\Settings</Filter>
     </ClInclude>
@@ -217,9 +209,6 @@
     </ClInclude>
     <ClInclude Include="ViewModels\Shell\ShellResource.h">
       <Filter>ViewModels\Shell</Filter>
-    </ClInclude>
-    <ClInclude Include="Resources\resource.h">
-      <Filter>Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,9 +2,10 @@
 #include "RuleEngine.h"
 
 #include "../compiler/CompileRule.h"
-#include "../context/OperationContext.h"
 #include "../settings/UserSettings.h"
 #include "../window/WindowStateCache.h"
+
+#include <magic_enum/magic_enum_flags.hpp>  // requires enum_flags_test
 
 namespace {
 
@@ -16,7 +17,7 @@ inline constexpr std::wstring_view kRuleCompilationOutOfMemory
 using namespace roxyg;
 using namespace roxyg::engine;
 
-void RuleEngine::checkRules(window::State& windowState) noexcept {
+void RuleEngine::checkRules(window::State& windowState, TriggerFlags trigger) noexcept {
   OperationContext* ctx = operation_context_;
   if (!ctx) {
     return;
@@ -25,7 +26,11 @@ void RuleEngine::checkRules(window::State& windowState) noexcept {
   std::shared_ptr<RuleSet const> rule_set{rule_set_.load(std::memory_order_acquire)};
 
   bool matched;
-  for (auto& rule : *rule_set.get()) {
+  for (Rule const& rule : *rule_set.get()) {
+    if (!magic_enum::enum_flags_test(rule.trigger, trigger)) {
+      continue;
+    }
+
     matched = true;
     for (auto& [evaluate, data] : rule.condition) {
       if (!evaluate(data, windowState)) {
@@ -55,9 +60,9 @@ void RuleEngine::onSettingsChanged(settings::UserSettingsDocument const& setting
 }
 
 void RuleEngine::onForegroundEvent(window::State& windowState) noexcept {
-  checkRules(windowState);
+  checkRules(windowState, TriggerFlags::kWindowFocus);
 }
 
 void RuleEngine::onShowEvent(window::State& windowState) noexcept {
-  checkRules(windowState);
+  checkRules(windowState, TriggerFlags::kWindowShow);
 }

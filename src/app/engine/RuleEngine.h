@@ -3,6 +3,7 @@
 #include "../context/OperationContext.h"
 #include "../logging/LogHelper.h"
 #include "../settings/ISettingsListener.h"
+#include "../settings/TriggerFlags.h"
 #include "../window/IWindowStateListener.h"
 
 namespace roxyg::engine {
@@ -34,7 +35,7 @@ public:
   }
 
 private:
-  void checkRules(window::State& windowState) noexcept;
+  void checkRules(window::State& windowState, settings::TriggerFlags trigger) noexcept;
 
 private:
   OperationContext* operation_context_;

@@ -15,14 +15,14 @@ RuleSet compiler::CompileRule(CompilationContext& ctx, settings::UserSettingsDoc
   }
 
   RuleSet rules;
-  for (auto const& rule : root->rules()) {
+  for (settings::Rule const& rule : root->rules()) {
     Operation operation{CompileAction(ctx, rule.action())};
     if (!operation) {
       continue;
     }
 
     PredicateSet predicates{filter::CompileFilter(rule.filter())};
-    rules.emplace_back(std::move(operation), std::move(predicates));
+    rules.emplace_back(rule.triggerFlags(), std::move(operation), std::move(predicates));
   }
   return std::move(rules);
 }

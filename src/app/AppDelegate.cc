@@ -34,3 +34,19 @@ message::Window& AppDelegate::messageWindow() noexcept {
 message::Window const& AppDelegate::messageWindow() const noexcept {
   return context_->message_window_;
 }
+
+monitor::StateCache& AppDelegate::monitorStateCache() noexcept {
+  return context_->operation_context_.monitor();
+}
+
+monitor::StateCache const& AppDelegate::monitorStateCache() const noexcept {
+  return context_->operation_context_.monitor();
+}
+
+settings::UserSettingsStore& AppDelegate::settingsStore() noexcept {
+  return context_->settings_store_;
+}
+
+settings::UserSettingsStore const& AppDelegate::settingsStore() const noexcept {
+  return context_->settings_store_;
+}

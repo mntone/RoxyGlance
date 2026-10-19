@@ -156,6 +156,9 @@
   <data name="Navigation_General.Content" xml:space="preserve">
     <value>ทั่วไป</value>
   </data>
+  <data name="Navigation_Rules.AccessKey" xml:space="preserve">
+    <value>R</value>
+  </data>
   <data name="Navigation_Rules.Content" xml:space="preserve">
     <value>กฎ</value>
   </data>
@@ -167,9 +170,6 @@
   </data>
   <data name="RelativeMoveAndResize_Target.Text" xml:space="preserve">
     <value>เป้าหมาย</value>
-  </data>
-  <data name="SettingsWindowTitle" xml:space="preserve">
-    <value>การตั้งค่า - Roxy Glance</value>
   </data>
   <data name="StringFilter_Column_Center.MinWidth" xml:space="preserve">
     <value>0</value>

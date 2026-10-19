@@ -18,5 +18,8 @@ BEGIN
   IDS_SHELL_DISPFMT      "Màn hình {}"
   IDS_SHELL_DISPNAMEFMT  "Màn hình {}: {}"
 
+  IDS_SETTINGS_WINDOW_TITLE    "Cài đặt - Roxy Glance"
+  IDS_SETTINGS_WINDOW_DEVELOP  "Nhà phát triển"
+
   IDS_MENU_DEBUG "&Gỡ lỗi"
 END

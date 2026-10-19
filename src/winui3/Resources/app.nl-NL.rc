@@ -18,5 +18,8 @@ BEGIN
   IDS_SHELL_DISPFMT      "Scherm {}"
   IDS_SHELL_DISPNAMEFMT  "Scherm {}: {}"
 
+  IDS_SETTINGS_WINDOW_TITLE    "Instellingen - Roxy Glance"
+  IDS_SETTINGS_WINDOW_DEVELOP  "Ontwikkelaar"
+
   IDS_MENU_DEBUG "&Foutopsporing"
 END

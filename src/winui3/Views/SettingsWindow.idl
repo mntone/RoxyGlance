@@ -1,0 +1,7 @@
+namespace Mntone.RoxyGlance.Views
+{
+    [default_interface]
+    runtimeclass SettingsWindow : Microsoft.UI.Xaml.Window
+    {
+    }
+}

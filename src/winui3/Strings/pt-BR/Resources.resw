@@ -156,6 +156,9 @@
   <data name="Navigation_General.Content" xml:space="preserve">
     <value>Geral</value>
   </data>
+  <data name="Navigation_Rules.AccessKey" xml:space="preserve">
+    <value>R</value>
+  </data>
   <data name="Navigation_Rules.Content" xml:space="preserve">
     <value>Regras</value>
   </data>
@@ -167,9 +170,6 @@
   </data>
   <data name="RelativeMoveAndResize_Target.Text" xml:space="preserve">
     <value>Alvo</value>
-  </data>
-  <data name="SettingsWindowTitle" xml:space="preserve">
-    <value>Configurações - Roxy Glance</value>
   </data>
   <data name="StringFilter_Column_Center.MinWidth" xml:space="preserve">
     <value>0</value>

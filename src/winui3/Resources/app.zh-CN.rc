@@ -18,5 +18,8 @@ BEGIN
   IDS_SHELL_DISPFMT      "显示器{}"
   IDS_SHELL_DISPNAMEFMT  "显示器{}: {}"
 
+  IDS_SETTINGS_WINDOW_TITLE    "设置 - Roxy Glance"
+  IDS_SETTINGS_WINDOW_DEVELOP  "开发版"
+
   IDS_MENU_DEBUG "调试(&D)"
 END

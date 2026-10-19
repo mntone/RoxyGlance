@@ -18,5 +18,8 @@ BEGIN
   IDS_SHELL_DISPFMT      "Tampilan {}"
   IDS_SHELL_DISPNAMEFMT  "Tampilan {}: {}"
 
+  IDS_SETTINGS_WINDOW_TITLE    "Pengaturan - Roxy Glance"
+  IDS_SETTINGS_WINDOW_DEVELOP  "Pengembang"
+
   IDS_MENU_DEBUG "&Debug"
 END

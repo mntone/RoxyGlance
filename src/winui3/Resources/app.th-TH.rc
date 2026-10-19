@@ -18,5 +18,8 @@ BEGIN
   IDS_SHELL_DISPFMT      "จอแสดงผล {}"
   IDS_SHELL_DISPNAMEFMT  "จอแสดงผล {}: {}"
 
+  IDS_SETTINGS_WINDOW_TITLE    "การตั้งค่า - Roxy Glance"
+  IDS_SETTINGS_WINDOW_DEVELOP  "นักพัฒนา"
+
   IDS_MENU_DEBUG "ดีบัก(&D)"
 END

@@ -94,6 +94,9 @@
     <Page Include="Views\RuleEditorPage.xaml">
       <Filter>Views</Filter>
     </Page>
+    <Page Include="Views\SettingsWindow.xaml">
+      <Filter>Views</Filter>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="Converters\EnumToInt32Converter.idl">
@@ -184,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="Helpers\KeyboardModifiers.h">
       <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\SettingsResource.h">
+      <Filter>ViewModels\Settings</Filter>
     </ClInclude>
     <ClInclude Include="ViewModels\Holders\CallbackHolder.h">
       <Filter>ViewModels\Holders</Filter>

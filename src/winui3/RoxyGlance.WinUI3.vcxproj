@@ -169,6 +169,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
     <ClInclude Include="Resources\resource.h" />
+    <ClInclude Include="Resources\SettingsResource.h" />
     <ClInclude Include="ViewModels\Holders\CallbackHolder.h" />
     <ClInclude Include="ViewModels\Holders\NotifyPropertyChangedHolder.h" />
     <ClInclude Include="ViewModels\Holders\StaticCommandHolder.h" />
@@ -218,12 +219,16 @@
     <ClInclude Include="Views\RuleEditorPage.xaml.h">
       <DependentUpon>Views\RuleEditorPage.xaml</DependentUpon>
     </ClInclude>
+    <ClInclude Include="Views\SettingsWindow.xaml.h">
+      <DependentUpon>Views\SettingsWindow.xaml</DependentUpon>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml" />
     <Page Include="Controls\RuleEditorControl.xaml" />
     <Page Include="Views\MainWindow.xaml" />
     <Page Include="Views\RuleEditorPage.xaml" />
+    <Page Include="Views\SettingsWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
@@ -304,6 +309,9 @@
     <ClCompile Include="Views\RuleEditorPage.xaml.cc">
       <DependentUpon>Views\RuleEditorPage.xaml</DependentUpon>
     </ClCompile>
+    <ClCompile Include="Views\SettingsWindow.xaml.cc">
+      <DependentUpon>Views\SettingsWindow.xaml</DependentUpon>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="Controls\RuleEditorControl.idl">
@@ -333,6 +341,9 @@
     </Midl>
     <Midl Include="Views\RuleEditorPage.idl">
       <DependentUpon>Views\RuleEditorPage.xaml</DependentUpon>
+    </Midl>
+    <Midl Include="Views\SettingsWindow.idl">
+      <DependentUpon>Views\SettingsWindow.xaml</DependentUpon>
     </Midl>
   </ItemGroup>
   <ItemGroup>

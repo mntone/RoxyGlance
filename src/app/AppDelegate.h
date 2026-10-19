@@ -1,10 +1,11 @@
 #pragma once
-#include "message/IMessageListener.h"
 
 namespace roxyg {
 
 namespace logging { class Logger; }
 namespace message { class Window; }
+namespace monitor { class StateCache; }
+namespace settings { class UserSettingsStore; }
 
 class AppContext;
 class AppDelegate final {
@@ -23,6 +24,12 @@ public:
 
   [[nodiscard]] message::Window& messageWindow() noexcept;
   [[nodiscard]] message::Window const& messageWindow() const noexcept;
+
+  [[nodiscard]] monitor::StateCache& monitorStateCache() noexcept;
+  [[nodiscard]] monitor::StateCache const& monitorStateCache() const noexcept;
+
+  [[nodiscard]] settings::UserSettingsStore& settingsStore() noexcept;
+  [[nodiscard]] settings::UserSettingsStore const& settingsStore() const noexcept;
 
   constexpr AppContext& context() noexcept { return *context_; }
   constexpr AppContext const& context() const noexcept { return *context_; }

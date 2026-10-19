@@ -156,6 +156,9 @@
   <data name="Navigation_General.Content" xml:space="preserve">
     <value>일반</value>
   </data>
+  <data name="Navigation_Rules.AccessKey" xml:space="preserve">
+    <value>규</value>
+  </data>
   <data name="Navigation_Rules.Content" xml:space="preserve">
     <value>규칙</value>
   </data>
@@ -167,9 +170,6 @@
   </data>
   <data name="RelativeMoveAndResize_Target.Text" xml:space="preserve">
     <value>대상</value>
-  </data>
-  <data name="SettingsWindowTitle" xml:space="preserve">
-    <value>설정 - Roxy Glance</value>
   </data>
   <data name="StringFilter_Column_Center.MinWidth" xml:space="preserve">
     <value>100</value>

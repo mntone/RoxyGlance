@@ -18,5 +18,8 @@ BEGIN
   IDS_SHELL_DISPFMT      "Display {}"
   IDS_SHELL_DISPNAMEFMT  "Display {}: {}"
 
+  IDS_SETTINGS_WINDOW_TITLE    "Settings - Roxy Glance"
+  IDS_SETTINGS_WINDOW_DEVELOP  "Develop"
+
   IDS_MENU_DEBUG "&Debug"
 END

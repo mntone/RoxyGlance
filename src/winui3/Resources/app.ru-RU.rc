@@ -18,5 +18,8 @@ BEGIN
   IDS_SHELL_DISPFMT      "Дисплей {}"
   IDS_SHELL_DISPNAMEFMT  "Дисплей {}: {}"
 
+  IDS_SETTINGS_WINDOW_TITLE    "Настройки - Roxy Glance"
+  IDS_SETTINGS_WINDOW_DEVELOP  "Разработка"
+
   IDS_MENU_DEBUG "&Отладка"
 END

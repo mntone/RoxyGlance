@@ -56,7 +56,7 @@ static ROXYG_ALWAYS_INLINE std::wstring convertString(c4::csubstr str) {
   return convertString(str.data(), str.size());
 }
 
-std::wstring detail::makeRuleDisplayName(c4::yml::ConstNodeRef rule, ParseError const err, size_t const index) {
+std::wstring detail::makeRuleDisplayName(c4::yml::ConstNodeRef rule, ParseError const err, uint32_t const index) {
   std::wstring name;
   if (err.key_id == KeyId::kRule  // Thrown only when the rule is not a map.
       || !rule.has_child(key::kName)) {

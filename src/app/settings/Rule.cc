@@ -21,11 +21,12 @@ static ROXYG_ALWAYS_INLINE void checkRuleNode(ConstNodeRef n) {
   }
 }
 
-Rule::Rule(NodeRef node)
+Rule::Rule(NodeRef node, uint32_t index)
   // Validate through a const view before taking ownership of the node.
   : node_((checkRuleNode(node), std::move(node)))
   , name_(ReadStringFromNode(node_[key::kName], KeyId::kName))
   , filter_(node_[key::kWhere])
+  , index_(index)
   , triggers_(ReadTriggerFlagsFromNode(node_))
   , action_(node_[key::kThen]) {
 #ifdef _DEBUG

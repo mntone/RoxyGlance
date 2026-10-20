@@ -46,7 +46,7 @@ struct RuleViewModel
     return Filters_;
   }
   inline hstring Name() const noexcept {
-    return hstring(rule_.name());
+    return Name_;
   }
   inline Settings::TriggersViewModel Triggers() const noexcept {
     return Triggers_;
@@ -74,6 +74,7 @@ private:
   roxyg::settings::Rule& rule_;
   boost::container::small_vector<FilterKey, 3> deleting_keys_;
 
+  hstring Name_;
   Settings::ActionViewModel Action_;
   Windows::Foundation::Collections::IObservableVector<Settings::StringFilterViewModel> Filters_;
   Settings::TriggersViewModel const Triggers_;

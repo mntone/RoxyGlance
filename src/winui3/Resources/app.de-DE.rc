@@ -20,6 +20,7 @@ BEGIN
 
   IDS_SETTINGS_WINDOW_TITLE    "Einstellungen - Roxy Glance"
   IDS_SETTINGS_WINDOW_DEVELOP  "Entwickler"
+  IDS_SETTINGS_RULE_FORMAT     "Regel {}"
 
   IDS_MENU_DEBUG "&Debuggen"
 END

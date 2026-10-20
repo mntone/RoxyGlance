@@ -20,6 +20,7 @@ BEGIN
 
   IDS_SETTINGS_WINDOW_TITLE    "Instellingen - Roxy Glance"
   IDS_SETTINGS_WINDOW_DEVELOP  "Ontwikkelaar"
+  IDS_SETTINGS_RULE_FORMAT     "Regel {}"
 
   IDS_MENU_DEBUG "&Foutopsporing"
 END

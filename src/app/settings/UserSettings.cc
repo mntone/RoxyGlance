@@ -2,6 +2,8 @@
 #include "UserSettings.h"
 #include "ParseErrorPrivate.h"
 
+#include <ranges>  // requires std::range
+
 #include "constants.h"
 #include "NodeHelper.h"
 #include "../logging/LogHelper.h"
@@ -31,10 +33,10 @@ static ROXYG_ALWAYS_INLINE std::vector<Rule> readRules(NodeRef n, Logger* logger
   std::vector<Rule> ret;
   ret.reserve(rules_count);
 
-  size_t index = 1;
+  uint32_t index = 1;
   for (NodeRef rule : rules.children()) {
     try {
-      ret.emplace_back(rule);
+      ret.emplace_back(rule, index);
     } catch (ParseError const& err) {
       std::wstring const rule_name{makeRuleDisplayName(rule, err, index)};
       winrt::hstring const content{makeParseErrorMessage(err, rule_name)};

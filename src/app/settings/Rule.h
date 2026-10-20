@@ -7,8 +7,9 @@ namespace roxyg::settings {
 
 class Rule final {
 public:
-  explicit Rule(c4::yml::NodeRef node);
+  explicit Rule(c4::yml::NodeRef node, uint32_t index = 0);
 
+  [[nodiscard]] constexpr uint32_t index() const noexcept { return index_; }
   [[nodiscard]] constexpr std::wstring_view name() const noexcept { return name_; }
 
   [[nodiscard]] constexpr TriggerFlags triggerFlags() const noexcept { return triggers_; }
@@ -24,6 +25,7 @@ private:
   c4::yml::NodeRef node_;
   std::wstring name_;
   Filter filter_;
+  uint32_t index_;
   TriggerFlags triggers_;
   Action action_;
 };

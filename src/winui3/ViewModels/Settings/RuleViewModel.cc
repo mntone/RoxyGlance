@@ -19,8 +19,10 @@
 // Common
 #include <ranges>
 #include "SettingsWinRTConverters.h"
+#include "../../Resources/SettingsResource.h"
 
-#include "../../../app/settings/action/MoveAndResize.h"
+#include "../../../app/settings/action/MoveAndResize.h"  // requires Absolute/RelativeMoveAndResize
+#include "../../../app/win32/string.h"                   // requires FormatResourceString
 
 namespace winrt {
 using namespace ::winrt::Windows::Foundation;
@@ -36,6 +38,18 @@ using namespace roxyg::settings::action;
 using namespace roxyg::winui3::viewmodel::settings;
 
 namespace winrt::Mntone::RoxyGlance::ViewModels::Settings::implementation {
+
+static inline hstring makeName(Rule const& rule) {
+  std::wstring_view name{rule.name()};
+  if (name.empty()) {
+    return roxyg::win32::FormatResourceString(
+      roxyg::winui3::viewmodel::string::kSettingsRuleFormat,
+      rule.index()
+    );
+  }
+
+  return hstring{name};
+}
 
 static inline winrt::ActionViewModel makeActionViewModel(
   Action& action,
@@ -87,6 +101,7 @@ RuleViewModel::RuleViewModel(
   : CallbackHolder(callback, context)
   , StaticCommandHolder(&RuleViewModel::onAddFilterRequested)
   , rule_(rule)
+  , Name_(makeName(rule))
   , Action_(makeActionViewModel(rule.action(), &RuleViewModel::onChildHasPendingChangesUpdated, *this))
   , Filters_(nullptr)
   , Triggers_(make<TriggersViewModel>(rule, &RuleViewModel::onChildHasPendingChangesUpdated, *this))

@@ -13,12 +13,12 @@ using namespace roxyg::numeric;
 static winrt::hresult applyWindowRect(HWND hwnd, long4 bounds) noexcept {
   ROXYG_UNCHECKED_ASSERT(hwnd != nullptr);
 
-  BOOL rc = SetWindowPos(
+  BOOL const rc = SetWindowPos(
     hwnd,
     nullptr,
     bounds.x(), bounds.y(), bounds.z(), bounds.w(),
     SWP_NOZORDER | SWP_NOACTIVATE | SWP_DEFERERASE | SWP_ASYNCWINDOWPOS);
-  if (!rc) [[unlikely]] {
+  if (rc == FALSE) [[unlikely]] {
     return roxyg::win32::hresult::LastErrorAsHResult();
   }
 

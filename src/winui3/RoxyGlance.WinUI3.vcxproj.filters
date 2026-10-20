@@ -193,7 +193,10 @@
       <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="Resources\SettingsResource.h">
-      <Filter>ViewModels\Settings</Filter>
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\ShellResource.h">
+      <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="ViewModels\Holders\CallbackHolder.h">
       <Filter>ViewModels\Holders</Filter>
@@ -215,9 +218,6 @@
     </ClInclude>
     <ClInclude Include="ViewModels\Settings\SettingsWinRTConverters.h">
       <Filter>ViewModels\Settings</Filter>
-    </ClInclude>
-    <ClInclude Include="ViewModels\Shell\ShellResource.h">
-      <Filter>ViewModels\Shell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

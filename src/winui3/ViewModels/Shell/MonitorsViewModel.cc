@@ -3,7 +3,8 @@
 #if __has_include("ViewModels/Shell/MonitorsViewModel.g.cpp")
 #include "ViewModels/Shell/MonitorsViewModel.g.cpp"
 #endif
-#include "ShellResource.h"
+
+#include "../../Resources/ShellResource.h"
 
 #include <ranges>     // requires std::range
 #include <algorithm>  // requires std::range::sort
@@ -33,7 +34,7 @@ IVectorView<T> single_threaded_vector_view(std::vector<T, Allocator>&& values = 
 
 static ROXYG_ALWAYS_INLINE IVectorView<IInspectable>
 makeMonitorViewModels(StateCache const& monitor) {
-  using namespace roxyg::winui3::viewmodel::string;
+  using namespace roxyg::winui3::string;
 
   StateCache::ContainerType const& storage{monitor.storage()};
   size_t const storage_size{storage.size()};

@@ -12,7 +12,7 @@ typedef unsigned int UINT;
 
 #else
 
-namespace roxyg::winui3::viewmodel::string {
+namespace roxyg::winui3::string {
 inline constexpr UINT kStringBase = 16;
 inline constexpr UINT kSettingsWindowTitle = kStringBase;
 inline constexpr UINT kSettingsWindowDevelop = kStringBase + 1;

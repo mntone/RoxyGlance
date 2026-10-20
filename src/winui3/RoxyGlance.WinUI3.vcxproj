@@ -170,6 +170,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="Resources\SettingsResource.h" />
+    <ClInclude Include="Resources\ShellResource.h" />
     <ClInclude Include="ViewModels\Holders\CallbackHolder.h" />
     <ClInclude Include="ViewModels\Holders\NotifyPropertyChangedHolder.h" />
     <ClInclude Include="ViewModels\Holders\StaticCommandHolder.h" />
@@ -213,7 +214,6 @@
     <ClInclude Include="ViewModels\Shell\MonitorViewModel.h">
       <DependentUpon>ViewModels\Shell\MonitorViewModel.idl</DependentUpon>
     </ClInclude>
-    <ClInclude Include="ViewModels\Shell\ShellResource.h" />
     <ClInclude Include="Views\MainWindow.xaml.h">
       <DependentUpon>Views\MainWindow.xaml</DependentUpon>
     </ClInclude>

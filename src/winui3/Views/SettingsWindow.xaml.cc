@@ -37,7 +37,7 @@ using namespace ::winrt::Mntone::RoxyGlance::Views;
 }
 
 using namespace roxyg::win32;
-using namespace roxyg::winui3::viewmodel::string;
+using namespace roxyg::winui3::string;
 
 namespace winrt::Mntone::RoxyGlance::Views::implementation {
 

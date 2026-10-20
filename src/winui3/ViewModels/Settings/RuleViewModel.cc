@@ -43,7 +43,7 @@ static inline hstring makeName(Rule const& rule) {
   std::wstring_view name{rule.name()};
   if (name.empty()) {
     return roxyg::win32::FormatResourceString(
-      roxyg::winui3::viewmodel::string::kSettingsRuleFormat,
+      roxyg::winui3::string::kSettingsRuleFormat,
       rule.index()
     );
   }

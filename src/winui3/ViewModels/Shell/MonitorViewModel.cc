@@ -3,7 +3,8 @@
 #if __has_include("ViewModels/Shell/MonitorViewModel.g.cpp")
 #include "ViewModels/Shell/MonitorViewModel.g.cpp"
 #endif
-#include "ShellResource.h"
+
+#include "../../Resources/ShellResource.h"
 
 #include "../../../app/monitor/MonitorState.h"  // requires monitor::State
 #include "../../../app/win32/string.h"          // requires FormatResourceString
@@ -17,7 +18,7 @@ using namespace roxyg::win32;
 namespace winrt::Mntone::RoxyGlance::ViewModels::Shell::implementation {
 
 static ROXYG_ALWAYS_INLINE hstring makeName(roxyg::monitor::State const& state) {
-  using namespace roxyg::winui3::viewmodel::string;
+  using namespace roxyg::winui3::string;
 
   auto const& friendlyName = state.friendlyName();
   return friendlyName.empty()

@@ -91,11 +91,11 @@ public:
     post_result_index_ = 0;
   }
 
-  [[nodiscard]] uint32_t postCount() const noexcept {
+  [[nodiscard]] constexpr uint32_t postCount() const noexcept {
     return post_count_;
   }
 
-  [[nodiscard]] bool hasThread() const noexcept {
+  [[nodiscard]] inline bool hasThread() const noexcept {
     return threadInfo().hthread != INVALID_HANDLE_VALUE;
   }
 

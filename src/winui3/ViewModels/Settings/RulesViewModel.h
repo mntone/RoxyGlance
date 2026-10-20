@@ -1,7 +1,7 @@
 #pragma once
 #include "ViewModels/Settings/RulesViewModel.g.h"
 
-#include "RuleViewModel.h"
+#include <winrt/Mntone.RoxyGlance.ViewModels.Settings.h>
 
 #include "../Holders/NotifyPropertyChangedHolder.h"
 #include "../../../app/settings/Rule.h"
@@ -9,7 +9,7 @@
 namespace winrt::Mntone::RoxyGlance::ViewModels::Settings::implementation {
 
 struct RulesViewModel
-  : RulesViewModelT<RulesViewModel>
+  : RulesViewModelT<RulesViewModel, non_agile>
   , roxyg::winui3::viewmodel::NotifyPropertyChangedHolder<RulesViewModel> {
   RulesViewModel(roxyg::settings::Rules& rules);
 

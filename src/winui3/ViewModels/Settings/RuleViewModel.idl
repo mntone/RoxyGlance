@@ -6,6 +6,7 @@ namespace Mntone.RoxyGlance.ViewModels.Settings
 {
   [bindable]
   [default_interface]
+  [marshaling_behavior(none)]
   runtimeclass RuleViewModel : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
   {
     [noexcept] ActionViewModel Action { get; };

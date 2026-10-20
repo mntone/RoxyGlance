@@ -15,7 +15,7 @@
 namespace winrt::Mntone::RoxyGlance::ViewModels::Settings::implementation {
 
 struct RuleViewModel
-  : RuleViewModelT<RuleViewModel, Microsoft::UI::Xaml::Input::ICommand>
+  : RuleViewModelT<RuleViewModel, Microsoft::UI::Xaml::Input::ICommand, non_agile>
   , roxyg::winui3::viewmodel::NotifyPropertyChangedHolder<RuleViewModel>
   , roxyg::winui3::viewmodel::StaticCommandHolder<RuleViewModel> {
   RuleViewModel(roxyg::settings::Rule& rule);
@@ -65,7 +65,7 @@ private:
 
   Settings::ActionViewModel Action_;
   Windows::Foundation::Collections::IObservableVector<Settings::StringFilterViewModel> Filters_;
-  Settings::TriggersViewModel Triggers_;
+  Settings::TriggersViewModel const Triggers_;
   Windows::Foundation::Collections::IObservableVector<Settings::FilterKeyViewModel> UnusedFilterKeys_;
 
   static Microsoft::UI::Xaml::Data::PropertyChangedEventArgs ActionPropertyChangedEventArgs_;

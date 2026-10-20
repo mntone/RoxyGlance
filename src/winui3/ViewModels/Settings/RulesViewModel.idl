@@ -4,6 +4,7 @@ namespace Mntone.RoxyGlance.ViewModels.Settings
 {
   [bindable]
   [default_interface]
+  [marshaling_behavior(none)]
   runtimeclass RulesViewModel : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
   {
     [noexcept] IObservableVector<RuleViewModel> Items { get; };

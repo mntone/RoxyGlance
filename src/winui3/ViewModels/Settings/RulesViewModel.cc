@@ -4,6 +4,8 @@
 #include "ViewModels/Settings/RulesViewModel.g.cpp"
 #endif
 
+#include "RuleViewModel.h"
+
 namespace winrt {
 using namespace ::winrt::Windows::Foundation;
 using namespace ::winrt::Windows::Foundation::Collections;

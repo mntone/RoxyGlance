@@ -1,0 +1,6 @@
+namespace Mntone.RoxyGlance.ViewModels.Settings
+{
+  interface ISettingsViewModel {
+    [noexcept] Boolean HasPendingChanges { get; };
+  };
+}

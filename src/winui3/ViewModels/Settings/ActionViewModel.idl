@@ -1,3 +1,5 @@
+import "ViewModels/Settings/ISettingsViewModel.idl";
+
 namespace Mntone.RoxyGlance.ViewModels.Settings
 {
   enum ActionType {
@@ -9,7 +11,7 @@ namespace Mntone.RoxyGlance.ViewModels.Settings
   [bindable]
   [default_interface]
   [marshaling_behavior(none)]
-  unsealed runtimeclass ActionViewModel
+  unsealed runtimeclass ActionViewModel : ISettingsViewModel
   {
     protected ActionViewModel(ActionType type);
 

@@ -27,35 +27,28 @@ void TriggersViewModel::initialize() {
   WindowShownPropertyChangedEventArgs_ = PropertyChangedEventArgs{L"WindowShown"};
 }
 
-TriggersViewModel::TriggersViewModel(Rule& rule)
-  : rule_(rule)
-  , dirty_(false)
+TriggersViewModel::TriggersViewModel(
+  Rule& rule,
+  CallbackFunction callback,
+  IInspectable const& context
+)
+  : CallbackHolder(callback, context)
+  , rule_(rule)
+  , HasPendingChanges_(false)
   , ApplicationStarted_(enum_flags_test(rule.triggerFlags(), TriggerFlags::kApplicationStart))
   , WindowActivated_(enum_flags_test(rule.triggerFlags(), TriggerFlags::kWindowFocus))
   , WindowShown_(enum_flags_test(rule.triggerFlags(), TriggerFlags::kWindowShow)) {
 }
 
-void TriggersViewModel::ApplicationStarted(bool flag) {
-  if (setProperty(ApplicationStarted_, flag, ApplicationStartedPropertyChangedEventArgs_)) {
-    dirty_ = true;
+void TriggersViewModel::HasPendingChanges(bool value) {
+  if (setProperty(HasPendingChanges_, value, HasPendingChangesPropertyChangedEventArgs_) && value) {
+    invokeCallback();
   }
 }
 
-void TriggersViewModel::WindowActivated(bool flag) {
-  if (setProperty(WindowActivated_, flag, WindowActivatedPropertyChangedEventArgs_)) {
-    dirty_ = true;
-  }
-}
-
-void TriggersViewModel::WindowShown(bool flag) {
-  if (setProperty(WindowShown_, flag, WindowShownPropertyChangedEventArgs_)) {
-    dirty_ = true;
-  }
-}
-
-void TriggersViewModel::save() {
-  if (!dirty_) {
-    return;
+bool TriggersViewModel::applyChanges() {
+  if (!HasPendingChanges_) {
+    return false;
   }
 
   underlying_type_t<TriggerFlags> raw_trigger{enum_underlying(TriggerFlags::kNone)};
@@ -72,7 +65,26 @@ void TriggersViewModel::save() {
   TriggerFlags const triggers{enum_flags_cast<TriggerFlags>(raw_trigger).value_or(TriggerFlags::kNone)};
   rule_.setTriggerFlags(triggers);
 
-  dirty_ = false;
+  HasPendingChanges(false);
+  return true;
+}
+
+void TriggersViewModel::ApplicationStarted(bool flag) {
+  if (setProperty(ApplicationStarted_, flag, ApplicationStartedPropertyChangedEventArgs_)) {
+    HasPendingChanges(true);
+  }
+}
+
+void TriggersViewModel::WindowActivated(bool flag) {
+  if (setProperty(WindowActivated_, flag, WindowActivatedPropertyChangedEventArgs_)) {
+    HasPendingChanges(true);
+  }
+}
+
+void TriggersViewModel::WindowShown(bool flag) {
+  if (setProperty(WindowShown_, flag, WindowShownPropertyChangedEventArgs_)) {
+    HasPendingChanges(true);
+  }
 }
 
 }  // namespace winrt::Mntone::RoxyGlance::ViewModels::Settings::implementation

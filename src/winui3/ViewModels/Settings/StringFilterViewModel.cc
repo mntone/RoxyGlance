@@ -83,15 +83,17 @@ toWinRTStringFilterValue(roxyg::settings::Filter const& filter, FilterKey key) {
 StringFilterViewModel::StringFilterViewModel(
   roxyg::settings::Filter& filter,
   FilterKey key,
-  CallbackFunction callback,
+  CallbackHolder<>::CallbackFunction void_callback,
+  CallbackHolder<FilterKey>::CallbackFunction filter_callback,
   IInspectable const& context,
   bool new_elem
 )
   : StaticCommandHolder(&StringFilterViewModel::onDelete)
-  , CallbackHolder(callback, context)
+  , CallbackHolder<>::CallbackHolder(void_callback, context)
+  , CallbackHolder<FilterKey>::CallbackHolder(filter_callback, context)
   , filter_(filter)
   , Key_(key)
-  , dirty_(new_elem) {
+  , HasPendingChanges_(new_elem) {
   if (new_elem) {
     ValueMatchType_ = StringMatchType::Contains;
     Value_ = L"";
@@ -102,29 +104,36 @@ StringFilterViewModel::StringFilterViewModel(
   }
 }
 
+void StringFilterViewModel::HasPendingChanges(bool value) {
+  if (setProperty(HasPendingChanges_, value, HasPendingChangesPropertyChangedEventArgs_) && value) {
+    CallbackHolder<>::invokeCallback();
+  }
+}
+
+bool StringFilterViewModel::applyChanges() {
+  if (!HasPendingChanges_) {
+    return false;
+  }
+
+  setSettingsStringFilterValue(filter_, Key_, ValueMatchType_, Value_);
+  HasPendingChanges(false);
+  return true;
+}
+
 void StringFilterViewModel::ValueMatchType(StringMatchType compare) {
   if (setProperty(ValueMatchType_, compare, ValueMatchPropertyChangedEventArgs_)) {
-    dirty_ = true;
+    HasPendingChanges(true);
   }
 }
 
 void StringFilterViewModel::Value(hstring value) {
   if (setProperty(Value_, value, ValuePropertyChangedEventArgs_)) {
-    dirty_ = true;
+    HasPendingChanges(true);
   }
-}
-
-void StringFilterViewModel::save() {
-  if (!dirty_) {
-    return;
-  }
-
-  setSettingsStringFilterValue(filter_, Key_, ValueMatchType_, Value_);
-  dirty_ = false;
 }
 
 void StringFilterViewModel::onDelete(StringFilterViewModel& self, IInspectable const&) {
-  self.invokeCallback(self.Key_);
+  self.CallbackHolder<FilterKey>::invokeCallback(self.Key_);
 }
 
 }  // namespace winrt::Mntone::RoxyGlance::ViewModels::Settings::implementation

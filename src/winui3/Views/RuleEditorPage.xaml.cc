@@ -37,8 +37,9 @@ RuleEditorPage::RuleEditorPage()
 }
 
 void RuleEditorPage::SaveClick(IInspectable const& /*sender*/, RoutedEventArgs const& /*args*/) const {
-  get_self<RulesViewModel>(Rules_)->save();
-  store_.save();
+  if (get_self<RulesViewModel>(Rules_)->applyChanges()) {
+    store_.save();
+  }
 
 #ifdef _DEBUG
   ContentDialog dialog;

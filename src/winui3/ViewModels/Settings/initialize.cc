@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "initialize.h"
 
+#include "SettingsViewModelProperties.h"
 #include "MoveAndResizeViewModelProperties.h"
 #include "RelativeMoveAndResizeViewModel.h"
 #include "StringFilterViewModel.h"
@@ -19,6 +20,7 @@ void initialize() {
     RelativeMoveAndResizeViewModel::initialize();
     RulesViewModel::initialize();
     RuleViewModel::initialize();
+    SettingsViewModelProperties::initialize();
     StringFilterViewModel::initialize();
     TriggersViewModel::initialize();
   });

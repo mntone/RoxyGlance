@@ -21,8 +21,14 @@ void RelativeMoveAndResizeViewModel::initialize() {
   IdPropertyChangedEventArgs_ = PropertyChangedEventArgs{L"Id"};
 }
 
-RelativeMoveAndResizeViewModel::RelativeMoveAndResizeViewModel(RelativeMoveAndResize action)
+RelativeMoveAndResizeViewModel::RelativeMoveAndResizeViewModel(
+  RelativeMoveAndResize action,
+  CallbackFunction callback,
+  IInspectable const& context,
+  bool change_type
+)
   : base_type(ActionType::RelativeMoveAndResize)
+  , CallbackHolder(callback, context)
   , action_(std::move(action))
   , X_(action.windowBounds().x())
   , Y_(action.windowBounds().y())
@@ -30,12 +36,23 @@ RelativeMoveAndResizeViewModel::RelativeMoveAndResizeViewModel(RelativeMoveAndRe
   , Height_(action.windowBounds().w())
   //, Name_(action.name())
   , Id_(action.id())
+  , HasPendingChanges_(change_type)
   , Id_dirty_(false)
   //, Name_dirty_(false)
   , X_dirty_(false)
   , Y_dirty_(false)
   , Width_dirty_(false)
   , Height_dirty_(false) {
+}
+
+bool RelativeMoveAndResizeViewModel::HasPendingChanges() const noexcept {
+  return HasPendingChanges_;
+}
+
+void RelativeMoveAndResizeViewModel::HasPendingChanges(bool value) {
+  if (setProperty(HasPendingChanges_, value, HasPendingChangesPropertyChangedEventArgs_) && value) {
+    invokeCallback();
+  }
 }
 
 void RelativeMoveAndResizeViewModel::Id(int value) {
@@ -46,6 +63,7 @@ void RelativeMoveAndResizeViewModel::Id(int value) {
 
   if (setProperty(Id_, value, IdPropertyChangedEventArgs_)) {
     Id_dirty_ = true;
+    HasPendingChanges(true);
   }
 }
 
@@ -67,6 +85,7 @@ void RelativeMoveAndResizeViewModel::X(float value) {
 
   if (setProperty(X_, value, XPropertyChangedEventArgs_)) {
     X_dirty_ = true;
+    HasPendingChanges(true);
   }
 }
 
@@ -82,6 +101,7 @@ void RelativeMoveAndResizeViewModel::Y(float value) {
 
   if (setProperty(Y_, value, YPropertyChangedEventArgs_)) {
     Y_dirty_ = true;
+    HasPendingChanges(true);
   }
 }
 
@@ -97,6 +117,7 @@ void RelativeMoveAndResizeViewModel::Width(float value) {
 
   if (setProperty(Width_, value, WidthPropertyChangedEventArgs_)) {
     Width_dirty_ = true;
+    HasPendingChanges(true);
   }
 }
 
@@ -112,10 +133,15 @@ void RelativeMoveAndResizeViewModel::Height(float value) {
 
   if (setProperty(Height_, value, HeightPropertyChangedEventArgs_)) {
     Height_dirty_ = true;
+    HasPendingChanges(true);
   }
 }
 
-void RelativeMoveAndResizeViewModel::save() {
+bool RelativeMoveAndResizeViewModel::applyChanges() {
+  if (!HasPendingChanges_) {
+    return false;
+  }
+
   if (Id_dirty_) {
     Id_dirty_ = false;
     action_.setId(Id_);
@@ -140,6 +166,9 @@ void RelativeMoveAndResizeViewModel::save() {
     Height_dirty_ = false;
     action_.setHeight(Height_);
   }
+
+  HasPendingChanges(false);
+  return true;
 }
 
 }  // namespace winrt::Mntone::RoxyGlance::ViewModels::Settings::implementation

@@ -1,9 +1,13 @@
+import "ViewModels/Settings/ISettingsViewModel.idl";
+
 namespace Mntone.RoxyGlance.ViewModels.Settings
 {
   [bindable]
   [default_interface]
   [marshaling_behavior(none)]
-  runtimeclass TriggersViewModel : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+  runtimeclass TriggersViewModel
+    : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    , ISettingsViewModel
   {
     Boolean ApplicationStarted;
     Boolean WindowActivated;

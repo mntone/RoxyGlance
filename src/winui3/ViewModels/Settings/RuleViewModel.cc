@@ -9,7 +9,7 @@
 
 // Filters
 #include "FilterKeyViewModel.h"
-// StringFilterViewModel is included by RuleViewModel.h.
+#include "StringFilterViewModel.h"
 
 // Actions
 #include "ActionViewModel.h"
@@ -37,16 +37,27 @@ using namespace roxyg::winui3::viewmodel::settings;
 
 namespace winrt::Mntone::RoxyGlance::ViewModels::Settings::implementation {
 
-static inline winrt::ActionViewModel makeActionViewModel(Action& action) {
+static inline winrt::ActionViewModel makeActionViewModel(
+  Action& action,
+  AbsoluteMoveAndResizeViewModel::CallbackFunction callback,
+  IInspectable const& context,
+  bool change_type = false
+) {
   using SAT = ::roxyg::settings::ActionType;
 
   winrt::ActionViewModel action_viewmodel{nullptr};
   switch (action.type()) {
   case SAT::kAbsoluteMoveAndResize:
-    action_viewmodel = make<AbsoluteMoveAndResizeViewModel>(action.as<AbsoluteMoveAndResize>());
+    action_viewmodel = make<AbsoluteMoveAndResizeViewModel>(
+      action.as<AbsoluteMoveAndResize>(),
+      callback, context, change_type
+    );
     break;
   case SAT::kRelativeMoveAndResize:
-    action_viewmodel = make<RelativeMoveAndResizeViewModel>(action.as<RelativeMoveAndResize>());
+    action_viewmodel = make<RelativeMoveAndResizeViewModel>(
+      action.as<RelativeMoveAndResize>(),
+      callback, context, change_type
+    );
     break;
   case SAT::kInvalid:
     action_viewmodel = nullptr;
@@ -68,12 +79,17 @@ void RuleViewModel::initialize() {
   ActionTypePropertyChangedEventArgs_ = PropertyChangedEventArgs{L"ActionType"};
 }
 
-RuleViewModel::RuleViewModel(Rule& rule)
-  : StaticCommandHolder(&RuleViewModel::onAddFilterRequested)
+RuleViewModel::RuleViewModel(
+  Rule& rule,
+  CallbackFunction callback,
+  IInspectable const& context
+)
+  : CallbackHolder(callback, context)
+  , StaticCommandHolder(&RuleViewModel::onAddFilterRequested)
   , rule_(rule)
-  , Action_(makeActionViewModel(rule.action()))
+  , Action_(makeActionViewModel(rule.action(), &RuleViewModel::onChildHasPendingChangesUpdated, *this))
   , Filters_(nullptr)
-  , Triggers_(make<TriggersViewModel>(rule))
+  , Triggers_(make<TriggersViewModel>(rule, &RuleViewModel::onChildHasPendingChangesUpdated, *this))
   , UnusedFilterKeys_(nullptr) {
   std::vector<winrt::StringFilterViewModel> new_filters;
   new_filters.reserve(kFilterKeyCount);
@@ -84,7 +100,13 @@ RuleViewModel::RuleViewModel(Rule& rule)
   Filter& f{rule.filter()};
   for (FilterKey key : kAllFilterKey) {
     if (hasFilterForKey(f, key)) {
-      new_filters.push_back(make<StringFilterViewModel>(f, key, &RuleViewModel::onDeleteRequested, *this));
+      new_filters.push_back(make<StringFilterViewModel>(
+        f,
+        key,
+        &RuleViewModel::onChildHasPendingChangesUpdated,
+        &RuleViewModel::onDeleteRequested,
+        *this
+      ));
     } else {
       new_unused_filters.push_back(make<FilterKeyViewModel>(key, /*ICommand*/ *this));
     }
@@ -101,27 +123,63 @@ void RuleViewModel::ActionType(Settings::ActionType value) {
   }
 
   action.setType(settings_value);
-  Action_ = makeActionViewModel(action);
+  Action_ = makeActionViewModel(action, &RuleViewModel::onChildHasPendingChangesUpdated, *this, true);
   notifyPropertyChanged(ActionPropertyChangedEventArgs_);
   notifyPropertyChanged(ActionTypePropertyChangedEventArgs_);
+  notifyHasPendingChangesPropertyChanged();
 }
 
-void RuleViewModel::save() {
+bool RuleViewModel::HasPendingChanges() const noexcept {
+  if (!deleting_keys_.empty()) {
+    return true;
+  }
+
+  winrt::ActionViewModel const action{Action_};
+  if (action && action.HasPendingChanges()) {
+    return true;
+  }
+  for (winrt::StringFilterViewModel const& filter : Filters_) {
+    if (filter.HasPendingChanges()) {
+      return true;
+    }
+  }
+  return Triggers_.HasPendingChanges();
+}
+
+bool RuleViewModel::applyChanges() {
+  bool changed = false;
+
   if (!deleting_keys_.empty()) {
     Filter& f{rule_.filter()};
     for (FilterKey key : deleting_keys_) {
       clearSettingsStringFilterValue(f, key);
     }
     deleting_keys_.clear();
+
+    changed = true;
   }
 
-  if (Action_) {
-    get_self<ActionViewModel>(Action_)->save();
+  if (Action_ && get_self<ActionViewModel>(Action_)->applyChanges()) {
+    changed = true;
   }
-  for (winrt::StringFilterViewModel const& vm : Filters_) {
-    get_self<StringFilterViewModel>(vm)->save();
+  for (winrt::StringFilterViewModel const& filter : Filters_) {
+    if (get_self<StringFilterViewModel>(filter)->applyChanges()) {
+      changed = true;
+    }
   }
-  get_self<TriggersViewModel>(Triggers_)->save();
+  if (get_self<TriggersViewModel>(Triggers_)->applyChanges()) {
+    changed = true;
+  }
+
+  if (changed) {
+    notifyHasPendingChangesPropertyChanged();
+  }
+  return changed;
+}
+
+void RuleViewModel::notifyHasPendingChangesPropertyChanged() {
+  notifyPropertyChanged(HasPendingChangesPropertyChangedEventArgs_);
+  invokeCallback();
 }
 
 void RuleViewModel::onAddFilterRequested(RuleViewModel& self, IInspectable const& param) {
@@ -141,7 +199,21 @@ void RuleViewModel::onAddFilterRequested(RuleViewModel& self, IInspectable const
   }
   self.UnusedFilterKeys_.RemoveAt(target_index);
 
-  self.Filters_.Append(make<StringFilterViewModel>(self.rule_.filter(), key, &RuleViewModel::onDeleteRequested, self, true));
+  self.Filters_.Append(make<StringFilterViewModel>(
+    self.rule_.filter(),
+    key,
+    &RuleViewModel::onChildHasPendingChangesUpdated,
+    &RuleViewModel::onDeleteRequested,
+    self,
+    true
+  ));
+
+  self.notifyHasPendingChangesPropertyChanged();
+}
+
+void RuleViewModel::onChildHasPendingChangesUpdated(IInspectable const& context) {
+  com_ptr<RuleViewModel> self{context.as<RuleViewModel>()};
+  self->notifyHasPendingChangesPropertyChanged();
 }
 
 void RuleViewModel::onDeleteRequested(IInspectable const& context, FilterKey key) {
@@ -171,6 +243,7 @@ void RuleViewModel::onDeleteRequested(IInspectable const& context, FilterKey key
         throw hresult_invalid_argument();
       }
       self->UnusedFilterKeys_.InsertAt(insertion_index, make<FilterKeyViewModel>(key, *self));
+      self->notifyHasPendingChangesPropertyChanged();
       return;
     }
   }

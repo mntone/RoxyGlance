@@ -2,7 +2,9 @@
 #include "ActionViewModel.h"
 #include "ViewModels/Settings/RelativeMoveAndResizeViewModel.g.h"
 #include "MoveAndResizeViewModelProperties.h"
+#include "SettingsViewModelProperties.h"
 
+#include "../Holders/CallbackHolder.h"
 #include "../Holders/NotifyPropertyChangedHolder.h"
 #include "../../../app/settings/action/MoveAndResize.h"
 
@@ -10,9 +12,16 @@ namespace winrt::Mntone::RoxyGlance::ViewModels::Settings::implementation {
 
 struct RelativeMoveAndResizeViewModel
   : RelativeMoveAndResizeViewModelT<RelativeMoveAndResizeViewModel, ActionViewModel>
+  , roxyg::winui3::viewmodel::CallbackHolder<>
   , roxyg::winui3::viewmodel::NotifyPropertyChangedHolder<RelativeMoveAndResizeViewModel>
-  , MoveAndResizeViewModelProperties {
-  RelativeMoveAndResizeViewModel(roxyg::settings::action::RelativeMoveAndResize action);
+  , MoveAndResizeViewModelProperties
+  , SettingsViewModelProperties {
+  RelativeMoveAndResizeViewModel(
+    roxyg::settings::action::RelativeMoveAndResize action,
+    CallbackFunction callback,
+    IInspectable const& context,
+    bool change_type
+  );
 
   DEFINE_PROP(int, Id);
   //DEFINE_PROP(hstring, Name);
@@ -21,9 +30,13 @@ struct RelativeMoveAndResizeViewModel
   DEFINE_PROP(float, Width);
   DEFINE_PROP(float, Height);
 
-  void save() override final;
+  bool HasPendingChanges() const noexcept override final;
+  bool applyChanges() override final;
 
   static void initialize();
+
+protected:
+  void HasPendingChanges(bool value) override final;
 
 private:
   roxyg::settings::action::RelativeMoveAndResize action_;
@@ -32,6 +45,7 @@ private:
   int Id_;
   float X_, Y_, Width_, Height_;
 
+  bool HasPendingChanges_;
   bool Id_dirty_ : 1;
   //bool Name_dirty_ : 1;
   bool X_dirty_ : 1;

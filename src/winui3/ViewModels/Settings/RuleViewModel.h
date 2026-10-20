@@ -1,13 +1,14 @@
 #pragma once
 #include "ViewModels/Settings/RuleViewModel.g.h"
+#include "SettingsViewModelProperties.h"
 
 #ifdef __INTELLISENSE__
 #include <boost/container/small_vector.hpp>
 #endif
 
 #include <winrt/Mntone.RoxyGlance.ViewModels.Settings.h>
-#include "StringFilterViewModel.h"
 
+#include "../Holders/CallbackHolder.h"
 #include "../Holders/NotifyPropertyChangedHolder.h"
 #include "../Holders/StaticCommandHolder.h"
 #include "../../../app/settings/Rule.h"
@@ -16,9 +17,15 @@ namespace winrt::Mntone::RoxyGlance::ViewModels::Settings::implementation {
 
 struct RuleViewModel
   : RuleViewModelT<RuleViewModel, Microsoft::UI::Xaml::Input::ICommand, non_agile>
+  , roxyg::winui3::viewmodel::CallbackHolder<>
   , roxyg::winui3::viewmodel::NotifyPropertyChangedHolder<RuleViewModel>
-  , roxyg::winui3::viewmodel::StaticCommandHolder<RuleViewModel> {
-  RuleViewModel(roxyg::settings::Rule& rule);
+  , roxyg::winui3::viewmodel::StaticCommandHolder<RuleViewModel>
+  , SettingsViewModelProperties {
+  RuleViewModel(
+    roxyg::settings::Rule& rule,
+    CallbackFunction callback,
+    IInspectable const& context
+  );
 
   inline Settings::ActionViewModel Action() const noexcept {
     return Action_;
@@ -48,12 +55,16 @@ struct RuleViewModel
     return UnusedFilterKeys_;
   }
 
-  void save();
+  bool HasPendingChanges() const noexcept;
+  bool applyChanges();
 
   static void initialize();
 
 private:
+  void notifyHasPendingChangesPropertyChanged();
+
   static void onAddFilterRequested(RuleViewModel& self, Windows::Foundation::IInspectable const& param);
+  static void onChildHasPendingChangesUpdated(Windows::Foundation::IInspectable const& context);
   static void onDeleteRequested(
     Windows::Foundation::IInspectable const& context,
     FilterKey key

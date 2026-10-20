@@ -1,3 +1,4 @@
+import "ViewModels/Settings/ISettingsViewModel.idl";
 import "ViewModels/Settings/FilterKeyViewModel.idl";
 
 namespace Mntone.RoxyGlance.ViewModels.Settings
@@ -12,7 +13,9 @@ namespace Mntone.RoxyGlance.ViewModels.Settings
   [bindable]
   [default_interface]
   [marshaling_behavior(none)]
-  runtimeclass StringFilterViewModel : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+  runtimeclass StringFilterViewModel
+    : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    , ISettingsViewModel
   {
     [noexcept] Microsoft.UI.Xaml.Input.ICommand DeleteCommand { get; };
     [noexcept] FilterKey Key { get; };

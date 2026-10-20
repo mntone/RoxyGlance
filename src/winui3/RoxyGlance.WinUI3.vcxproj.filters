@@ -132,6 +132,9 @@
     <Midl Include="ViewModels\Settings\FilterKeyViewModel.idl">
       <Filter>ViewModels\Settings</Filter>
     </Midl>
+    <Midl Include="ViewModels\Settings\ISettingsViewModel.idl">
+      <Filter>ViewModels\Settings</Filter>
+    </Midl>
     <Midl Include="ViewModels\Settings\RelativeMoveAndResizeViewModel.idl">
       <Filter>ViewModels\Settings</Filter>
     </Midl>
@@ -170,6 +173,9 @@
     <ClCompile Include="ViewModels\Settings\MoveAndResizeViewModelProperties.cc">
       <Filter>ViewModels\Settings</Filter>
     </ClCompile>
+    <ClCompile Include="ViewModels\Settings\SettingsViewModelProperties.cc">
+      <Filter>ViewModels\Settings</Filter>
+    </ClCompile>
     <ClCompile Include="ViewModels\Settings\SettingsWinRTConverters.cc">
       <Filter>ViewModels\Settings</Filter>
     </ClCompile>
@@ -202,6 +208,9 @@
       <Filter>ViewModels\Settings</Filter>
     </ClInclude>
     <ClInclude Include="ViewModels\Settings\MoveAndResizeViewModelProperties.h">
+      <Filter>ViewModels\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewModels\Settings\SettingsViewModelProperties.h">
       <Filter>ViewModels\Settings</Filter>
     </ClInclude>
     <ClInclude Include="ViewModels\Settings\SettingsWinRTConverters.h">

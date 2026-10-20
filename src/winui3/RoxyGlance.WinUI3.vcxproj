@@ -199,6 +199,7 @@
     <ClInclude Include="ViewModels\Settings\RuleViewModel.h">
       <DependentUpon>ViewModels\Settings\RuleViewModel.idl</DependentUpon>
     </ClInclude>
+    <ClInclude Include="ViewModels\Settings\SettingsViewModelProperties.h" />
     <ClInclude Include="ViewModels\Settings\SettingsWinRTConverters.h" />
     <ClInclude Include="ViewModels\Settings\StringFilterViewModel.h">
       <DependentUpon>ViewModels\Settings\StringFilterViewModel.idl</DependentUpon>
@@ -290,6 +291,7 @@
     <ClCompile Include="ViewModels\Settings\RuleViewModel.cc">
       <DependentUpon>ViewModels\Settings\RuleViewModel.idl</DependentUpon>
     </ClCompile>
+    <ClCompile Include="ViewModels\Settings\SettingsViewModelProperties.cc" />
     <ClCompile Include="ViewModels\Settings\SettingsWinRTConverters.cc" />
     <ClCompile Include="ViewModels\Settings\StringFilterViewModel.cc">
       <DependentUpon>ViewModels\Settings\StringFilterViewModel.idl</DependentUpon>
@@ -328,6 +330,7 @@
     <Midl Include="ViewModels\Settings\AbsoluteMoveAndResizeViewModel.idl" />
     <Midl Include="ViewModels\Settings\ActionViewModel.idl" />
     <Midl Include="ViewModels\Settings\FilterKeyViewModel.idl" />
+    <Midl Include="ViewModels\Settings\ISettingsViewModel.idl" />
     <Midl Include="ViewModels\Settings\RelativeMoveAndResizeViewModel.idl" />
     <Midl Include="ViewModels\Settings\RulesViewModel.idl" />
     <Midl Include="ViewModels\Settings\RuleViewModel.idl" />

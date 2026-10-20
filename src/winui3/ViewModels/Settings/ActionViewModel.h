@@ -12,7 +12,11 @@ struct ActionViewModel: ActionViewModelT<ActionViewModel, non_agile> {
     return Type_;
   }
 
-  virtual void save() {};
+  virtual bool HasPendingChanges() const noexcept;
+  virtual bool applyChanges();
+
+protected:
+  virtual void HasPendingChanges(bool) {};
 
 private:
   ActionType const Type_;

@@ -1,5 +1,6 @@
 #pragma once
 #include "ViewModels/Settings/RulesViewModel.g.h"
+#include "SettingsViewModelProperties.h"
 
 #include <winrt/Mntone.RoxyGlance.ViewModels.Settings.h>
 
@@ -10,7 +11,8 @@ namespace winrt::Mntone::RoxyGlance::ViewModels::Settings::implementation {
 
 struct RulesViewModel
   : RulesViewModelT<RulesViewModel, non_agile>
-  , roxyg::winui3::viewmodel::NotifyPropertyChangedHolder<RulesViewModel> {
+  , roxyg::winui3::viewmodel::NotifyPropertyChangedHolder<RulesViewModel>
+  , SettingsViewModelProperties {
   RulesViewModel(roxyg::settings::Rules& rules);
 
   inline Windows::Foundation::Collections::IObservableVector<ViewModels::Settings::RuleViewModel> Items() const noexcept {
@@ -19,9 +21,13 @@ struct RulesViewModel
 
   DEFINE_REFPROP(ViewModels::Settings::RuleViewModel, SelectedItem);
 
-  void save();
+  bool HasPendingChanges() const noexcept;
+  bool applyChanges();
 
   static void initialize();
+
+private:
+  static void onRuleHasPendingChangesUpdated(Windows::Foundation::IInspectable const& context);
 
 private:
   Windows::Foundation::Collections::IObservableVector<ViewModels::Settings::RuleViewModel> Items_;

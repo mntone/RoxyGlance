@@ -55,7 +55,7 @@ protected:
   void expectSingleGetter(
     std::string_view target,
     V const& input,
-    T(*const accessor_operation)(V const&),
+    T(* const accessor_operation)(V const&),
     std::size_t index,
     std::size_t offset = 0
   ) {
@@ -65,7 +65,7 @@ protected:
   void expectSingleSetter(
     std::string_view target,
     V actual,
-    void (*const accessor_operation)(V&),
+    void (* const accessor_operation)(V&),
     T expected,
     std::size_t index
   ) {

@@ -10,7 +10,6 @@
 
 namespace winrt {
 using namespace ::winrt::Windows::Foundation;
-using namespace ::winrt::Windows::Foundation::Numerics;
 }
 
 using namespace roxyg::win32;
@@ -26,8 +25,8 @@ static ROXYG_ALWAYS_INLINE hstring makeName(roxyg::monitor::State const& state) 
     : FormatResourceString(kShellDisplayNameFormat, state.id(), friendlyName);
 }
 
-static ROXYG_ALWAYS_INLINE float4 makeVector4(roxyg::numeric::float4 vec) noexcept {
-  return float4(vec.x(), vec.y(), vec.z(), vec.w());
+static ROXYG_ALWAYS_INLINE Rect makeRect(roxyg::numeric::float4 vec) noexcept {
+  return Rect(vec.x(), vec.y(), vec.z(), vec.w());
 }
 
 MonitorViewModel::MonitorViewModel(
@@ -37,8 +36,8 @@ MonitorViewModel::MonitorViewModel(
   : IsPrimary_(state.isPrimary())
   , Id_(id)
   , Name_(name)
-  , DisplayArea_(makeVector4(state.displayArea()))
-  , WorkArea_(makeVector4(state.workArea())) {
+  , DisplayArea_(makeRect(state.displayArea()))
+  , WorkArea_(makeRect(state.workArea())) {
 }
 
 MonitorViewModel::MonitorViewModel(roxyg::monitor::State const& state)

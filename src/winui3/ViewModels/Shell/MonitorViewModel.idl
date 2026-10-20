@@ -7,7 +7,7 @@ namespace Mntone.RoxyGlance.ViewModels.Shell
     [noexcept] Int32 Id { get; };
     [noexcept] String Name { get; };
     [noexcept] Boolean IsPrimary { get; };
-    [noexcept] Windows.Foundation.Numerics.Vector4 DisplayArea { get; };
-    [noexcept] Windows.Foundation.Numerics.Vector4 WorkArea { get; };
+    [noexcept] Windows.Foundation.Rect DisplayArea { get; };
+    [noexcept] Windows.Foundation.Rect WorkArea { get; };
   }
 }

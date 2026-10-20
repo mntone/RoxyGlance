@@ -20,10 +20,10 @@ struct MonitorViewModel: MonitorViewModelT<MonitorViewModel> {
   inline constexpr bool IsPrimary() const noexcept {
     return IsPrimary_;
   }
-  inline constexpr Windows::Foundation::Numerics::float4 DisplayArea() const noexcept {
+  inline constexpr Windows::Foundation::Rect DisplayArea() const noexcept {
     return DisplayArea_;
   }
-  inline constexpr Windows::Foundation::Numerics::float4 WorkArea() const noexcept {
+  inline constexpr Windows::Foundation::Rect WorkArea() const noexcept {
     return WorkArea_;
   }
 
@@ -31,8 +31,8 @@ private:
   bool IsPrimary_;
   std::int32_t Id_;
   hstring Name_;
-  Windows::Foundation::Numerics::float4 DisplayArea_;
-  Windows::Foundation::Numerics::float4 WorkArea_;
+  Windows::Foundation::Rect DisplayArea_;
+  Windows::Foundation::Rect WorkArea_;
 };
 
 }

@@ -234,6 +234,9 @@
     <ClInclude Include="win32\process.h">
       <Filter>win32</Filter>
     </ClInclude>
+    <ClInclude Include="win32\process_mitigation.h">
+      <Filter>win32</Filter>
+    </ClInclude>
     <ClInclude Include="win32\SRWLock.h">
       <Filter>win32</Filter>
     </ClInclude>
@@ -368,6 +371,9 @@
       <Filter>win32</Filter>
     </ClCompile>
     <ClCompile Include="win32\process.cc">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\process_mitigation.cc">
       <Filter>win32</Filter>
     </ClCompile>
     <ClCompile Include="win32\string.cc">

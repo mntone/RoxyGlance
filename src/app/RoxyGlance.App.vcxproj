@@ -141,6 +141,7 @@
     <ClInclude Include="win32\MessageLoopThreadController.h" />
     <ClInclude Include="win32\monitor.h" />
     <ClInclude Include="win32\process.h" />
+    <ClInclude Include="win32\process_mitigation.h" />
     <ClInclude Include="win32\SRWLock.h" />
     <ClInclude Include="win32\string.h" />
     <ClInclude Include="win32\ThreadContext.h" />
@@ -191,6 +192,7 @@
     <ClCompile Include="win32\MessageLoopThreadController.cc" />
     <ClCompile Include="win32\monitor.cc" />
     <ClCompile Include="win32\process.cc" />
+    <ClCompile Include="win32\process_mitigation.cc" />
     <ClCompile Include="win32\string.cc" />
     <ClCompile Include="win32\TrayIcon.cc" />
     <ClCompile Include="win32\window.cc" />

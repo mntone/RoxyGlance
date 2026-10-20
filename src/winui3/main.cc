@@ -3,6 +3,8 @@
 
 #include <wil/resource.h>
 
+#include "../app/win32/process_mitigation.h"
+
 namespace {
 
 inline constexpr std::wstring_view kAppSingleInstanceName = L"P";
@@ -85,6 +87,11 @@ int __stdcall wWinMain(
   [[maybe_unused]] _In_ LPWSTR lpCmdLine,
   [[maybe_unused]] _In_ int nCmdShow
 ) {
+  BOOL const status = roxyg::win32::ConfigureProcessMitigations();
+  if (status == FALSE) {
+    return EXIT_FAILURE;
+  }
+
   winrt::init_apartment(winrt::apartment_type::single_threaded);
 
   winrt::AppInstance const currentInstance{winrt::AppInstance::GetCurrent()};

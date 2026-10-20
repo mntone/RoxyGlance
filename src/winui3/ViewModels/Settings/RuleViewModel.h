@@ -55,8 +55,8 @@ struct RuleViewModel
 private:
   static void onAddFilterRequested(RuleViewModel& self, Windows::Foundation::IInspectable const& param);
   static void onDeleteRequested(
-    Mntone::RoxyGlance::ViewModels::Settings::implementation::StringFilterViewModel const& sender,
-    Windows::Foundation::IInspectable const& context
+    Windows::Foundation::IInspectable const& context,
+    FilterKey key
   );
 
 private:

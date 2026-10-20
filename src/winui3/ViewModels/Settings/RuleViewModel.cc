@@ -144,12 +144,10 @@ void RuleViewModel::onAddFilterRequested(RuleViewModel& self, IInspectable const
   self.Filters_.Append(make<StringFilterViewModel>(self.rule_.filter(), key, &RuleViewModel::onDeleteRequested, self, true));
 }
 
-void RuleViewModel::onDeleteRequested(StringFilterViewModel const& sender, IInspectable const& context) {
+void RuleViewModel::onDeleteRequested(IInspectable const& context, FilterKey key) {
   using namespace std::views;
 
   com_ptr<RuleViewModel> self{context.as<RuleViewModel>()};
-
-  FilterKey const key{sender.Key()};
   for (auto const& [index, vm] : zip(iota(uint32_t{0}), self->Filters_)) {
     if (vm.Key() == key) {
       self->Filters_.RemoveAt(index);

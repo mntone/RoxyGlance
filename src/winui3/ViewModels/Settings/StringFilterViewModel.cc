@@ -124,7 +124,7 @@ void StringFilterViewModel::save() {
 }
 
 void StringFilterViewModel::onDelete(StringFilterViewModel& self, IInspectable const&) {
-  self.invokeCallback();
+  self.invokeCallback(self.Key_);
 }
 
 }  // namespace winrt::Mntone::RoxyGlance::ViewModels::Settings::implementation

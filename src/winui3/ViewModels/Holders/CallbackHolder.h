@@ -2,10 +2,10 @@
 
 namespace roxyg::winui3::viewmodel {
 
-template<typename Derived>
+template<typename... Args>
 struct CallbackHolder {
   using Context = ::winrt::Windows::Foundation::IInspectable;
-  using CallbackFunction = void(*)(Derived const& sender, Context const& context);
+  using CallbackFunction = void(*)(Context const& context, Args... args);
 
   CallbackHolder(::std::nullptr_t, Context const&) = delete;
   explicit inline constexpr CallbackHolder(CallbackFunction callback, Context const& context) noexcept
@@ -15,11 +15,10 @@ struct CallbackHolder {
   }
 
 protected:
-  void invokeCallback() {
+  void invokeCallback(Args... args) {
     Context context{context_.get()};
     if (context) {
-      Derived* const self{static_cast<Derived*>(this)};
-      callback_(*self->get_strong(), context);
+      callback_(context, std::forward<Args>(args)...);
     }
   }
 

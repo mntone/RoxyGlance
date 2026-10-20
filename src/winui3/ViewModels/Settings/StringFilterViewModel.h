@@ -10,7 +10,7 @@ namespace winrt::Mntone::RoxyGlance::ViewModels::Settings::implementation {
 
 struct StringFilterViewModel
   : StringFilterViewModelT<StringFilterViewModel, Microsoft::UI::Xaml::Input::ICommand, non_agile>
-  , roxyg::winui3::viewmodel::CallbackHolder<StringFilterViewModel>
+  , roxyg::winui3::viewmodel::CallbackHolder<FilterKey>
   , roxyg::winui3::viewmodel::NotifyPropertyChangedHolder<StringFilterViewModel>
   , roxyg::winui3::viewmodel::StaticCommandHolder<StringFilterViewModel> {
   explicit StringFilterViewModel(

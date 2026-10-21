@@ -59,6 +59,9 @@
     <Filter Include="Strings\th-tH">
       <UniqueIdentifier>{736be295-417e-4fef-b34d-f0cef50a1cae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Strings\tr-TR">
+      <UniqueIdentifier>{0b2cc1bb-0d13-43f5-a2ea-7b42f0f3c947}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Strings\vi-VN">
       <UniqueIdentifier>{f5a5da0c-29ff-4eff-9f6d-a4b2cf914521}</UniqueIdentifier>
     </Filter>
@@ -431,6 +434,9 @@
     <MuiResourceCompile Include="Resources\app.th-TH.rc">
       <Filter>Resources</Filter>
     </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.tr-TR.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
     <MuiResourceCompile Include="Resources\app.vi-VN.rc">
       <Filter>Resources</Filter>
     </MuiResourceCompile>
@@ -480,6 +486,9 @@
     </PRIResource>
     <PRIResource Include="Strings\th-TH\Resources.resw">
       <Filter>Strings\th-tH</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\tr-TR\Resources.resw">
+      <Filter>Strings\tr-TR</Filter>
     </PRIResource>
     <PRIResource Include="Strings\vi-VN\Resources.resw">
       <Filter>Strings\vi-VN</Filter>

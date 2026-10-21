@@ -1,0 +1,26 @@
+#include "resource.h"
+
+LANGUAGE 31, 1  // LANG_TURKISH, SUBLANG_TURKISH_TURKEY
+
+IDC_MENU_TRAY MENU
+BEGIN
+  POPUP ""
+  BEGIN
+    MENUITEM "&Ayarlar", IDM_TRAY_SETTINGS
+    MENUITEM "Ç&ıkış",   IDM_TRAY_EXIT
+  END
+END
+
+STRINGTABLE
+BEGIN
+  IDS_SHELL_MAIN         "Ana Ekran"
+  IDS_SHELL_MAINFMT      "Ana Ekran ({})"
+  IDS_SHELL_DISPFMT      "Ekran {}"
+  IDS_SHELL_DISPNAMEFMT  "Ekran {}: {}"
+
+  IDS_SETTINGS_WINDOW_TITLE    "Ayarlar - Roxy Glance"
+  IDS_SETTINGS_WINDOW_DEVELOP  "Geliştirme"
+  IDS_SETTINGS_RULE_FORMAT     "Kural {}"
+
+  IDS_MENU_DEBUG "Hata A&yıklama"
+END

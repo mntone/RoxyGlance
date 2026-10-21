@@ -462,6 +462,10 @@
       <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
       <MuiResourceLanguage>th-TH</MuiResourceLanguage>
     </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.tr-TR.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>tr-TR</MuiResourceLanguage>
+    </MuiResourceCompile>
     <MuiResourceCompile Include="Resources\app.vi-VN.rc">
       <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
       <MuiResourceLanguage>vi-VN</MuiResourceLanguage>
@@ -489,6 +493,7 @@
     <PRIResource Include="Strings\pt-BR\Resources.resw" />
     <PRIResource Include="Strings\ru-RU\Resources.resw" />
     <PRIResource Include="Strings\th-TH\Resources.resw" />
+    <PRIResource Include="Strings\tr-TR\Resources.resw" />
     <PRIResource Include="Strings\vi-VN\Resources.resw" />
     <PRIResource Include="Strings\zh-CN\Resources.resw" />
     <PRIResource Include="Strings\zh-TW\Resources.resw" />

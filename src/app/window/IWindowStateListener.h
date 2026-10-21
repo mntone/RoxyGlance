@@ -3,7 +3,7 @@
 namespace roxyg::window {
 
 struct State;
-struct IWindowStateListener {
+struct ROXYG_NOVTABLE IWindowStateListener {
   virtual void onForegroundEvent(State& windowState) noexcept = 0;
   virtual void onShowEvent(State& windowState) noexcept = 0;
 

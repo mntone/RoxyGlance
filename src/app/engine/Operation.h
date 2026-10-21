@@ -8,7 +8,7 @@ struct State;
 
 namespace roxyg::engine {
 
-class IOperation {
+class ROXYG_NOVTABLE IOperation {
 public:
   virtual ~IOperation() noexcept = default;
   [[nodiscard]] virtual winrt::hresult execute(OperationContext& ctx, window::State& windowState) noexcept = 0;

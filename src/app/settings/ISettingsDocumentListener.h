@@ -3,7 +3,7 @@
 namespace roxyg::settings {
 
 template<typename TDocument>
-struct ISettingsDocumentListener {
+struct ROXYG_NOVTABLE ISettingsDocumentListener {
   virtual void onSettingsChanged(TDocument const& settings) noexcept = 0;
 
 protected:

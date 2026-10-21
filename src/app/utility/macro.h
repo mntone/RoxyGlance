@@ -24,6 +24,12 @@
 #define ROXYG_DEBUG_ASSERT_SUCCEEDED(expr) ((void)(expr))
 #endif
 
+#ifdef _MSC_VER
+#define ROXYG_NOVTABLE __declspec(novtable)
+#else
+#define ROXYG_NOVTABLE
+#endif
+
 #ifdef _DEBUG
 # include <cassert>
 # define ROXYG_UNCHECKED_ASSERT(expr) assert(expr)

@@ -2,7 +2,7 @@
 
 namespace roxyg::message {
 
-struct IMessageListener {
+struct ROXYG_NOVTABLE IMessageListener {
   virtual void onAppExitRequested() noexcept {}
   virtual void onDisplayChanged() noexcept {}
   virtual void onShowSettingsRequested() noexcept {}

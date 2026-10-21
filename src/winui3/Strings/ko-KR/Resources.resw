@@ -186,6 +186,9 @@
   <data name="StringFilter_DeleteButton.AccessKey" xml:space="preserve">
     <value>삭</value>
   </data>
+  <data name="StringFilter_DeleteButton.AutomationProperties.Name" xml:space="preserve">
+    <value>이 조건 삭제</value>
+  </data>
   <data name="StringFilter_DeleteButton_ToolTip.Content" xml:space="preserve">
     <value>삭제</value>
   </data>

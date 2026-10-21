@@ -186,6 +186,9 @@
   <data name="StringFilter_DeleteButton.AccessKey" xml:space="preserve">
     <value>R</value>
   </data>
+  <data name="StringFilter_DeleteButton.AutomationProperties.Name" xml:space="preserve">
+    <value>刪除此條件</value>
+  </data>
   <data name="StringFilter_DeleteButton_ToolTip.Content" xml:space="preserve">
     <value>刪除</value>
   </data>

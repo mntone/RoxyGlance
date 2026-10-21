@@ -186,6 +186,9 @@
   <data name="StringFilter_DeleteButton.AccessKey" xml:space="preserve">
     <value>E</value>
   </data>
+  <data name="StringFilter_DeleteButton.AutomationProperties.Name" xml:space="preserve">
+    <value>Diese Bedingung entfernen</value>
+  </data>
   <data name="StringFilter_DeleteButton_ToolTip.Content" xml:space="preserve">
     <value>Entfernen</value>
   </data>

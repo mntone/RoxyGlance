@@ -5,14 +5,14 @@
 #endif
 
 // Triggers
-#include "TriggersViewModel.h"
+// TriggersViewModel is included by RuleViewModel.h.
 
 // Filters
 #include "FilterKeyViewModel.h"
 #include "StringFilterViewModel.h"
 
 // Actions
-#include "ActionViewModel.h"
+// ActionViewModel is included by RuleViewModel.h.
 #include "AbsoluteMoveAndResizeViewModel.h"
 #include "RelativeMoveAndResizeViewModel.h"
 
@@ -51,7 +51,7 @@ static inline hstring makeName(Rule const& rule) {
   return hstring{name};
 }
 
-static inline winrt::ActionViewModel makeActionViewModel(
+static inline com_ptr<ActionViewModel> makeActionViewModel(
   Action& action,
   AbsoluteMoveAndResizeViewModel::CallbackFunction callback,
   IInspectable const& context,
@@ -59,16 +59,16 @@ static inline winrt::ActionViewModel makeActionViewModel(
 ) {
   using SAT = ::roxyg::settings::ActionType;
 
-  winrt::ActionViewModel action_viewmodel{nullptr};
+  com_ptr<ActionViewModel> action_viewmodel{nullptr};
   switch (action.type()) {
   case SAT::kAbsoluteMoveAndResize:
-    action_viewmodel = make<AbsoluteMoveAndResizeViewModel>(
+    action_viewmodel = make_self<AbsoluteMoveAndResizeViewModel>(
       action.as<AbsoluteMoveAndResize>(),
       callback, context, change_type
     );
     break;
   case SAT::kRelativeMoveAndResize:
-    action_viewmodel = make<RelativeMoveAndResizeViewModel>(
+    action_viewmodel = make_self<RelativeMoveAndResizeViewModel>(
       action.as<RelativeMoveAndResize>(),
       callback, context, change_type
     );
@@ -104,7 +104,7 @@ RuleViewModel::RuleViewModel(
   , Name_(makeName(rule))
   , Action_(makeActionViewModel(rule.action(), &RuleViewModel::onChildHasPendingChangesUpdated, *this))
   , Filters_(nullptr)
-  , Triggers_(make<TriggersViewModel>(rule, &RuleViewModel::onChildHasPendingChangesUpdated, *this))
+  , Triggers_(make_self<TriggersViewModel>(rule, &RuleViewModel::onChildHasPendingChangesUpdated, *this))
   , UnusedFilterKeys_(nullptr) {
   std::vector<winrt::StringFilterViewModel> new_filters;
   new_filters.reserve(kFilterKeyCount);
@@ -149,8 +149,8 @@ bool RuleViewModel::HasPendingChanges() const noexcept {
     return true;
   }
 
-  winrt::ActionViewModel const action{Action_};
-  if (action && action.HasPendingChanges()) {
+  com_ptr<ActionViewModel> const action{Action_};
+  if (action && action->HasPendingChanges()) {
     return true;
   }
   for (winrt::StringFilterViewModel const& filter : Filters_) {
@@ -158,7 +158,7 @@ bool RuleViewModel::HasPendingChanges() const noexcept {
       return true;
     }
   }
-  return Triggers_.HasPendingChanges();
+  return Triggers_->HasPendingChanges();
 }
 
 bool RuleViewModel::applyChanges() {
@@ -174,7 +174,8 @@ bool RuleViewModel::applyChanges() {
     changed = true;
   }
 
-  if (Action_ && get_self<ActionViewModel>(Action_)->applyChanges()) {
+  com_ptr<ActionViewModel> const action{Action_};
+  if (action && action->applyChanges()) {
     changed = true;
   }
   for (winrt::StringFilterViewModel const& filter : Filters_) {
@@ -182,7 +183,7 @@ bool RuleViewModel::applyChanges() {
       changed = true;
     }
   }
-  if (get_self<TriggersViewModel>(Triggers_)->applyChanges()) {
+  if (Triggers_->applyChanges()) {
     changed = true;
   }
 

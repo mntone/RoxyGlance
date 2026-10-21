@@ -6,6 +6,9 @@
 #include <boost/container/small_vector.hpp>
 #endif
 
+#include "ActionViewModel.h"
+#include "TriggersViewModel.h"
+
 #include "../Holders/CallbackHolder.h"
 #include "../Holders/NotifyPropertyChangedHolder.h"
 #include "../Holders/StaticCommandHolder.h"
@@ -26,14 +29,15 @@ struct RuleViewModel
   );
 
   inline Settings::ActionViewModel Action() const noexcept {
-    return Action_;
+    return Action_.as<Settings::ActionViewModel>();
   }
 
   inline Settings::ActionType ActionType() const noexcept {
-    if (!Action_) {
+    com_ptr<ActionViewModel> const action{Action_};
+    if (!action) {
       return Settings::ActionType::Invalid;
     }
-    return Action_.Type();
+    return action->Type();
   }
   void ActionType(Settings::ActionType);
 
@@ -47,7 +51,7 @@ struct RuleViewModel
     return Name_;
   }
   inline Settings::TriggersViewModel Triggers() const noexcept {
-    return Triggers_;
+    return Triggers_.as<Settings::TriggersViewModel>();
   }
   inline Windows::Foundation::Collections::IObservableVector<Settings::FilterKeyViewModel> UnusedFilterKeys() const noexcept {
     return UnusedFilterKeys_;
@@ -73,9 +77,9 @@ private:
   boost::container::small_vector<FilterKey, 3> deleting_keys_;
 
   hstring Name_;
-  Settings::ActionViewModel Action_;
+  com_ptr<ActionViewModel> Action_;
   Windows::Foundation::Collections::IObservableVector<Settings::StringFilterViewModel> Filters_;
-  Settings::TriggersViewModel const Triggers_;
+  com_ptr<TriggersViewModel> const Triggers_;
   Windows::Foundation::Collections::IObservableVector<Settings::FilterKeyViewModel> UnusedFilterKeys_;
 
   static Microsoft::UI::Xaml::Data::PropertyChangedEventArgs ActionPropertyChangedEventArgs_;

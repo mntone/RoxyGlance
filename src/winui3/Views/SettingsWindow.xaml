@@ -32,7 +32,6 @@
                     SelectionChanged="NavigationViewSelectionChanged">
       <NavigationView.MenuItems>
         <NavigationViewItem x:Uid="Navigation_Rules"
-                            IsSelected="True"
                             KeyTipPlacementMode="Bottom"
                             Tag="Mntone.RoxyGlance.Views.RuleEditorPage" />
         <NavigationViewItem x:Uid="Navigation_Logs"
@@ -40,13 +39,7 @@
                             Tag="Mntone.RoxyGlance.Views.LogsPage" />
       </NavigationView.MenuItems>
       <Frame x:Name="RootFrame"
-             Navigated="RootFrameNavigated">
-        <Frame.ContentTransitions>
-          <TransitionCollection>
-            <NavigationThemeTransition />
-          </TransitionCollection>
-        </Frame.ContentTransitions>
-      </Frame>
+             Navigated="RootFrameNavigated" />
     </NavigationView>
   </Grid>
 </Window>

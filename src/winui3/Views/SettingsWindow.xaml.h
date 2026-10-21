@@ -7,6 +7,7 @@ struct SettingsWindow: SettingsWindowT<SettingsWindow> {
   SettingsWindow() noexcept;
 
   void InitializeComponent();
+  bool navigateTo(hstring page_type);
 
   void RootGridKeyDown(
     Windows::Foundation::IInspectable const& sender,

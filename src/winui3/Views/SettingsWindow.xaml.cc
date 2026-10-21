@@ -118,6 +118,19 @@ void SettingsWindow::InitializeComponent() {
   titlebar.ButtonPressedForegroundColor(theme_color);
 }
 
+bool SettingsWindow::navigateTo(hstring page_type) {
+  Frame const frame{RootFrame()};
+  if (frame.CurrentSourcePageType().Name == page_type) {
+    return false;
+  }
+
+  return frame.Navigate(
+    TypeName{page_type},
+    nullptr,
+    SuppressNavigationTransitionInfo()
+  );
+}
+
 bool SettingsWindow::tryGoBack() {
   Frame const frame{RootFrame()};
   if (frame.CanGoBack()) {
@@ -180,15 +193,7 @@ void SettingsWindow::NavigationViewSelectionChanged(
 ) {
   NavigationViewItem item{args.SelectedItem().as<NavigationViewItem>()};
   hstring const page_type{unbox_value<hstring>(item.Tag())};
-  if (RootFrame().CurrentSourcePageType().Name == page_type) {
-    return;
-  }
-
-  RootFrame().Navigate(
-    TypeName{page_type},
-    nullptr,
-    SuppressNavigationTransitionInfo()
-  );
+  navigateTo(page_type);
 }
 
 void SettingsWindow::RootFrameNavigated(IInspectable const& /*sender*/, NavigationEventArgs const& args) {

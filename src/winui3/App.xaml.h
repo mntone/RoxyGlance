@@ -19,7 +19,7 @@ struct App: AppT<App>, roxyg::message::IMessageListener {
 
 private:
   void exitApp();
-  void showSettingsWindow();
+  void showSettingsWindow(param::hstring page_type);
 
   void onAppExitRequested() noexcept override;
   void onShowSettingsRequested() noexcept override;

@@ -49,6 +49,9 @@ App::~App() noexcept {
 /// </summary>
 /// <param name="e">Details about the launch request and process.</param>
 void App::OnLaunched([[maybe_unused]] LaunchActivatedEventArgs const& e) {
+#ifdef _DEBUG
+  showSettingsWindow(L"Mntone.RoxyGlance.Views.LogsPage");
+#endif
 }
 
 void App::exitApp() {
@@ -74,7 +77,7 @@ void App::exitApp() {
   Exit();
 }
 
-void App::showSettingsWindow() {
+void App::showSettingsWindow(param::hstring page_type) {
   winrt::SettingsWindow window{settings_window_};
   if (!window) {
     winrt::SettingsWindow new_window{make<SettingsWindow>()};
@@ -96,6 +99,7 @@ void App::showSettingsWindow() {
     settings_window_ = new_window;
   }
   window.Activate();
+  get_self<SettingsWindow>(window)->navigateTo(page_type);
 }
 
 void App::onAppExitRequested() noexcept {
@@ -106,7 +110,7 @@ void App::onAppExitRequested() noexcept {
 
 void App::onShowSettingsRequested() noexcept {
   dispatcher_.TryEnqueue([this] {
-    showSettingsWindow();
+    showSettingsWindow(L"Mntone.RoxyGlance.Views.RuleEditorPage");
   });
 }
 

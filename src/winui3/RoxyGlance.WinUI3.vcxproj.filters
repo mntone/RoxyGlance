@@ -123,10 +123,10 @@
     <Midl Include="Helpers\MenuFlyoutHelper.idl">
       <Filter>Helpers</Filter>
     </Midl>
-    <Midl Include="ViewModels\LogsViewModel.idl">
+    <Midl Include="ViewModels\Logging\LogsViewModel.idl">
       <Filter>ViewModels</Filter>
     </Midl>
-    <Midl Include="ViewModels\LogViewModel.idl">
+    <Midl Include="ViewModels\Logging\LogViewModel.idl">
       <Filter>ViewModels</Filter>
     </Midl>
     <Midl Include="ViewModels\Settings\AbsoluteMoveAndResizeViewModel.idl">

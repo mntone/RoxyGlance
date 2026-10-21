@@ -1,6 +1,6 @@
 #pragma once
 #include "LogViewModel.h"
-#include "ViewModels/LogsViewModel.g.h"
+#include "ViewModels/Logging/LogsViewModel.g.h"
 
 #include "../../app/utility/ICollectionChangeListener.h"
 
@@ -9,7 +9,7 @@ struct Log;
 class Logger;
 }
 
-namespace winrt::Mntone::RoxyGlance::ViewModels::implementation {
+namespace winrt::Mntone::RoxyGlance::ViewModels::Logging::implementation {
 
 struct LogsViewModel
   : LogsViewModelT<LogsViewModel, non_agile>
@@ -18,7 +18,7 @@ public:
   LogsViewModel(roxyg::logging::Logger& logger);
   ~LogsViewModel();
 
-  Windows::Foundation::Collections::IObservableVector<ViewModels::LogViewModel> Logs() noexcept {
+  Windows::Foundation::Collections::IObservableVector<ViewModels::Logging::LogViewModel> Logs() noexcept {
     return Logs_;
   }
 
@@ -28,7 +28,7 @@ private:
 private:
   Microsoft::UI::Dispatching::DispatcherQueue dispatcher_;
   roxyg::logging::Logger& logger_;
-  Windows::Foundation::Collections::IObservableVector<ViewModels::LogViewModel> Logs_;
+  Windows::Foundation::Collections::IObservableVector<ViewModels::Logging::LogViewModel> Logs_;
 };
 
 }

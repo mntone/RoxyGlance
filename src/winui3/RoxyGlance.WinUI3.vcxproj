@@ -174,11 +174,11 @@
     <ClInclude Include="ViewModels\Holders\CallbackHolder.h" />
     <ClInclude Include="ViewModels\Holders\NotifyPropertyChangedHolder.h" />
     <ClInclude Include="ViewModels\Holders\StaticCommandHolder.h" />
-    <ClInclude Include="ViewModels\LogsViewModel.h">
-      <DependentUpon>ViewModels\LogsViewModel.idl</DependentUpon>
+    <ClInclude Include="ViewModels\Logging\LogsViewModel.h">
+      <DependentUpon>ViewModels\Logging\LogsViewModel.idl</DependentUpon>
     </ClInclude>
-    <ClInclude Include="ViewModels\LogViewModel.h">
-      <DependentUpon>ViewModels\LogViewModel.idl</DependentUpon>
+    <ClInclude Include="ViewModels\Logging\LogViewModel.h">
+      <DependentUpon>ViewModels\Logging\LogViewModel.idl</DependentUpon>
     </ClInclude>
     <ClInclude Include="ViewModels\Settings\AbsoluteMoveAndResizeViewModel.h">
       <DependentUpon>ViewModels\Settings\AbsoluteMoveAndResizeViewModel.idl</DependentUpon>
@@ -264,11 +264,11 @@
     </ClCompile>
     <ClCompile Include="ViewModels\Holders\NotifyPropertyChangedHolder.cc" />
     <ClCompile Include="ViewModels\Holders\StaticCommandHolder.cc" />
-    <ClCompile Include="ViewModels\LogsViewModel.cc">
-      <DependentUpon>ViewModels\LogsViewModel.idl</DependentUpon>
+    <ClCompile Include="ViewModels\Logging\LogsViewModel.cc">
+      <DependentUpon>ViewModels\Logging\LogsViewModel.idl</DependentUpon>
     </ClCompile>
-    <ClCompile Include="ViewModels\LogViewModel.cc">
-      <DependentUpon>ViewModels\LogViewModel.idl</DependentUpon>
+    <ClCompile Include="ViewModels\Logging\LogViewModel.cc">
+      <DependentUpon>ViewModels\Logging\LogViewModel.idl</DependentUpon>
     </ClCompile>
     <ClCompile Include="ViewModels\Settings\AbsoluteMoveAndResizeViewModel.cc">
       <DependentUpon>ViewModels\Settings\AbsoluteMoveAndResizeViewModel.idl</DependentUpon>
@@ -325,8 +325,8 @@
     <Midl Include="Converters\TypeNameTemplateSelector.idl" />
     <Midl Include="Converters\ZeroToCollapsedConverter.idl" />
     <Midl Include="Helpers\MenuFlyoutHelper.idl" />
-    <Midl Include="ViewModels\LogsViewModel.idl" />
-    <Midl Include="ViewModels\LogViewModel.idl" />
+    <Midl Include="ViewModels\Logging\LogsViewModel.idl" />
+    <Midl Include="ViewModels\Logging\LogViewModel.idl" />
     <Midl Include="ViewModels\Settings\AbsoluteMoveAndResizeViewModel.idl" />
     <Midl Include="ViewModels\Settings\ActionViewModel.idl" />
     <Midl Include="ViewModels\Settings\FilterKeyViewModel.idl" />

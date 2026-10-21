@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "LogsViewModel.h"
-#if __has_include("ViewModels/LogsViewModel.g.cpp")
-#include "ViewModels/LogsViewModel.g.cpp"
+#if __has_include("ViewModels/Logging/LogsViewModel.g.cpp")
+#include "ViewModels/Logging/LogsViewModel.g.cpp"
 #endif
 
 #include <magic_enum/magic_enum_flags.hpp>  // requires enum_flags_test
@@ -13,10 +13,10 @@ using namespace ::winrt::Windows::Foundation::Collections;
 
 using namespace ::winrt::Microsoft::UI::Dispatching;
 using namespace ::winrt::Microsoft::UI::Xaml;
-using namespace ::winrt::Mntone::RoxyGlance::ViewModels;
+using namespace ::winrt::Mntone::RoxyGlance::ViewModels::Logging;
 }
 
-namespace winrt::Mntone::RoxyGlance::ViewModels::implementation {
+namespace winrt::Mntone::RoxyGlance::ViewModels::Logging::implementation {
 
 static ROXYG_ALWAYS_INLINE IObservableVector<winrt::LogViewModel>
 makeLogViewModels(roxyg::logging::Logger& logger) {

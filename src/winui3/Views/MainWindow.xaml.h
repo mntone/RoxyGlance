@@ -1,7 +1,7 @@
 #pragma once
 #include "Views/MainWindow.g.h"
 
-#include <winrt/Mntone.RoxyGlance.ViewModels.h>
+#include <winrt/Mntone.RoxyGlance.ViewModels.Logging.h>
 
 namespace roxyg::logging { class Logger; }
 
@@ -16,12 +16,12 @@ struct MainWindow: MainWindowT<MainWindow> {
     winrt::Microsoft::UI::Xaml::WindowEventArgs const& args
   ) noexcept;
 
-  inline ViewModels::LogsViewModel Logs() const noexcept {
+  inline ViewModels::Logging::LogsViewModel Logs() const noexcept {
     return Logs_;
   }
 
 private:
-  ViewModels::LogsViewModel Logs_;
+  ViewModels::Logging::LogsViewModel Logs_;
 };
 
 }

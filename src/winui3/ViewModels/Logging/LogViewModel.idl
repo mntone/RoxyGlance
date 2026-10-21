@@ -1,4 +1,4 @@
-namespace Mntone.RoxyGlance.ViewModels
+namespace Mntone.RoxyGlance.ViewModels.Logging
 {
   [default_interface]
   [marshaling_behavior(none)]

@@ -1,6 +1,6 @@
-import "ViewModels/LogViewModel.idl";
+import "ViewModels/Logging/LogViewModel.idl";
 
-namespace Mntone.RoxyGlance.ViewModels
+namespace Mntone.RoxyGlance.ViewModels.Logging
 {
   [default_interface]
   [marshaling_behavior(none)]

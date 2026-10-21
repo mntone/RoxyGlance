@@ -8,7 +8,7 @@
 #include <winrt/Microsoft.UI.Windowing.h>  // requires AppIcon::SetIcon
 
 #include "../AppLocator.h"
-#include "../ViewModels/LogsViewModel.h"
+#include "../ViewModels/Logging/LogsViewModel.h"
 
 #include "../../app/AppResource.h"
 
@@ -18,14 +18,14 @@ using namespace ::winrt::Windows::Foundation;
 using namespace ::winrt::Microsoft::UI;
 using namespace ::winrt::Microsoft::UI::Windowing;
 using namespace ::winrt::Microsoft::UI::Xaml;
-using namespace ::winrt::Mntone::RoxyGlance::ViewModels;
+using namespace ::winrt::Mntone::RoxyGlance::ViewModels::Logging;
 using namespace ::winrt::Mntone::RoxyGlance::Views;
 }
 
 using namespace roxyg::winui3;
 
 namespace winrt::Mntone::RoxyGlance::Views::implementation {
-using namespace ::winrt::Mntone::RoxyGlance::ViewModels::implementation;
+using namespace ::winrt::Mntone::RoxyGlance::ViewModels::Logging::implementation;
 
 MainWindow::MainWindow(roxyg::logging::Logger& logger)
   : Logs_(make<LogsViewModel>(logger)) {

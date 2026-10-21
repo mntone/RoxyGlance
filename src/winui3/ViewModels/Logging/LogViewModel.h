@@ -1,9 +1,9 @@
 #pragma once
-#include "ViewModels/LogViewModel.g.h"
+#include "ViewModels/Logging/LogViewModel.g.h"
 
 #include "../app/logging/Log.h"
 
-namespace winrt::Mntone::RoxyGlance::ViewModels::implementation {
+namespace winrt::Mntone::RoxyGlance::ViewModels::Logging::implementation {
 
 struct LogViewModel: LogViewModelT<LogViewModel, non_agile> {
 public:

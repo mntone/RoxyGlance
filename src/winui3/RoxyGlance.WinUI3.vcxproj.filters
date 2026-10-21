@@ -47,6 +47,9 @@
     <Filter Include="Strings\nl-NL">
       <UniqueIdentifier>{1f865ab9-4400-455c-a319-a1e7a58ce83b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Strings\pl-PL">
+      <UniqueIdentifier>{41bc973c-6526-458c-9f69-0c5c8017c094}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Strings\pt-BR">
       <UniqueIdentifier>{26e477d1-4898-409f-9b81-efaace658df4}</UniqueIdentifier>
     </Filter>
@@ -416,6 +419,9 @@
     <MuiResourceCompile Include="Resources\app.nl-NL.rc">
       <Filter>Resources</Filter>
     </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.pl-PL.rc">
+      <Filter>Resources</Filter>
+    </MuiResourceCompile>
     <MuiResourceCompile Include="Resources\app.pt-BR.rc">
       <Filter>Resources</Filter>
     </MuiResourceCompile>
@@ -462,6 +468,9 @@
     </PRIResource>
     <PRIResource Include="Strings\nl-NL\Resources.resw">
       <Filter>Strings\nl-NL</Filter>
+    </PRIResource>
+    <PRIResource Include="Strings\pl-PL\Resources.resw">
+      <Filter>Strings\pl-PL</Filter>
     </PRIResource>
     <PRIResource Include="Strings\pt-BR\Resources.resw">
       <Filter>Strings\pt-BR</Filter>

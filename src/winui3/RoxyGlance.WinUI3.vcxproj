@@ -446,6 +446,10 @@
       <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
       <MuiResourceLanguage>nl-NL</MuiResourceLanguage>
     </MuiResourceCompile>
+    <MuiResourceCompile Include="Resources\app.pl-PL.rc">
+      <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
+      <MuiResourceLanguage>pl-PL</MuiResourceLanguage>
+    </MuiResourceCompile>
     <MuiResourceCompile Include="Resources\app.pt-BR.rc">
       <MuiResourceConfig>Resources\app.rcconfig</MuiResourceConfig>
       <MuiResourceLanguage>pt-BR</MuiResourceLanguage>
@@ -481,6 +485,7 @@
     <PRIResource Include="Strings\ja-JP\Resources.resw" />
     <PRIResource Include="Strings\ko-KR\Resources.resw" />
     <PRIResource Include="Strings\nl-NL\Resources.resw" />
+    <PRIResource Include="Strings\pl-PL\Resources.resw" />
     <PRIResource Include="Strings\pt-BR\Resources.resw" />
     <PRIResource Include="Strings\ru-RU\Resources.resw" />
     <PRIResource Include="Strings\th-TH\Resources.resw" />

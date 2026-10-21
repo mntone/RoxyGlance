@@ -1,0 +1,26 @@
+#include "resource.h"
+
+LANGUAGE 21, 1  // LANG_POLISH, SUBLANG_POLISH_POLAND
+
+IDC_MENU_TRAY MENU
+BEGIN
+  POPUP ""
+  BEGIN
+    MENUITEM "&Ustawienia", IDM_TRAY_SETTINGS
+    MENUITEM "Wyjś&cie",    IDM_TRAY_EXIT
+  END
+END
+
+STRINGTABLE
+BEGIN
+  IDS_SHELL_MAIN         "Główny ekran"
+  IDS_SHELL_MAINFMT      "Główny ekran ({})"
+  IDS_SHELL_DISPFMT      "Ekran {}"
+  IDS_SHELL_DISPNAMEFMT  "Ekran {}: {}"
+
+  IDS_SETTINGS_WINDOW_TITLE    "Ustawienia - Roxy Glance"
+  IDS_SETTINGS_WINDOW_DEVELOP  "Deweloperska"
+  IDS_SETTINGS_RULE_FORMAT     "Reguła {}"
+
+  IDS_MENU_DEBUG "&Debuguj"
+END

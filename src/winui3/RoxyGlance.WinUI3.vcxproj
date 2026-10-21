@@ -217,9 +217,6 @@
     <ClInclude Include="Views\LogsPage.xaml.h">
       <DependentUpon>Views\LogsPage.xaml</DependentUpon>
     </ClInclude>
-    <ClInclude Include="Views\MainWindow.xaml.h">
-      <DependentUpon>Views\MainWindow.xaml</DependentUpon>
-    </ClInclude>
     <ClInclude Include="Views\RuleEditorPage.xaml.h">
       <DependentUpon>Views\RuleEditorPage.xaml</DependentUpon>
     </ClInclude>
@@ -231,7 +228,6 @@
     <ApplicationDefinition Include="App.xaml" />
     <Page Include="Controls\RuleEditorControl.xaml" />
     <Page Include="Views\LogsPage.xaml" />
-    <Page Include="Views\MainWindow.xaml" />
     <Page Include="Views\RuleEditorPage.xaml" />
     <Page Include="Views\SettingsWindow.xaml" />
   </ItemGroup>
@@ -312,9 +308,6 @@
     <ClCompile Include="Views\LogsPage.xaml.cc">
       <DependentUpon>Views\LogsPage.xaml</DependentUpon>
     </ClCompile>
-    <ClCompile Include="Views\MainWindow.xaml.cc">
-      <DependentUpon>Views\MainWindow.xaml</DependentUpon>
-    </ClCompile>
     <ClCompile Include="Views\RuleEditorPage.xaml.cc">
       <DependentUpon>Views\RuleEditorPage.xaml</DependentUpon>
     </ClCompile>
@@ -347,9 +340,6 @@
     <Midl Include="ViewModels\Shell\MonitorViewModel.idl" />
     <Midl Include="Views\LogsPage.idl">
       <DependentUpon>Views\LogsPage.xaml</DependentUpon>
-    </Midl>
-    <Midl Include="Views\MainWindow.idl">
-      <DependentUpon>Views\MainWindow.xaml</DependentUpon>
     </Midl>
     <Midl Include="Views\RuleEditorPage.idl">
       <DependentUpon>Views\RuleEditorPage.xaml</DependentUpon>

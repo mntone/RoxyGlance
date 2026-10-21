@@ -19,7 +19,6 @@ struct App: AppT<App>, roxyg::message::IMessageListener {
 
 private:
   void exitApp();
-  void showMainWindow();
   void showSettingsWindow();
 
   void onAppExitRequested() noexcept override;
@@ -28,9 +27,6 @@ private:
 private:
   roxyg::AppDelegate AppDelegate_;
   Microsoft::UI::Dispatching::DispatcherQueue dispatcher_;
-
-  Views::MainWindow main_window_;
-  event_token main_window_closed_token_;
 
   Views::SettingsWindow settings_window_;
   event_token settings_window_closed_token_;

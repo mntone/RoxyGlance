@@ -156,6 +156,12 @@
   <data name="Navigation_General.Content" xml:space="preserve">
     <value>Ogólne</value>
   </data>
+  <data name="Navigation_Logs.AccessKey" xml:space="preserve">
+    <value>D</value>
+  </data>
+  <data name="Navigation_Logs.Content" xml:space="preserve">
+    <value>Dzienniki</value>
+  </data>
   <data name="Navigation_Rules.AccessKey" xml:space="preserve">
     <value>Z</value>
   </data>

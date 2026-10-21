@@ -94,6 +94,9 @@
     <Page Include="Controls\RuleEditorControl.xaml">
       <Filter>Controls</Filter>
     </Page>
+    <Page Include="Views\LogsPage.xaml">
+      <Filter>Views</Filter>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Filter>Views</Filter>
     </Page>

@@ -1,0 +1,12 @@
+import "ViewModels/Logging/LogsViewModel.idl";
+
+namespace Mntone.RoxyGlance.Views
+{
+  [default_interface]
+  runtimeclass LogsPage : Microsoft.UI.Xaml.Controls.Page
+  {
+    LogsPage();
+
+    [noexcept] Mntone.RoxyGlance.ViewModels.Logging.LogsViewModel Logs { get; };
+  }
+}

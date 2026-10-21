@@ -156,6 +156,12 @@
   <data name="Navigation_General.Content" xml:space="preserve">
     <value>Umum</value>
   </data>
+  <data name="Navigation_Logs.AccessKey" xml:space="preserve">
+    <value>L</value>
+  </data>
+  <data name="Navigation_Logs.Content" xml:space="preserve">
+    <value>Log</value>
+  </data>
   <data name="Navigation_Rules.AccessKey" xml:space="preserve">
     <value>A</value>
   </data>

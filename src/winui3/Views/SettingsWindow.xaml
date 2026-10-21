@@ -35,6 +35,9 @@
                             IsSelected="True"
                             KeyTipPlacementMode="Bottom"
                             Tag="Mntone.RoxyGlance.Views.RuleEditorPage" />
+        <NavigationViewItem x:Uid="Navigation_Logs"
+                            KeyTipPlacementMode="Bottom"
+                            Tag="Mntone.RoxyGlance.Views.LogsPage" />
       </NavigationView.MenuItems>
       <Frame x:Name="RootFrame"
              Navigated="RootFrameNavigated">

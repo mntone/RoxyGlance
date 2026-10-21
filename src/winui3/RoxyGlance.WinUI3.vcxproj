@@ -147,7 +147,6 @@
       <DependentUpon>Controls\RuleEditorControl.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
-    <ClInclude Include="Converters\bundle.h" />
     <ClInclude Include="Converters\EnumToInt32Converter.h">
       <DependentUpon>Converters\EnumToInt32Converter.idl</DependentUpon>
     </ClInclude>

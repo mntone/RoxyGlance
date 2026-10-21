@@ -1,5 +1,4 @@
 #pragma once
-#include <winrt/Mntone.RoxyGlance.ViewModels.Settings.h>
 
 #ifdef __INTELLISENSE__
 #include <string>

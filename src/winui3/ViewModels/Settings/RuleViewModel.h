@@ -6,8 +6,6 @@
 #include <boost/container/small_vector.hpp>
 #endif
 
-#include <winrt/Mntone.RoxyGlance.ViewModels.Settings.h>
-
 #include "../Holders/CallbackHolder.h"
 #include "../Holders/NotifyPropertyChangedHolder.h"
 #include "../Holders/StaticCommandHolder.h"

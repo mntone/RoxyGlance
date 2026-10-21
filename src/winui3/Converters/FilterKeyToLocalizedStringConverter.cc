@@ -4,8 +4,6 @@
 #include "Converters/FilterKeyToLocalizedStringConverter.g.cpp"
 #endif
 
-#include <winrt/Mntone.RoxyGlance.ViewModels.Settings.h>
-
 namespace {
 inline constexpr std::wstring_view kProcessName{L"Process Name"};
 inline constexpr std::wstring_view kWindowClass{L"Window Class"};

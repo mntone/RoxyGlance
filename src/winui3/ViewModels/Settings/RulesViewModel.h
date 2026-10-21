@@ -2,8 +2,6 @@
 #include "ViewModels/Settings/RulesViewModel.g.h"
 #include "SettingsViewModelProperties.h"
 
-#include <winrt/Mntone.RoxyGlance.ViewModels.Settings.h>
-
 #include "../Holders/NotifyPropertyChangedHolder.h"
 #include "../../../app/settings/Rule.h"
 

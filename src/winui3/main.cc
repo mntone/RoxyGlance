@@ -2,6 +2,7 @@
 #include "App.xaml.h"
 
 #include <wil/resource.h>
+#include <winrt/Microsoft.Windows.AppLifecycle.h>
 
 #include "../app/win32/process_mitigation.h"
 

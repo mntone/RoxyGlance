@@ -188,9 +188,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppLocator.h" />
-    <ClInclude Include="Converters\bundle.h">
-      <Filter>Converters</Filter>
-    </ClInclude>
     <ClInclude Include="Helpers\KeyboardModifiers.h">
       <Filter>Helpers</Filter>
     </ClInclude>

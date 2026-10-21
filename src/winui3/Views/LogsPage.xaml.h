@@ -1,8 +1,6 @@
 #pragma once
 #include "Views/LogsPage.g.h"
 
-#include <winrt/Mntone.RoxyGlance.ViewModels.Logging.h>
-
 namespace roxyg::logging { class Logger; }
 
 namespace winrt::Mntone::RoxyGlance::Views::implementation {

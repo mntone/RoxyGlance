@@ -1,9 +1,6 @@
 #pragma once
 #include "Views/RuleEditorPage.g.h"
 
-#include <winrt/Mntone.RoxyGlance.ViewModels.Settings.h>
-#include <winrt/Mntone.RoxyGlance.ViewModels.Shell.h>
-
 namespace roxyg::settings { class UserSettingsStore; }
 
 namespace winrt::Mntone::RoxyGlance::Views::implementation {
